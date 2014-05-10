@@ -44,24 +44,6 @@ inoremap <C-U> <C-G>u<C-U>
 set t_Co=256
 colorscheme hybrid
 
-function! ToggleXresources()
-  if g:hybrid_use_Xresources
-    let g:hybrid_use_Xresources = 0
-  else
-    let g:hybrid_use_Xresources = 1
-  endif
-  colorscheme hybrid
-endfunction
-
-function! ToggleiTermcolors()
-  if g:hybrid_use_iTerm_colors
-    let g:hybrid_use_iTerm_colors = 0
-  else
-    let g:hybrid_use_iTerm_colors = 1
-  endif
-  colorscheme hybrid
-endfunction
-
 " Use the OS clipboard by default (on versions compiled with `+clipboard`)
 set clipboard=unnamed
 " Enhance command-line completion
@@ -362,9 +344,7 @@ set winminheight=0
 
 " Making it so ; works like : for commands
 nnoremap ; :
+nnoremap ;; ;
 
 " turn off stupid fucking alt shortcuts
 set winaltkeys=no
-
-noremap <leader>tx :call ToggleXresources()<CR>
-noremap <leader>ti :call ToggleiTermcolors()<CR>

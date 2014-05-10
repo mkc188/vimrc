@@ -16,6 +16,7 @@ endif
 set guioptions-=m
 set guioptions-=T
 set guioptions-=r
+set guioptions-=b
 set guioptions-=L
 
 if has("gui_running")
