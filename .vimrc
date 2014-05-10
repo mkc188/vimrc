@@ -1,13 +1,3 @@
-silent function! OS()
-  if has('win16') || has('win32') || has('win64')
-    return 'win'
-  elseif has('unix') && system('uname')=~'Darwin'
-    return 'mac'
-  else
-    return 'linux'
-  endif
-endfunction
-
 "NeoBundle Scripts-----------------------------
 if has('vim_starting')
   set nocompatible               " Be iMproved
@@ -52,12 +42,25 @@ inoremap <C-U> <C-G>u<C-U>
 
 " Use the hybrid theme
 set t_Co=256
-if OS() == 'linux'
-  let g:hybrid_use_Xresources = 1
-elseif OS() == 'mac'
-  let g:hybrid_use_iTerm_colors = 1
-endif
 colorscheme hybrid
+
+function! ToggleXresources()
+  if g:hybrid_use_Xresources
+    let g:hybrid_use_Xresources = 0
+  else
+    let g:hybrid_use_Xresources = 1
+  endif
+  colorscheme hybrid
+endfunction
+
+function! ToggleiTermcolors()
+  if g:hybrid_use_iTerm_colors
+    let g:hybrid_use_iTerm_colors = 0
+  else
+    let g:hybrid_use_iTerm_colors = 1
+  endif
+  colorscheme hybrid
+endfunction
 
 " Use the OS clipboard by default (on versions compiled with `+clipboard`)
 set clipboard=unnamed
@@ -106,8 +109,6 @@ set mouse=a
 set noerrorbells
 " Show the cursor position
 set ruler
-" Don’t show the intro message when starting Vim
-set shortmess=atI
 " Show the (partial) command as it’s being typed
 set showcmd
 " Start scrolling three lines before the horizontal window border
@@ -364,3 +365,6 @@ nnoremap ; :
 
 " turn off stupid fucking alt shortcuts
 set winaltkeys=no
+
+noremap <leader>tx :call ToggleXresources()<CR>
+noremap <leader>ti :call ToggleiTermcolors()<CR>
