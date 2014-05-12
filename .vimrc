@@ -1,3 +1,14 @@
+" detect OS
+let s:is_windows = has('win32') || has('win64')
+let s:is_cygwin = has('win32unix')
+let s:is_macvim = has('gui_macvim')
+
+function! EnsureExists(path)
+  if !isdirectory(expand(a:path))
+    call mkdir(expand(a:path))
+  endif
+endfunction
+
 "NeoBundle Scripts-----------------------------
 if has('vim_starting')
   set nocompatible               " Be iMproved
@@ -15,6 +26,15 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 
 " My Bundles here:
 NeoBundle 'w0ng/vim-hybrid'
+NeoBundle 'Shougo/unite.vim'
+NeoBundle 'Shougo/vimproc', {
+      \ 'build' : {
+      \     'windows' : 'make -f make_mingw32.mak',
+      \     'cygwin' : 'make -f make_cygwin.mak',
+      \     'mac' : 'make -f make_mac.mak',
+      \     'unix' : 'make -f make_unix.mak',
+      \    },
+      \ }
 
 call neobundle#end()
 
@@ -41,7 +61,6 @@ set sessionoptions-=options
 inoremap <C-U> <C-G>u<C-U>
 
 " Use the hybrid theme
-set t_Co=256
 colorscheme hybrid
 
 " Use the OS clipboard by default (on versions compiled with `+clipboard`)
@@ -59,13 +78,18 @@ set encoding=utf-8 fileencoding=utf-8 termencoding=utf-8
 " Change mapleader
 let mapleader=","
 " Centralize backups, swapfiles and undo history
-set backupdir=~/.vim/backup
-set directory=~/.vim/swap
-if exists("&undodir")
-  set undodir=~/.vim/undo
+set backupdir=~/.vim/.cache/backup
+set directory=~/.vim/.cache/swap
+if exists('&undodir')
+  set undodir=~/.vim/.cache/undo
 endif
 set backup            " backups are nice ...
 set undofile          " so is persistent undo ...
+
+call EnsureExists('~/.vim/.cache')
+call EnsureExists(&undodir)
+call EnsureExists(&backupdir)
+call EnsureExists(&directory)
 
 " Respect modeline in files
 set modeline
@@ -98,7 +122,7 @@ set scrolloff=3
 
 " Strip trailing whitespace (,ss)
 function! StripWhitespace()
-  let save_cursor = getpos(".")
+  let save_cursor = getpos('.')
   let old_query = getreg('/')
   :%s/\s\+$//e
   call setpos('.', save_cursor)
@@ -212,7 +236,7 @@ nmap <leader>hs :set hlsearch! hlsearch?<CR>
 " Adjust viewports to the same size
 map <Leader>= <C-w>=
 
-if has("gui_macvim") && has("gui_running")
+if has('gui_macvim') && has('gui_running')
   " Map command-[ and command-] to indenting or outdenting
   " while keeping the original selection in visual mode
   vmap <D-]> >gv
@@ -314,13 +338,13 @@ else
   imap <C-9> <Esc>9gt
 endif
 
-if has("autocmd")
+if has('autocmd')
   " In Makefiles, use real tabs, not tabs expanded to spaces
   au FileType make setlocal noexpandtab
 
   " Make sure all mardown files have the correct filetype set and setup wrapping
   au BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn,txt} setf markdown
-  if !exists("g:disable_markdown_autostyle")
+  if !exists('g:disable_markdown_autostyle')
     au FileType markdown setlocal wrap linebreak textwidth=72 nolist
   endif
 
@@ -349,3 +373,93 @@ nnoremap ;; ;
 
 " turn off stupid fucking alt shortcuts
 set winaltkeys=no
+
+set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.idea/*,*/.DS_Store
+
+let g:netrw_home=expand('~/.vim/.cache/')
+
+if has('gui_running')
+  if s:is_macvim
+    set guifont=Source\ Code\ Pro:h14
+  elseif s:is_windows
+    set guifont=Source\ Code\ Pro:h11
+  endif
+  set guioptions-=m
+  set guioptions-=T
+  set guioptions-=r
+  set guioptions-=b
+  set guioptions-=L
+
+  if has('autocmd')
+    " Automatically resize splits when resizing MacVim window
+    autocmd VimResized * wincmd =
+  endif
+else
+  set t_Co=256
+endif
+
+
+" plugins settings
+let bundle = neobundle#get('unite.vim')
+function! bundle.hooks.on_source(bundle)
+  call unite#filters#matcher_default#use(['matcher_fuzzy'])
+  call unite#filters#sorter_default#use(['sorter_rank'])
+  call unite#set_profile('files', 'smartcase', 1)
+  call unite#custom#source('line,outline','matchers','matcher_fuzzy')
+endfunction
+
+let g:unite_data_directory='~/.vim/.cache/unite'
+let g:unite_enable_start_insert=1
+let g:unite_source_history_yank_enable=1
+let g:unite_source_rec_max_cache_files=5000
+let g:unite_prompt='» '
+
+if executable('ag')
+  let g:unite_source_grep_command='ag'
+  let g:unite_source_grep_default_opts='--nocolor --nogroup -S -C4'
+  let g:unite_source_grep_recursive_opt=''
+elseif executable('ack')
+  let g:unite_source_grep_command='ack'
+  let g:unite_source_grep_default_opts='--no-heading --no-color -C4'
+  let g:unite_source_grep_recursive_opt=''
+endif
+
+function! s:unite_settings()
+  nmap <buffer> Q <plug>(unite_exit)
+  nmap <buffer> <esc> <plug>(unite_exit)
+  imap <buffer> <esc> <plug>(unite_exit)
+endfunction
+autocmd FileType unite call s:unite_settings()
+
+nmap <space> [unite]
+nnoremap [unite] <nop>
+
+if s:is_windows
+  nnoremap <silent> [unite]<space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed file_rec:! buffer file_mru bookmark<cr>
+  nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec:!<cr>
+else
+  nnoremap <silent> [unite]<space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed file_rec/async:! buffer file_mru bookmark<cr>
+  nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec/async:!<cr>
+endif
+nnoremap <silent> [unite]e :<C-u>Unite -buffer-name=recent file_mru<cr>
+nnoremap <silent> [unite]y :<C-u>Unite -buffer-name=yanks history/yank<cr>
+nnoremap <silent> [unite]l :<C-u>Unite -auto-resize -buffer-name=line line<cr>
+nnoremap <silent> [unite]b :<C-u>Unite -auto-resize -buffer-name=buffers buffer<cr>
+nnoremap <silent> [unite]/ :<C-u>Unite -no-quit -buffer-name=search grep:.<cr>
+nnoremap <silent> [unite]m :<C-u>Unite -auto-resize -buffer-name=mappings mapping<cr>
+nnoremap <silent> [unite]s :<C-u>Unite -quick-match buffer<cr>
+
+NeoBundleLazy 'Shougo/neomru.vim', {'autoload':{'unite_sources':'file_mru'}}
+
+NeoBundleLazy 'tsukkee/unite-tag', {'autoload':{'unite_sources':['tag','tag/file']}}
+nnoremap <silent> [unite]t :<C-u>Unite -auto-resize -buffer-name=tag tag tag/file<cr>
+
+NeoBundleLazy 'Shougo/unite-outline', {'autoload':{'unite_sources':'outline'}}
+nnoremap <silent> [unite]o :<C-u>Unite -auto-resize -buffer-name=outline outline<cr>
+
+NeoBundleLazy 'Shougo/unite-help', {'autoload':{'unite_sources':'help'}}
+nnoremap <silent> [unite]h :<C-u>Unite -auto-resize -buffer-name=help help<cr>
+
+NeoBundleLazy 'Shougo/junkfile.vim', {'autoload':{'commands':'JunkfileOpen','unite_sources':['junkfile','junkfile/new']}}
+let g:junkfile#directory=expand('~/.vim/.cache/junk/')
+nnoremap <silent> [unite]j :<C-u>Unite -auto-resize -buffer-name=junk junkfile junkfile/new<cr>
