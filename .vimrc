@@ -128,8 +128,9 @@ set nowrap
 set linebreak
 
 " fold settings
+set foldlevelstart=99
 set foldmethod=indent
-set foldnestmax=3
+set foldnestmax=1
 set nofoldenable
 
 " arrow keys to navigate windows
