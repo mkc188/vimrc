@@ -47,6 +47,26 @@ filetype plugin indent on
 NeoBundleCheck
 "End NeoBundle Scripts-------------------------
 
+if has('gui_running')
+  if s:is_macvim
+    set guifont=Source\ Code\ Pro:h14
+  elseif s:is_windows
+    set guifont=Source\ Code\ Pro:h11
+  endif
+  set guioptions-=m
+  set guioptions-=T
+  set guioptions-=r
+  set guioptions-=b
+  set guioptions-=L
+
+  if has('autocmd')
+    " Automatically resize splits when resizing MacVim window
+    autocmd VimResized * wincmd =
+  endif
+else
+  set t_Co=256
+endif
+
 " vim-sensible
 set complete-=i
 set nrformats-=octal
@@ -378,26 +398,6 @@ set winaltkeys=no
 set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.idea/*,*/.DS_Store
 
 let g:netrw_home=expand('~/.vim/.cache/')
-
-if has('gui_running')
-  if s:is_macvim
-    set guifont=Source\ Code\ Pro:h14
-  elseif s:is_windows
-    set guifont=Source\ Code\ Pro:h11
-  endif
-  set guioptions-=m
-  set guioptions-=T
-  set guioptions-=r
-  set guioptions-=b
-  set guioptions-=L
-
-  if has('autocmd')
-    " Automatically resize splits when resizing MacVim window
-    autocmd VimResized * wincmd =
-  endif
-else
-  set t_Co=256
-endif
 
 
 " unite
