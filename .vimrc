@@ -400,7 +400,7 @@ else
 endif
 
 
-" plugins settings
+" unite
 let bundle = neobundle#get('unite.vim')
 function! bundle.hooks.on_source(bundle)
   call unite#filters#matcher_default#use(['matcher_fuzzy'])
@@ -465,7 +465,7 @@ NeoBundleLazy 'Shougo/junkfile.vim', {'autoload':{'commands':'JunkfileOpen','uni
 let g:junkfile#directory=expand('~/.vim/.cache/junk/')
 nnoremap <silent> [unite]j :<C-u>Unite -auto-resize -buffer-name=junk junkfile junkfile/new<cr>
 
-
+" vimfiler
 let g:vimfiler_data_directory = '~/.vim/.cache/vimfiler'
 let g:vimfiler_as_default_explorer = 1
 let g:vimfiler_safe_mode_by_default = 0
@@ -476,3 +476,6 @@ function! s:vimfiler_my_settings()
   nmap <buffer> Q <Plug>(vimfiler_hide)
 endfunction
 autocmd FileType vimfiler call s:vimfiler_my_settings()
+
+" vim-css-color
+NeoBundleLazy 'ap/vim-css-color', {'autoload':{'filetypes':['css','scss','sass','less','styl']}}
