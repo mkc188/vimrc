@@ -35,6 +35,7 @@ NeoBundle 'Shougo/vimproc', {
       \     'unix' : 'make -f make_unix.mak',
       \    },
       \ }
+NeoBundle 'Shougo/vimfiler.vim'
 
 call neobundle#end()
 
@@ -441,7 +442,7 @@ else
   nnoremap <silent> [unite]<space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed file_rec/async:! buffer file_mru bookmark<cr>
   nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec/async:!<cr>
 endif
-nnoremap <silent> [unite]e :<C-u>Unite -buffer-name=recent file_mru<cr>
+nnoremap <silent> [unite]r :<C-u>Unite -buffer-name=recent file_mru<cr>
 nnoremap <silent> [unite]y :<C-u>Unite -buffer-name=yanks history/yank<cr>
 nnoremap <silent> [unite]l :<C-u>Unite -auto-resize -buffer-name=line line<cr>
 nnoremap <silent> [unite]b :<C-u>Unite -auto-resize -buffer-name=buffers buffer<cr>
@@ -463,3 +464,15 @@ nnoremap <silent> [unite]h :<C-u>Unite -auto-resize -buffer-name=help help<cr>
 NeoBundleLazy 'Shougo/junkfile.vim', {'autoload':{'commands':'JunkfileOpen','unite_sources':['junkfile','junkfile/new']}}
 let g:junkfile#directory=expand('~/.vim/.cache/junk/')
 nnoremap <silent> [unite]j :<C-u>Unite -auto-resize -buffer-name=junk junkfile junkfile/new<cr>
+
+
+let g:vimfiler_data_directory = '~/.vim/.cache/vimfiler'
+let g:vimfiler_as_default_explorer = 1
+let g:vimfiler_safe_mode_by_default = 0
+nnoremap <silent> [unite]e :<C-u>VimFilerBufferDir -quit<CR>
+
+function! s:vimfiler_my_settings()
+  nmap <buffer> q <Plug>(vimfiler_exit)
+  nmap <buffer> Q <Plug>(vimfiler_hide)
+endfunction
+autocmd FileType vimfiler call s:vimfiler_my_settings()
