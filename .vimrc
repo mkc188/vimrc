@@ -345,8 +345,10 @@ call neobundle#end()
   NeoBundle 'jiangmiao/auto-pairs'
   NeoBundle 'justinmk/vim-sneak'
     let g:sneak#streak = 1
-    hi link SneakPluginTarget ErrorMsg
-    hi link SneakPluginScope  Comment
+    hi link SneakPluginTarget Search
+    hi link SneakPluginScope Search
+    hi link SneakStreakTarget Search
+    hi SneakStreakMask guifg=03 guibg=03 ctermfg=03 ctermbg=03
 
 " -------- navigation --------
   NeoBundle 'mileszs/ack.vim'
