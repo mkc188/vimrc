@@ -645,6 +645,11 @@ nnoremap <leader>nbu :Unite neobundle/update -vertical -no-start-insert<cr>
     exec "map! \e".c." <M-".c.">"
   endfor
 
+  " use option (alt) as meta key
+  if s:is_macvim
+    set macmeta
+  endif
+
 " -------- commands --------
   command! -bang Q q<bang>
   command! -bang QA qa<bang>
