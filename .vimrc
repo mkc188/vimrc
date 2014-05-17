@@ -315,7 +315,7 @@ call neobundle#end()
     imap <expr><S-TAB> pumvisible() ? "\<C-p>" : ""
     smap <expr><S-TAB> pumvisible() ? "\<C-p>" : ""
 
-  if has('lua')
+  if has('lua') && ( version > 703 || version == 703 && has('patch885') )
     NeoBundleLazy 'Shougo/neocomplete.vim', {'autoload':{'insert':1}, 'vim_version':'7.3.885'}
       let g:neocomplete#enable_at_startup=1
       let g:neocomplete#data_directory='~/.vim/.cache/neocomplete'
