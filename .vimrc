@@ -75,7 +75,6 @@ call neobundle#end()
   set showfulltag
   set modeline
   set modelines=2
-  set winminheight=0                                  " windows can be 0 line high
 
   if s:is_windows && !s:is_cygwin
     " ensure correct shell in gvim
@@ -162,7 +161,6 @@ call neobundle#end()
 
   if has('conceal')
     set conceallevel=1
-    set listchars+=conceal:Δ
   endif
 
   if has('gui_running')
@@ -199,7 +197,8 @@ call neobundle#end()
     endif
   endif
 
-" -------- core --------
+" -------- plugin configuration --------
+  " core
   NeoBundle 'matchit.zip'
   NeoBundle 'bling/vim-airline'
     let g:airline#extensions#tabline#enabled = 1
@@ -224,7 +223,7 @@ call neobundle#end()
         \    },
         \ }
 
-" -------- web --------
+  " web
   NeoBundleLazy 'groenewege/vim-less', {'autoload':{'filetypes':['less']}}
   NeoBundleLazy 'cakebaker/scss-syntax.vim', {'autoload':{'filetypes':['scss','sass']}}
   NeoBundleLazy 'hail2u/vim-css3-syntax', {'autoload':{'filetypes':['css','scss','sass']}}
@@ -245,7 +244,7 @@ call neobundle#end()
     autocmd FileType xml,xsl,xslt,xsd,css,sass,scss,less,mustache imap <buffer><tab> <c-y>,
     autocmd FileType html imap <buffer><expr><tab> <sid>zen_html_tab()
 
-" -------- javascript --------
+  " javascript
   NeoBundleLazy 'marijnh/tern_for_vim', {
     \ 'autoload': { 'filetypes': ['javascript'] },
     \ 'build': {
@@ -264,25 +263,25 @@ call neobundle#end()
   NeoBundleLazy 'leshill/vim-json', {'autoload':{'filetypes':['javascript','json']}}
   NeoBundleLazy 'othree/javascript-libraries-syntax.vim', {'autoload':{'filetypes':['javascript','coffee','ls','typescript']}}
 
-" -------- ruby --------
+  " ruby
   NeoBundle 'tpope/vim-rails'
   NeoBundle 'tpope/vim-bundler'
 
-" -------- python --------
+  " python
   NeoBundleLazy 'klen/python-mode', {'autoload':{'filetypes':['python']}}
     let g:pymode_rope=0
   NeoBundleLazy 'davidhalter/jedi-vim', {'autoload':{'filetypes':['python']}}
     let g:jedi#popup_on_dot=0
 
-" -------- scala --------
+  " scala
   NeoBundle 'derekwyatt/vim-scala'
   NeoBundle 'megaannum/vimside'
 
-" -------- go --------
+  " go
   NeoBundleLazy 'jnwhiteh/vim-golang', {'autoload':{'filetypes':['go']}}
   NeoBundleLazy 'nsf/gocode', {'autoload': {'filetypes':['go']}, 'rtp': 'vim'}
 
-" -------- scm --------
+  " scm
   NeoBundle 'mhinz/vim-signify'
     let g:signify_update_on_bufenter=0
   if executable('hg')
@@ -303,7 +302,7 @@ call neobundle#end()
     nnoremap <silent> <leader>gv :Gitv<CR>
     nnoremap <silent> <leader>gV :Gitv!<CR>
 
-" -------- autocomplete --------
+  " autocomplete
   NeoBundle 'honza/vim-snippets'
 
   NeoBundle 'Shougo/neosnippet-snippets'
@@ -316,11 +315,18 @@ call neobundle#end()
     imap <expr><S-TAB> pumvisible() ? "\<C-p>" : ""
     smap <expr><S-TAB> pumvisible() ? "\<C-p>" : ""
 
-  NeoBundleLazy 'Shougo/neocomplete.vim', {'autoload':{'insert':1}, 'vim_version':'7.3.885'}
-    let g:neocomplete#enable_at_startup=1
-    let g:neocomplete#data_directory='~/.vim/.cache/neocomplete'
+  if has('lua')
+    NeoBundleLazy 'Shougo/neocomplete.vim', {'autoload':{'insert':1}, 'vim_version':'7.3.885'}
+      let g:neocomplete#enable_at_startup=1
+      let g:neocomplete#data_directory='~/.vim/.cache/neocomplete'
+  else
+    NeoBundleLazy 'Shougo/neocomplcache.vim', {'autoload':{'insert':1}}
+      let g:neocomplcache_enable_at_startup=1
+      let g:neocomplcache_temporary_dir='~/.vim/.cache/neocomplcache'
+      let g:neocomplcache_enable_fuzzy_completion=1
+  endif
 
-" -------- editing --------
+  " editing
   NeoBundleLazy 'editorconfig/editorconfig-vim', {'autoload':{'insert':1}}
   NeoBundle 'tpope/vim-endwise'
   NeoBundle 'tpope/vim-speeddating'
@@ -350,7 +356,7 @@ call neobundle#end()
     hi link SneakStreakTarget Search
     hi SneakStreakMask guifg=03 guibg=03 ctermfg=03 ctermbg=03
 
-" -------- navigation --------
+  " navigation
   NeoBundle 'mileszs/ack.vim'
     if executable('ag')
       let g:ackprg = "ag --nogroup --column --smart-case --follow"
@@ -373,7 +379,7 @@ call neobundle#end()
     nnoremap <F2> :VimFilerExplorer<CR>
     nnoremap <F3> :VimFilerBufferDir -quit<CR>
 
-" -------- unite --------
+  " unite
   NeoBundle 'Shougo/unite.vim'
     let bundle = neobundle#get('unite.vim')
     function! bundle.hooks.on_source(bundle)
@@ -439,7 +445,7 @@ call neobundle#end()
     let g:junkfile#directory=expand("~/.vim/.cache/junk")
     nnoremap <silent> [unite]j :<C-u>Unite -auto-resize -buffer-name=junk junkfile junkfile/new<cr>
 
-" -------- indents --------
+  " indents
   NeoBundle 'nathanaelkane/vim-indent-guides'
     let g:indent_guides_start_level=1
     let g:indent_guides_guide_size=1
@@ -454,13 +460,13 @@ call neobundle#end()
       autocmd VimEnter,Colorscheme * call s:indent_set_console_colors()
     endif
 
-" -------- textobj --------
+  " textobj
   NeoBundle 'kana/vim-textobj-user'
   NeoBundle 'kana/vim-textobj-indent'
   NeoBundle 'kana/vim-textobj-entire'
   NeoBundle 'lucapette/vim-textobj-underscore'
 
-" -------- misc --------
+  " misc
   if exists('$TMUX')
     NeoBundle 'christoomey/vim-tmux-navigator'
   endif
@@ -507,7 +513,7 @@ call neobundle#end()
     let g:goldenview__enable_default_mapping=0
     nmap <F4> <Plug>ToggleGoldenViewAutoResize
 
-" -------- windows --------
+  " windows
   NeoBundleLazy 'PProvost/vim-ps1', {'autoload':{'filetypes':['ps1']}}
     autocmd BufNewFile,BufRead *.ps1,*.psd1,*.psm1 setlocal ft=ps1
   NeoBundleLazy 'nosami/Omnisharp', {'autoload':{'filetypes':['cs']}}
@@ -632,6 +638,12 @@ nnoremap <leader>nbu :Unite neobundle/update -vertical -no-start-insert<cr>
   nnoremap <silent> <leader>DC :exe ":profile continue"<cr>
   nnoremap <silent> <leader>DQ :exe ":profile pause"<cr>:noautocmd qall!<cr>
 
+  " fix meta-keys which generate <Esc>a .. <Esc>z
+  for i in range(97,122)
+    let c = nr2char(i)
+    exec "map \e".c." <M-".c.">"
+    exec "map! \e".c." <M-".c.">"
+  endfor
 
 " -------- commands --------
   command! -bang Q q<bang>
