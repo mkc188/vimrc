@@ -195,6 +195,8 @@ call neobundle#end()
         let &t_EI = "\<Esc>]50;CursorShape=0\x7"
       endif
     endif
+    " disable background color erase
+    set t_ut=
   endif
 
 " -------- plugin configuration --------
