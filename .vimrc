@@ -311,6 +311,7 @@ call neobundle#end()
   NeoBundle 'Shougo/neosnippet.vim'
     let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets,~/.vim/snippets'
     let g:neosnippet#enable_snipmate_compatibility=1
+    let g:neosnippet_data_directory='~/.vim/.cache/neosnippet'
 
     imap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : (pumvisible() ? "\<C-n>" : "\<TAB>")
     smap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
@@ -356,7 +357,7 @@ call neobundle#end()
     hi link SneakPluginTarget Search
     hi link SneakPluginScope Search
     hi link SneakStreakTarget Search
-    hi SneakStreakMask guifg=03 guibg=03 ctermfg=03 ctermbg=03
+    hi SneakStreakMask guifg=yellow guibg=yellow ctermfg=yellow ctermbg=yellow
 
   " navigation
   NeoBundle 'mileszs/ack.vim'
@@ -433,6 +434,8 @@ call neobundle#end()
     nnoremap <silent> [unite]s :<C-u>Unite -quick-match buffer<cr>
 
   NeoBundleLazy 'Shougo/neomru.vim', {'autoload':{'unite_sources':'file_mru'}}
+    let g:neomru#file_mru_path='~/.vim/.cache/neomru/file'
+    let g:neomru#directory_mru_path='~/.vim/.cache/neomru/directory'
   NeoBundleLazy 'osyo-manga/unite-airline_themes', {'autoload':{'unite_sources':'airline_themes'}}
     nnoremap <silent> [unite]a :<C-u>Unite -winheight=10 -auto-preview -buffer-name=airline_themes airline_themes<cr>
   NeoBundleLazy 'ujihisa/unite-colorscheme', {'autoload':{'unite_sources':'colorscheme'}}
@@ -503,7 +506,6 @@ call neobundle#end()
     endif
     let g:vimshell_right_prompt='getcwd()'
     let g:vimshell_data_directory='~/.vim/.cache/vimshell'
-    let g:vimshell_vimshrc_path='~/.vim/vimshrc'
 
     nnoremap <leader>c :VimShell -split<cr>
     nnoremap <leader>cc :VimShell -split<cr>
