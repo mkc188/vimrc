@@ -351,7 +351,7 @@ NeoBundleLazy 'godlygeek/tabular', {'autoload':{'commands':'Tabularize'}}
   vmap <Leader>a, :Tabularize /,<CR>
   nmap <Leader>a<Bar> :Tabularize /<Bar><CR>
   vmap <Leader>a<Bar> :Tabularize /<Bar><CR>
-NeoBundle 'jiangmiao/auto-pairs'
+NeoBundle 'mkc188/auto-pairs'
 NeoBundle 'justinmk/vim-sneak'
   let g:sneak#streak = 1
   hi link SneakPluginTarget Search
