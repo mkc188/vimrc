@@ -212,10 +212,10 @@ call neobundle#end()
   NeoBundle 'tpope/vim-dispatch'
   NeoBundle 'tpope/vim-eunuch'
   NeoBundle 'tpope/vim-unimpaired'
-    nmap <c-up> [e
-    nmap <c-down> ]e
-    vmap <c-up> [egv
-    vmap <c-down> ]egv
+    nmap <M-k> [e
+    nmap <M-j> ]e
+    vmap <M-k> [egv
+    vmap <M-j> ]egv
   NeoBundle 'Shougo/vimproc.vim', {
         \ 'build' : {
         \     'windows' : 'make -f make_mingw32.mak',
