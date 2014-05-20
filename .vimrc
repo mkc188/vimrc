@@ -135,8 +135,8 @@ set backup
 set backupdir=~/.vim/.cache/backup
 
 " swap files
+set swapfile
 set directory=~/.vim/.cache/swap
-set noswapfile
 
 call EnsureExists('~/.vim/.cache')
 call EnsureExists(&undodir)
@@ -151,6 +151,7 @@ set showmatch                                       "automatically highlight mat
 set matchtime=2                                     "tens of a second to show matching parentheses
 set number
 set lazyredraw
+set showtabline=0
 set laststatus=2
 set noshowmode
 set foldmethod=syntax                               "fold via syntax of files
@@ -201,16 +202,9 @@ endif
 
 " -------- plugin configuration --------
 " core
-NeoBundle 'matchit.zip'
 NeoBundle 'bling/vim-airline'
-  let g:airline#extensions#tabline#enabled = 1
-  let g:airline#extensions#tabline#left_sep=' '
-  let g:airline#extensions#tabline#left_alt_sep='¦'
   let g:airline_theme='jellybeans'
 NeoBundle 'tpope/vim-surround'
-NeoBundle 'tpope/vim-repeat'
-NeoBundle 'tpope/vim-dispatch'
-NeoBundle 'tpope/vim-eunuch'
 NeoBundle 'tpope/vim-unimpaired'
   nmap <M-k> [e
   nmap <M-j> ]e
@@ -223,6 +217,25 @@ NeoBundle 'Shougo/vimproc.vim', {
       \     'mac' : 'make -f make_mac.mak',
       \     'unix' : 'make -f make_unix.mak',
       \    },
+      \ }
+NeoBundleLazy 'matchit.zip', { 'autoload' : {
+      \ 'mappings' : ['%', 'g%']
+      \ }}
+  let bundle = neobundle#get('matchit.zip')
+  function! bundle.hooks.on_post_source(bundle)
+    silent! execute 'doautocmd Filetype' &filetype
+  endfunction
+NeoBundleLazy 'tpope/vim-repeat', {
+      \ 'mappings' : '.',
+      \ }
+NeoBundleLazy 'tpope/vim-dispatch', {
+      \ 'autoload': { 'commands': ['Dispatch', 'Make', 'Start'] }
+      \ }
+NeoBundleLazy 'tpope/vim-eunuch', {
+      \   'autoload' : {
+      \     'commands' : ['Unlink', 'Remove', 'Move', 'Rename',
+      \                   'Chmod', 'Mkdir', 'SudoEdit', 'SudoWrite'],
+      \   }
       \ }
 
 " web
@@ -266,8 +279,8 @@ NeoBundleLazy 'leshill/vim-json', {'autoload':{'filetypes':['javascript','json']
 NeoBundleLazy 'othree/javascript-libraries-syntax.vim', {'autoload':{'filetypes':['javascript','coffee','ls','typescript']}}
 
 " ruby
-NeoBundle 'tpope/vim-rails'
-NeoBundle 'tpope/vim-bundler'
+NeoBundleLazy 'tpope/vim-rails', {'autoload': {'filetypes': ['ruby', 'rake']}}
+NeoBundleLazy 'tpope/vim-bundler', {'autoload': {'filetypes': ['ruby', 'rake']}}
 
 " python
 NeoBundleLazy 'klen/python-mode', {'autoload':{'filetypes':['python']}}
@@ -276,8 +289,8 @@ NeoBundleLazy 'davidhalter/jedi-vim', {'autoload':{'filetypes':['python']}}
   let g:jedi#popup_on_dot=0
 
 " scala
-NeoBundle 'derekwyatt/vim-scala'
-NeoBundle 'megaannum/vimside'
+NeoBundleLazy 'derekwyatt/vim-scala', {'autoload': {'filetypes': ['scala']}}
+NeoBundleLazy 'megaannum/vimside', {'autoload': {'filetypes': ['scala']}}
 
 " go
 NeoBundleLazy 'jnwhiteh/vim-golang', {'autoload':{'filetypes':['go']}}
@@ -305,10 +318,9 @@ NeoBundleLazy 'gregsexton/gitv', {'depends':['tpope/vim-fugitive'], 'autoload':{
   nnoremap <silent> <leader>gV :Gitv!<CR>
 
 " autocomplete
-NeoBundle 'honza/vim-snippets'
-
-NeoBundle 'Shougo/neosnippet-snippets'
-NeoBundle 'Shougo/neosnippet.vim'
+NeoBundleLazy 'honza/vim-snippets'
+NeoBundleLazy 'Shougo/neosnippet-snippets'
+NeoBundleLazy 'Shougo/neosnippet.vim', { 'depends' : ['honza/vim-snippets', 'Shougo/neosnippet-snippets'], 'autoload' : { 'insert' : '1', 'unite_sources' : ['neosnippet/runtime', 'neosnippet/user', 'snippet']} }
   let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets,~/.vim/snippets'
   let g:neosnippet#enable_snipmate_compatibility=1
   let g:neosnippet_data_directory='~/.vim/.cache/neosnippet'
@@ -330,14 +342,30 @@ else
 endif
 
 " editing
-NeoBundleLazy 'editorconfig/editorconfig-vim', {'autoload':{'insert':1}}
-NeoBundle 'tpope/vim-endwise'
-NeoBundle 'tpope/vim-speeddating'
-NeoBundle 'thinca/vim-visualstar'
-NeoBundle 'tomtom/tcomment_vim'
-NeoBundle 'terryma/vim-expand-region'
 NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundle 'chrisbra/NrrwRgn'
+NeoBundle 'mkc188/auto-pairs'
+NeoBundle 'justinmk/vim-sneak'
+  let g:sneak#streak = 1
+  hi link SneakPluginTarget Search
+  hi link SneakPluginScope Search
+  hi link SneakStreakTarget Search
+  hi SneakStreakMask guifg=yellow guibg=yellow ctermfg=yellow ctermbg=yellow
+NeoBundleLazy 'editorconfig/editorconfig-vim', {'autoload':{'insert':1}}
+NeoBundleLazy 'tpope/vim-endwise', {'autoload':{'filetypes':['lua','ruby','sh','zsh','vb','vbnet','aspvbs','vim','c','cpp','xdefaults']}}
+NeoBundleLazy 'tpope/vim-speeddating'
+NeoBundleLazy 'thinca/vim-visualstar', {
+      \   'autoload': {
+      \     'mappings': ['<Plug>(visualstar-']
+      \   }
+      \ }
+NeoBundleLazy 'tomtom/tcomment_vim', {
+      \ 'autoload': {
+      \   'mappings': [['nx', 'gc', 'gcc', 'gC']]
+      \ }
+      \}
+NeoBundleLazy 'terryma/vim-expand-region', { 'autoload' : { 'mappings' : [ [ 'ov', '<Plug>(expand_region_' ] ] } }
+
 NeoBundleLazy 'godlygeek/tabular', {'autoload':{'commands':'Tabularize'}}
   nmap <Leader>a& :Tabularize /&<CR>
   vmap <Leader>a& :Tabularize /&<CR>
@@ -351,16 +379,15 @@ NeoBundleLazy 'godlygeek/tabular', {'autoload':{'commands':'Tabularize'}}
   vmap <Leader>a, :Tabularize /,<CR>
   nmap <Leader>a<Bar> :Tabularize /<Bar><CR>
   vmap <Leader>a<Bar> :Tabularize /<Bar><CR>
-NeoBundle 'mkc188/auto-pairs'
-NeoBundle 'justinmk/vim-sneak'
-  let g:sneak#streak = 1
-  hi link SneakPluginTarget Search
-  hi link SneakPluginScope Search
-  hi link SneakStreakTarget Search
-  hi SneakStreakMask guifg=yellow guibg=yellow ctermfg=yellow ctermbg=yellow
 
 " navigation
-NeoBundle 'mileszs/ack.vim'
+NeoBundle 'Shougo/vimfiler.vim'
+  let g:vimfiler_as_default_explorer=1
+  let g:vimfiler_safe_mode_by_default = 0
+  let g:vimfiler_data_directory='~/.vim/.cache/vimfiler'
+  nnoremap <F2> :VimFilerExplorer<CR>
+  nnoremap <F3> :VimFilerBufferDir -quit<CR>
+NeoBundleLazy 'mileszs/ack.vim', { 'autoload' : {'commands': 'Ack'}}
   if executable('ag')
     let g:ackprg = "ag --nogroup --column --smart-case --follow"
   endif
@@ -375,12 +402,7 @@ NeoBundleLazy 'EasyGrep', {'autoload':{'commands':'GrepOptions'}}
   nnoremap <leader>vo :GrepOptions<cr>
 NeoBundleLazy 'majutsushi/tagbar', {'autoload':{'commands':'TagbarToggle'}}
   nnoremap <silent> <F9> :TagbarToggle<CR>
-NeoBundle 'Shougo/vimfiler.vim'
-  let g:vimfiler_as_default_explorer=1
-  let g:vimfiler_safe_mode_by_default = 0
-  let g:vimfiler_data_directory='~/.vim/.cache/vimfiler'
-  nnoremap <F2> :VimFilerExplorer<CR>
-  nnoremap <F3> :VimFilerBufferDir -quit<CR>
+
 
 " unite
 NeoBundle 'Shougo/unite.vim'
@@ -436,10 +458,6 @@ NeoBundle 'Shougo/unite.vim'
 NeoBundleLazy 'Shougo/neomru.vim', {'autoload':{'unite_sources':'file_mru'}}
   let g:neomru#file_mru_path='~/.vim/.cache/neomru/file'
   let g:neomru#directory_mru_path='~/.vim/.cache/neomru/directory'
-NeoBundleLazy 'osyo-manga/unite-airline_themes', {'autoload':{'unite_sources':'airline_themes'}}
-  nnoremap <silent> [unite]a :<C-u>Unite -winheight=10 -auto-preview -buffer-name=airline_themes airline_themes<cr>
-NeoBundleLazy 'ujihisa/unite-colorscheme', {'autoload':{'unite_sources':'colorscheme'}}
-  nnoremap <silent> [unite]c :<C-u>Unite -winheight=10 -auto-preview -buffer-name=colorschemes colorscheme<cr>
 NeoBundleLazy 'tsukkee/unite-tag', {'autoload':{'unite_sources':['tag','tag/file']}}
   nnoremap <silent> [unite]t :<C-u>Unite -auto-resize -buffer-name=tag tag tag/file<cr>
 NeoBundleLazy 'Shougo/unite-outline', {'autoload':{'unite_sources':'outline'}}
@@ -451,7 +469,10 @@ NeoBundleLazy 'Shougo/junkfile.vim', {'autoload':{'commands':'JunkfileOpen','uni
   nnoremap <silent> [unite]j :<C-u>Unite -auto-resize -buffer-name=junk junkfile junkfile/new<cr>
 
 " indents
-NeoBundle 'nathanaelkane/vim-indent-guides'
+NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
+        \ 'autoload' : {
+        \   'commands' : ['IndentGuidesEnable', 'IndentGuidesDisable', 'IndentGuidesToggle'],
+        \ }}
   let g:indent_guides_start_level=1
   let g:indent_guides_guide_size=1
   let g:indent_guides_enable_on_vim_startup=0
@@ -466,31 +487,49 @@ NeoBundle 'nathanaelkane/vim-indent-guides'
   endif
 
 " textobj
-NeoBundle 'kana/vim-textobj-user'
-NeoBundle 'kana/vim-textobj-indent'
-NeoBundle 'kana/vim-textobj-entire'
-NeoBundle 'lucapette/vim-textobj-underscore'
+NeoBundleLazy 'kana/vim-textobj-user', {
+      \   'autoload' : {
+      \     'function_prefix' : 'textobj'
+      \ }}
+NeoBundleLazy 'kana/vim-textobj-indent', {
+      \   'autoload' : {
+      \     'mappings' : [
+      \       ['xo', 'ai'], ['xo', 'ii'], ['xo', 'aI'], ['xo', 'iI']
+      \ ]}}
+NeoBundleLazy 'kana/vim-textobj-entire', {
+      \   'autoload' : {
+      \     'mappings' : [['xo', 'ae'], ['xo', 'ie']]
+      \ }}
+NeoBundleLazy 'lucapette/vim-textobj-underscore'
 
 " misc
+NeoBundle 'mhinz/vim-startify'
+  let g:startify_session_dir = '~/.vim/.cache/sessions'
+  let g:startify_change_to_vcs_root = 1
+  let g:startify_show_sessions = 1
+  nnoremap <F1> :Startify<cr>
 if exists('$TMUX')
   NeoBundle 'christoomey/vim-tmux-navigator'
 endif
-NeoBundle 'kana/vim-vspec'
+NeoBundleLazy 'kana/vim-vspec', {
+      \ 'autoload' : {
+      \   'filetypes' : ['vim']
+      \ }}
 NeoBundleLazy 'tpope/vim-scriptease', {'autoload':{'filetypes':['vim']}}
 NeoBundleLazy 'tpope/vim-markdown', {'autoload':{'filetypes':['markdown']}}
 if executable('redcarpet') && executable('instant-markdown-d')
   NeoBundleLazy 'suan/vim-instant-markdown', {'autoload':{'filetypes':['markdown']}}
 endif
 NeoBundleLazy 'guns/xterm-color-table.vim', {'autoload':{'commands':'XtermColorTable'}}
-NeoBundle 'chrisbra/vim_faq'
-NeoBundle 'vimwiki'
-NeoBundle 'bufkill.vim'
-NeoBundle 'mhinz/vim-startify'
-  let g:startify_session_dir = '~/.vim/.cache/sessions'
-  let g:startify_change_to_vcs_root = 1
-  let g:startify_show_sessions = 1
-  nnoremap <F1> :Startify<cr>
-NeoBundle 'scrooloose/syntastic'
+NeoBundleLazy 'chrisbra/vim_faq'
+NeoBundleLazy 'vimwiki'
+NeoBundleLazy 'bufkill.vim'
+
+NeoBundleLazy 'scrooloose/syntastic', {
+      \ 'autoload': {
+      \   'insert': 1,
+      \ }
+  \ }
   let g:syntastic_error_symbol = '✗'
   let g:syntastic_style_error_symbol = '✠'
   let g:syntastic_warning_symbol = '∆'
@@ -498,7 +537,15 @@ NeoBundle 'scrooloose/syntastic'
 NeoBundleLazy 'mattn/gist-vim', { 'depends': 'mattn/webapi-vim', 'autoload': { 'commands': 'Gist' } }
   let g:gist_post_private=1
   let g:gist_show_privates=1
-NeoBundleLazy 'Shougo/vimshell.vim', {'autoload':{'commands':[ 'VimShell', 'VimShellInteractive' ]}}
+NeoBundleLazy 'Shougo/vimshell.vim', {
+      \ 'depends' : 'Shougo/vimproc.vim',
+      \ 'autoload' : {
+      \   'commands' : [{ 'name' : 'VimShell',
+      \                   'complete' : 'customlist,vimshell#complete'},
+      \                 'VimShellExecute', 'VimShellInteractive',
+      \                 'VimShellTerminal', 'VimShellPop'],
+      \   'mappings' : ['<Plug>(vimshell_']
+      \ }}
   if s:is_macvim
     let g:vimshell_editor_command='mvim'
   else
