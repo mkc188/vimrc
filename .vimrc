@@ -114,12 +114,11 @@ set incsearch                                       "incremental searching
 set ignorecase                                      "ignore case for searching
 set smartcase                                       "do case-sensitive if there's a capital letter
 set gdefault                                        "add the g flag to search/replace by default
-if executable('ack')
-  set grepprg=ack\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow\ $*
-  set grepformat=%f:%l:%c:%m
-endif
 if executable('ag')
   set grepprg=ag\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow
+  set grepformat=%f:%l:%c:%m
+elseif executable('ack')
+  set grepprg=ack\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow\ $*
   set grepformat=%f:%l:%c:%m
 endif
 
@@ -165,10 +164,6 @@ if has('conceal')
 endif
 
 if has('gui_running')
-  if s:is_windows
-    autocmd GUIEnter * simalt ~x
-  endif
-
   set guioptions-=m
   set guioptions-=T
   set guioptions-=r
@@ -177,9 +172,7 @@ if has('gui_running')
 
   if s:is_macvim
     set guifont=Source\ Code\ Pro:h14
-  endif
-
-  if s:is_windows
+  elseif s:is_windows
     set guifont=Source\ Code\ Pro:h10
   endif
 else
@@ -296,6 +289,12 @@ NeoBundleLazy 'megaannum/vimside', {'autoload': {'filetypes': ['scala']}}
 NeoBundleLazy 'jnwhiteh/vim-golang', {'autoload':{'filetypes':['go']}}
 NeoBundleLazy 'nsf/gocode', {'autoload': {'filetypes':['go']}, 'rtp': 'vim'}
 
+" markdown
+NeoBundleLazy 'tpope/vim-markdown', {'autoload':{'filetypes':['markdown']}}
+if executable('redcarpet') && executable('instant-markdown-d')
+  NeoBundleLazy 'suan/vim-instant-markdown', {'autoload':{'filetypes':['markdown']}}
+endif
+
 " scm
 NeoBundle 'mhinz/vim-signify'
   let g:signify_update_on_bufenter=0
@@ -351,7 +350,6 @@ NeoBundle 'justinmk/vim-sneak'
   hi link SneakPluginScope Search
   hi link SneakStreakTarget Search
   hi SneakStreakMask guifg=yellow guibg=yellow ctermfg=yellow ctermbg=yellow
-NeoBundleLazy 'editorconfig/editorconfig-vim', {'autoload':{'insert':1}}
 NeoBundleLazy 'tpope/vim-endwise', {'autoload':{'filetypes':['lua','ruby','sh','zsh','vb','vbnet','aspvbs','vim','c','cpp','xdefaults']}}
 NeoBundleLazy 'tpope/vim-speeddating'
 NeoBundleLazy 'thinca/vim-visualstar', {
@@ -395,14 +393,8 @@ NeoBundleLazy 'mbbill/undotree', {'autoload':{'commands':'UndotreeToggle'}}
   let g:undotree_SplitLocation='botright'
   let g:undotree_SetFocusWhenToggle=1
   nnoremap <silent> <F5> :UndotreeToggle<CR>
-NeoBundleLazy 'EasyGrep', {'autoload':{'commands':'GrepOptions'}}
-  let g:EasyGrepRecursive=1
-  let g:EasyGrepAllOptionsInExplorer=1
-  let g:EasyGrepCommand=1
-  nnoremap <leader>vo :GrepOptions<cr>
 NeoBundleLazy 'majutsushi/tagbar', {'autoload':{'commands':'TagbarToggle'}}
   nnoremap <silent> <F9> :TagbarToggle<CR>
-
 
 " unite
 NeoBundle 'Shougo/unite.vim'
@@ -434,6 +426,10 @@ NeoBundle 'Shougo/unite.vim'
     nmap <buffer> Q <plug>(unite_exit)
     nmap <buffer> <esc> <plug>(unite_exit)
     imap <buffer> <esc> <plug>(unite_exit)
+
+    " Enable navigation with control-j and control-k in insert mode
+    imap <buffer> <C-j> <Plug>(unite_select_next_line)
+    imap <buffer> <C-k> <Plug>(unite_select_previous_line)
   endfunction
   autocmd FileType unite call s:unite_settings()
 
@@ -454,6 +450,8 @@ NeoBundle 'Shougo/unite.vim'
   nnoremap <silent> [unite]/ :<C-u>Unite -no-quit -buffer-name=search grep:.<cr>
   nnoremap <silent> [unite]m :<C-u>Unite -auto-resize -buffer-name=mappings mapping<cr>
   nnoremap <silent> [unite]s :<C-u>Unite -quick-match buffer<cr>
+
+  nnoremap <leader>nbu :Unite neobundle/update -vertical -no-start-insert<cr>
 
 NeoBundleLazy 'Shougo/neomru.vim', {'autoload':{'unite_sources':'file_mru'}}
   let g:neomru#file_mru_path='~/.vim/.cache/neomru/file'
@@ -486,22 +484,6 @@ NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
     autocmd VimEnter,Colorscheme * call s:indent_set_console_colors()
   endif
 
-" textobj
-NeoBundleLazy 'kana/vim-textobj-user', {
-      \   'autoload' : {
-      \     'function_prefix' : 'textobj'
-      \ }}
-NeoBundleLazy 'kana/vim-textobj-indent', {
-      \   'autoload' : {
-      \     'mappings' : [
-      \       ['xo', 'ai'], ['xo', 'ii'], ['xo', 'aI'], ['xo', 'iI']
-      \ ]}}
-NeoBundleLazy 'kana/vim-textobj-entire', {
-      \   'autoload' : {
-      \     'mappings' : [['xo', 'ae'], ['xo', 'ie']]
-      \ }}
-NeoBundleLazy 'lucapette/vim-textobj-underscore'
-
 " misc
 NeoBundle 'mhinz/vim-startify'
   let g:startify_session_dir = '~/.vim/.cache/sessions'
@@ -511,19 +493,7 @@ NeoBundle 'mhinz/vim-startify'
 if exists('$TMUX')
   NeoBundle 'christoomey/vim-tmux-navigator'
 endif
-NeoBundleLazy 'kana/vim-vspec', {
-      \ 'autoload' : {
-      \   'filetypes' : ['vim']
-      \ }}
-NeoBundleLazy 'tpope/vim-scriptease', {'autoload':{'filetypes':['vim']}}
-NeoBundleLazy 'tpope/vim-markdown', {'autoload':{'filetypes':['markdown']}}
-if executable('redcarpet') && executable('instant-markdown-d')
-  NeoBundleLazy 'suan/vim-instant-markdown', {'autoload':{'filetypes':['markdown']}}
-endif
 NeoBundleLazy 'guns/xterm-color-table.vim', {'autoload':{'commands':'XtermColorTable'}}
-NeoBundleLazy 'chrisbra/vim_faq'
-NeoBundleLazy 'vimwiki'
-NeoBundleLazy 'bufkill.vim'
 
 NeoBundleLazy 'scrooloose/syntastic', {
       \ 'autoload': {
@@ -563,13 +533,6 @@ NeoBundleLazy 'Shougo/vimshell.vim', {
 NeoBundleLazy 'zhaocai/GoldenView.Vim', {'autoload':{'mappings':['<Plug>ToggleGoldenViewAutoResize']}}
   let g:goldenview__enable_default_mapping=0
   nmap <F4> <Plug>ToggleGoldenViewAutoResize
-
-" windows
-NeoBundleLazy 'PProvost/vim-ps1', {'autoload':{'filetypes':['ps1']}}
-  autocmd BufNewFile,BufRead *.ps1,*.psd1,*.psm1 setlocal ft=ps1
-NeoBundleLazy 'nosami/Omnisharp', {'autoload':{'filetypes':['cs']}}
-
-nnoremap <leader>nbu :Unite neobundle/update -vertical -no-start-insert<cr>
 
 " -------- mappings --------
 " formatting shortcuts
