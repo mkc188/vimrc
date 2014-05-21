@@ -63,6 +63,8 @@ set viewoptions=folds,options,cursor,unix,slash     "unix/windows compatibility
 set encoding=utf-8                                  "set encoding for text
 if exists('$TMUX')
   set clipboard=
+elseif has('unnamedplus')
+  set clipboard=unnamedplus
 else
   set clipboard=unnamed                             "sync with OS clipboard
 endif
@@ -485,6 +487,7 @@ NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
   endif
 
 " misc
+NeoBundle 'bufkill.vim'
 NeoBundle 'mhinz/vim-startify'
   let g:startify_session_dir = '~/.vim/.cache/sessions'
   let g:startify_change_to_vcs_root = 1
