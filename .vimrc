@@ -5,9 +5,20 @@ let s:is_windows = has('win32') || has('win64')
 let s:is_cygwin = has('win32unix')
 let s:is_macvim = has('gui_macvim')
 
-" -------- setup & neobundle --------
-let g:slow_mode = 1
+" -------- detect cpuinfo --------
+let g:slow_mode = 0
+let s:cpu_list = []
+call add(s:cpu_list, 'ARMv6-compatible processor rev 7')  " Raspberry Pi
+if filereadable('/proc/cpuinfo')
+  for cpu in s:cpu_list
+    let g:slow_mode = system('grep -c "'.cpu.'" /proc/cpuinfo')
+    if g:slow_mode
+      break
+    endif
+  endfor
+endif
 
+" -------- setup & neobundle --------
 if has('vim_starting')
 set nocompatible               " Be iMproved
 
@@ -203,6 +214,8 @@ endif
 " core
 NeoBundle 'bling/vim-airline'
   let g:airline_theme='jellybeans'
+  let g:airline#extensions#disable_rtp_load=1
+  let g:airline#extensions#syntastic#enabled=0
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'tpope/vim-unimpaired'
   nmap <M-k> [e
@@ -302,25 +315,27 @@ if executable('redcarpet') && executable('instant-markdown-d')
 endif
 
 " scm
-NeoBundle 'mhinz/vim-signify'
-  let g:signify_update_on_bufenter=0
-if executable('hg')
-  NeoBundle 'bitbucket:ludovicchabant/vim-lawrencium'
+if !g:slow_mode
+  NeoBundle 'mhinz/vim-signify'
+    let g:signify_update_on_bufenter=0
+  if executable('hg')
+    NeoBundle 'bitbucket:ludovicchabant/vim-lawrencium'
+  endif
+  NeoBundle 'tpope/vim-fugitive'
+    nnoremap <silent> <leader>gs :Gstatus<CR>
+    nnoremap <silent> <leader>gd :Gdiff<CR>
+    nnoremap <silent> <leader>gc :Gcommit<CR>
+    nnoremap <silent> <leader>gb :Gblame<CR>
+    nnoremap <silent> <leader>gl :Glog<CR>
+    nnoremap <silent> <leader>gp :Git push<CR>
+    nnoremap <silent> <leader>gw :Gwrite<CR>
+    nnoremap <silent> <leader>gr :Gremove<CR>
+    autocmd FileType gitcommit nmap <buffer> U :Git checkout -- <C-r><C-g><CR>
+    autocmd BufReadPost fugitive://* set bufhidden=delete
+  NeoBundleLazy 'gregsexton/gitv', {'depends':['tpope/vim-fugitive'], 'autoload':{'commands':'Gitv'}}
+    nnoremap <silent> <leader>gv :Gitv<CR>
+    nnoremap <silent> <leader>gV :Gitv!<CR>
 endif
-NeoBundle 'tpope/vim-fugitive'
-  nnoremap <silent> <leader>gs :Gstatus<CR>
-  nnoremap <silent> <leader>gd :Gdiff<CR>
-  nnoremap <silent> <leader>gc :Gcommit<CR>
-  nnoremap <silent> <leader>gb :Gblame<CR>
-  nnoremap <silent> <leader>gl :Glog<CR>
-  nnoremap <silent> <leader>gp :Git push<CR>
-  nnoremap <silent> <leader>gw :Gwrite<CR>
-  nnoremap <silent> <leader>gr :Gremove<CR>
-  autocmd FileType gitcommit nmap <buffer> U :Git checkout -- <C-r><C-g><CR>
-  autocmd BufReadPost fugitive://* set bufhidden=delete
-NeoBundleLazy 'gregsexton/gitv', {'depends':['tpope/vim-fugitive'], 'autoload':{'commands':'Gitv'}}
-  nnoremap <silent> <leader>gv :Gitv<CR>
-  nnoremap <silent> <leader>gV :Gitv!<CR>
 
 " autocomplete
 if !g:slow_mode
@@ -371,7 +386,6 @@ NeoBundleLazy 'tomtom/tcomment_vim', {
       \ }
       \}
 NeoBundleLazy 'terryma/vim-expand-region', { 'autoload' : { 'mappings' : [ [ 'ov', '<Plug>(expand_region_' ] ] } }
-
 NeoBundleLazy 'godlygeek/tabular', {'autoload':{'commands':'Tabularize'}}
   nmap <Leader>a& :Tabularize /&<CR>
   vmap <Leader>a& :Tabularize /&<CR>
@@ -507,12 +521,14 @@ if exists('$TMUX')
   NeoBundle 'christoomey/vim-tmux-navigator'
 endif
 NeoBundleLazy 'guns/xterm-color-table.vim', {'autoload':{'commands':'XtermColorTable'}}
-
 NeoBundleLazy 'scrooloose/syntastic', {
       \ 'autoload': {
-      \   'insert': 1,
-      \ }
-  \ }
+      \   'filetypes' : ['ruby', 'c'],
+      \   'commands' : [
+      \     'SyntasticCheck', 'SyntasticInfo',
+      \     'SyntasticReset', 'SyntasticToggleMode'
+      \   ]
+      \ }}
   let g:syntastic_error_symbol = '✗'
   let g:syntastic_style_error_symbol = '✠'
   let g:syntastic_warning_symbol = '∆'
