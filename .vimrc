@@ -168,13 +168,21 @@ set matchtime=2                                     "tens of a second to show ma
 set number
 set lazyredraw
 set showtabline=0
-set laststatus=2
-set noshowmode
 set foldmethod=syntax                               "fold via syntax of files
 set foldlevelstart=99                               "open all folds by default
 let g:xml_syntax_folding=1                          "enable xml folding
 
 autocmd VimResized * wincmd =                       " automatically resize splits when resizing MacVim window
+
+if has("statusline") && !&cp
+  set laststatus=2
+  set statusline=%f\ %m\ %r
+  set statusline+=[#%n]
+  set statusline+=[%l/%L]
+  set statusline+=[%p%%]
+  set statusline+=[%v]
+  set statusline+=[%b][0x%B]
+endif
 
 if has('conceal')
   set conceallevel=1
@@ -212,10 +220,6 @@ endif
 
 " -------- plugin configuration --------
 " core
-NeoBundle 'bling/vim-airline'
-  let g:airline_theme='jellybeans'
-  let g:airline#extensions#disable_rtp_load=1
-  let g:airline#extensions#syntastic#enabled=0
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'tpope/vim-unimpaired'
   nmap <M-k> [e
@@ -332,6 +336,7 @@ if !g:slow_mode
     nnoremap <silent> <leader>gr :Gremove<CR>
     autocmd FileType gitcommit nmap <buffer> U :Git checkout -- <C-r><C-g><CR>
     autocmd BufReadPost fugitive://* set bufhidden=delete
+    set statusline+=%{fugitive#statusline()}
   NeoBundleLazy 'gregsexton/gitv', {'depends':['tpope/vim-fugitive'], 'autoload':{'commands':'Gitv'}}
     nnoremap <silent> <leader>gv :Gitv<CR>
     nnoremap <silent> <leader>gV :Gitv!<CR>
@@ -365,7 +370,6 @@ endif
 
 " editing
 NeoBundle 'terryma/vim-multiple-cursors'
-NeoBundle 'chrisbra/NrrwRgn'
 NeoBundle 'mkc188/auto-pairs'
 NeoBundle 'justinmk/vim-sneak'
   let g:sneak#streak = 1
@@ -373,6 +377,15 @@ NeoBundle 'justinmk/vim-sneak'
   hi link SneakPluginScope Search
   hi link SneakStreakTarget Search
   hi SneakStreakMask guifg=yellow guibg=yellow ctermfg=yellow ctermbg=yellow
+NeoBundleLazy 'chrisbra/NrrwRgn', {
+      \ 'autoload' : {
+      \   'commands' : [
+      \     'NR',
+      \     'NarrowRegion',
+      \     'NW',
+      \     'NarrowWindow',
+      \   ]},
+      \ }
 NeoBundleLazy 'tpope/vim-endwise', {'autoload':{'filetypes':['lua','ruby','sh','zsh','vb','vbnet','aspvbs','vim','c','cpp','xdefaults']}}
 NeoBundleLazy 'tpope/vim-speeddating'
 NeoBundleLazy 'thinca/vim-visualstar', {
@@ -402,7 +415,14 @@ NeoBundleLazy 'godlygeek/tabular', {'autoload':{'commands':'Tabularize'}}
 
 " navigation
 if !g:slow_mode
-  NeoBundle 'Shougo/vimfiler.vim'
+  NeoBundleLazy 'Shougo/vimfiler.vim', {
+        \  'autoload': {'commands': [
+        \                  'VimFiler',
+        \                  'VimFilerExplorer',
+        \                  'VimFilerBufferDir',
+        \              ]},
+        \  'depends': ['Shougo/unite.vim', 'Shougo/vimproc.vim']
+        \}
     let g:vimfiler_as_default_explorer=1
     let g:vimfiler_safe_mode_by_default = 0
     let g:vimfiler_data_directory='~/.vim/.cache/vimfiler'
@@ -422,7 +442,7 @@ NeoBundleLazy 'majutsushi/tagbar', {'autoload':{'commands':'TagbarToggle'}}
 
 " unite
 if !g:slow_mode
-  NeoBundle 'Shougo/unite.vim'
+  NeoBundleLazy "Shougo/unite.vim", { "autoload" : { "commands" : ["Unite"] } }
     let bundle = neobundle#get('unite.vim')
     function! bundle.hooks.on_source(bundle)
       call unite#filters#matcher_default#use(['matcher_fuzzy'])
@@ -692,6 +712,10 @@ endfor
 if s:is_macvim
   set macmeta
 endif
+
+" format pasted text automatically
+nnoremap p p=`]
+nnoremap <c-p> p
 
 " -------- commands --------
 command! -bang Q q<bang>
