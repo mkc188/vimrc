@@ -6,6 +6,8 @@ let s:is_cygwin = has('win32unix')
 let s:is_macvim = has('gui_macvim')
 
 " -------- setup & neobundle --------
+let g:slow_mode = 1
+
 if has('vim_starting')
 set nocompatible               " Be iMproved
 
@@ -146,6 +148,8 @@ call EnsureExists(&directory)
 
 let mapleader = ","
 let g:mapleader = ","
+
+let g:netrw_home=expand('~/.vim/.cache')
 
 " -------- ui configuration --------
 set showmatch                                       "automatically highlight matching braces/brackets/etc.
@@ -319,27 +323,29 @@ NeoBundleLazy 'gregsexton/gitv', {'depends':['tpope/vim-fugitive'], 'autoload':{
   nnoremap <silent> <leader>gV :Gitv!<CR>
 
 " autocomplete
-NeoBundleLazy 'honza/vim-snippets'
-NeoBundleLazy 'Shougo/neosnippet-snippets'
-NeoBundleLazy 'Shougo/neosnippet.vim', { 'depends' : ['honza/vim-snippets', 'Shougo/neosnippet-snippets'], 'autoload' : { 'insert' : '1', 'unite_sources' : ['neosnippet/runtime', 'neosnippet/user', 'snippet']} }
-  let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets,~/.vim/snippets'
-  let g:neosnippet#enable_snipmate_compatibility=1
-  let g:neosnippet_data_directory='~/.vim/.cache/neosnippet'
+if !g:slow_mode
+  NeoBundleLazy 'honza/vim-snippets'
+  NeoBundleLazy 'Shougo/neosnippet-snippets'
+  NeoBundleLazy 'Shougo/neosnippet.vim', { 'depends' : ['honza/vim-snippets', 'Shougo/neosnippet-snippets'], 'autoload' : { 'insert' : '1', 'unite_sources' : ['neosnippet/runtime', 'neosnippet/user', 'snippet']} }
+    let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets,~/.vim/snippets'
+    let g:neosnippet#enable_snipmate_compatibility=1
+    let g:neosnippet_data_directory='~/.vim/.cache/neosnippet'
 
-  imap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : (pumvisible() ? "\<C-n>" : "\<TAB>")
-  smap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-  imap <expr><S-TAB> pumvisible() ? "\<C-p>" : ""
-  smap <expr><S-TAB> pumvisible() ? "\<C-p>" : ""
+    imap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : (pumvisible() ? "\<C-n>" : "\<TAB>")
+    smap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+    imap <expr><S-TAB> pumvisible() ? "\<C-p>" : ""
+    smap <expr><S-TAB> pumvisible() ? "\<C-p>" : ""
 
-if has('lua') && ( version > 703 || version == 703 && has('patch885') )
-  NeoBundleLazy 'Shougo/neocomplete.vim', {'autoload':{'insert':1}, 'vim_version':'7.3.885'}
-    let g:neocomplete#enable_at_startup=1
-    let g:neocomplete#data_directory='~/.vim/.cache/neocomplete'
-else
-  NeoBundleLazy 'Shougo/neocomplcache.vim', {'autoload':{'insert':1}}
-    let g:neocomplcache_enable_at_startup=1
-    let g:neocomplcache_temporary_dir='~/.vim/.cache/neocomplcache'
-    let g:neocomplcache_enable_fuzzy_completion=1
+  if has('lua') && ( version > 703 || version == 703 && has('patch885') )
+    NeoBundleLazy 'Shougo/neocomplete.vim', {'autoload':{'insert':1}, 'vim_version':'7.3.885'}
+      let g:neocomplete#enable_at_startup=1
+      let g:neocomplete#data_directory='~/.vim/.cache/neocomplete'
+  else
+    NeoBundleLazy 'Shougo/neocomplcache.vim', {'autoload':{'insert':1}}
+      let g:neocomplcache_enable_at_startup=1
+      let g:neocomplcache_temporary_dir='~/.vim/.cache/neocomplcache'
+      let g:neocomplcache_enable_fuzzy_completion=1
+  endif
 endif
 
 " editing
@@ -381,12 +387,14 @@ NeoBundleLazy 'godlygeek/tabular', {'autoload':{'commands':'Tabularize'}}
   vmap <Leader>a<Bar> :Tabularize /<Bar><CR>
 
 " navigation
-NeoBundle 'Shougo/vimfiler.vim'
-  let g:vimfiler_as_default_explorer=1
-  let g:vimfiler_safe_mode_by_default = 0
-  let g:vimfiler_data_directory='~/.vim/.cache/vimfiler'
-  nnoremap <F2> :VimFilerExplorer<CR>
-  nnoremap <F3> :VimFilerBufferDir -quit<CR>
+if !g:slow_mode
+  NeoBundle 'Shougo/vimfiler.vim'
+    let g:vimfiler_as_default_explorer=1
+    let g:vimfiler_safe_mode_by_default = 0
+    let g:vimfiler_data_directory='~/.vim/.cache/vimfiler'
+    nnoremap <F2> :VimFilerExplorer<CR>
+    nnoremap <F3> :VimFilerBufferDir -quit<CR>
+endif
 NeoBundleLazy 'mileszs/ack.vim', { 'autoload' : {'commands': 'Ack'}}
   if executable('ag')
     let g:ackprg = "ag --nogroup --column --smart-case --follow"
@@ -399,74 +407,76 @@ NeoBundleLazy 'majutsushi/tagbar', {'autoload':{'commands':'TagbarToggle'}}
   nnoremap <silent> <F9> :TagbarToggle<CR>
 
 " unite
-NeoBundle 'Shougo/unite.vim'
-  let bundle = neobundle#get('unite.vim')
-  function! bundle.hooks.on_source(bundle)
-    call unite#filters#matcher_default#use(['matcher_fuzzy'])
-    call unite#filters#sorter_default#use(['sorter_rank'])
-    call unite#set_profile('files', 'smartcase', 1)
-    call unite#custom#source('line,outline','matchers','matcher_fuzzy')
-  endfunction
+if !g:slow_mode
+  NeoBundle 'Shougo/unite.vim'
+    let bundle = neobundle#get('unite.vim')
+    function! bundle.hooks.on_source(bundle)
+      call unite#filters#matcher_default#use(['matcher_fuzzy'])
+      call unite#filters#sorter_default#use(['sorter_rank'])
+      call unite#set_profile('files', 'smartcase', 1)
+      call unite#custom#source('line,outline','matchers','matcher_fuzzy')
+    endfunction
 
-  let g:unite_data_directory='~/.vim/.cache/unite'
-  let g:unite_enable_start_insert=1
-  let g:unite_source_history_yank_enable=1
-  let g:unite_source_rec_max_cache_files=5000
-  let g:unite_prompt='» '
+    let g:unite_data_directory='~/.vim/.cache/unite'
+    let g:unite_enable_start_insert=1
+    let g:unite_source_history_yank_enable=1
+    let g:unite_source_rec_max_cache_files=5000
+    let g:unite_prompt='» '
 
-  if executable('ag')
-    let g:unite_source_grep_command='ag'
-    let g:unite_source_grep_default_opts='--nocolor --nogroup -S -C4'
-    let g:unite_source_grep_recursive_opt=''
-  elseif executable('ack')
-    let g:unite_source_grep_command='ack'
-    let g:unite_source_grep_default_opts='--no-heading --no-color -C4'
-    let g:unite_source_grep_recursive_opt=''
-  endif
+    if executable('ag')
+      let g:unite_source_grep_command='ag'
+      let g:unite_source_grep_default_opts='--nocolor --nogroup -S -C4'
+      let g:unite_source_grep_recursive_opt=''
+    elseif executable('ack')
+      let g:unite_source_grep_command='ack'
+      let g:unite_source_grep_default_opts='--no-heading --no-color -C4'
+      let g:unite_source_grep_recursive_opt=''
+    endif
 
-  function! s:unite_settings()
-    nmap <buffer> Q <plug>(unite_exit)
-    nmap <buffer> <esc> <plug>(unite_exit)
-    imap <buffer> <esc> <plug>(unite_exit)
+    function! s:unite_settings()
+      nmap <buffer> Q <plug>(unite_exit)
+      nmap <buffer> <esc> <plug>(unite_exit)
+      imap <buffer> <esc> <plug>(unite_exit)
 
-    " Enable navigation with control-j and control-k in insert mode
-    imap <buffer> <C-j> <Plug>(unite_select_next_line)
-    imap <buffer> <C-k> <Plug>(unite_select_previous_line)
-  endfunction
-  autocmd FileType unite call s:unite_settings()
+      " Enable navigation with control-j and control-k in insert mode
+      imap <buffer> <C-j> <Plug>(unite_select_next_line)
+      imap <buffer> <C-k> <Plug>(unite_select_previous_line)
+    endfunction
+    autocmd FileType unite call s:unite_settings()
 
-  nmap <space> [unite]
-  nnoremap [unite] <nop>
+    nmap <space> [unite]
+    nnoremap [unite] <nop>
 
-  if s:is_windows
-    nnoremap <silent> [unite]<space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed file_rec:! buffer file_mru bookmark<cr>
-    nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec:!<cr>
-  else
-    nnoremap <silent> [unite]<space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed file_rec/async:! buffer file_mru bookmark<cr>
-    nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec/async:!<cr>
-  endif
-  nnoremap <silent> [unite]e :<C-u>Unite -buffer-name=recent file_mru<cr>
-  nnoremap <silent> [unite]y :<C-u>Unite -buffer-name=yanks history/yank<cr>
-  nnoremap <silent> [unite]l :<C-u>Unite -auto-resize -buffer-name=line line<cr>
-  nnoremap <silent> [unite]b :<C-u>Unite -auto-resize -buffer-name=buffers buffer<cr>
-  nnoremap <silent> [unite]/ :<C-u>Unite -no-quit -buffer-name=search grep:.<cr>
-  nnoremap <silent> [unite]m :<C-u>Unite -auto-resize -buffer-name=mappings mapping<cr>
-  nnoremap <silent> [unite]s :<C-u>Unite -quick-match buffer<cr>
+    if s:is_windows
+      nnoremap <silent> [unite]<space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed file_rec:! buffer file_mru bookmark<cr>
+      nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec:!<cr>
+    else
+      nnoremap <silent> [unite]<space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed file_rec/async:! buffer file_mru bookmark<cr>
+      nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec/async:!<cr>
+    endif
+    nnoremap <silent> [unite]e :<C-u>Unite -buffer-name=recent file_mru<cr>
+    nnoremap <silent> [unite]y :<C-u>Unite -buffer-name=yanks history/yank<cr>
+    nnoremap <silent> [unite]l :<C-u>Unite -auto-resize -buffer-name=line line<cr>
+    nnoremap <silent> [unite]b :<C-u>Unite -auto-resize -buffer-name=buffers buffer<cr>
+    nnoremap <silent> [unite]/ :<C-u>Unite -no-quit -buffer-name=search grep:.<cr>
+    nnoremap <silent> [unite]m :<C-u>Unite -auto-resize -buffer-name=mappings mapping<cr>
+    nnoremap <silent> [unite]s :<C-u>Unite -quick-match buffer<cr>
 
-  nnoremap <leader>nbu :Unite neobundle/update -vertical -no-start-insert<cr>
+    nnoremap <leader>nbu :Unite neobundle/update -vertical -no-start-insert<cr>
 
-NeoBundleLazy 'Shougo/neomru.vim', {'autoload':{'unite_sources':'file_mru'}}
-  let g:neomru#file_mru_path='~/.vim/.cache/neomru/file'
-  let g:neomru#directory_mru_path='~/.vim/.cache/neomru/directory'
-NeoBundleLazy 'tsukkee/unite-tag', {'autoload':{'unite_sources':['tag','tag/file']}}
-  nnoremap <silent> [unite]t :<C-u>Unite -auto-resize -buffer-name=tag tag tag/file<cr>
-NeoBundleLazy 'Shougo/unite-outline', {'autoload':{'unite_sources':'outline'}}
-  nnoremap <silent> [unite]o :<C-u>Unite -auto-resize -buffer-name=outline outline<cr>
-NeoBundleLazy 'Shougo/unite-help', {'autoload':{'unite_sources':'help'}}
-  nnoremap <silent> [unite]h :<C-u>Unite -auto-resize -buffer-name=help help<cr>
-NeoBundleLazy 'Shougo/junkfile.vim', {'autoload':{'commands':'JunkfileOpen','unite_sources':['junkfile','junkfile/new']}}
-  let g:junkfile#directory=expand("~/.vim/.cache/junk")
-  nnoremap <silent> [unite]j :<C-u>Unite -auto-resize -buffer-name=junk junkfile junkfile/new<cr>
+  NeoBundleLazy 'Shougo/neomru.vim', {'autoload':{'unite_sources':'file_mru'}}
+    let g:neomru#file_mru_path='~/.vim/.cache/neomru/file'
+    let g:neomru#directory_mru_path='~/.vim/.cache/neomru/directory'
+  NeoBundleLazy 'tsukkee/unite-tag', {'autoload':{'unite_sources':['tag','tag/file']}}
+    nnoremap <silent> [unite]t :<C-u>Unite -auto-resize -buffer-name=tag tag tag/file<cr>
+  NeoBundleLazy 'Shougo/unite-outline', {'autoload':{'unite_sources':'outline'}}
+    nnoremap <silent> [unite]o :<C-u>Unite -auto-resize -buffer-name=outline outline<cr>
+  NeoBundleLazy 'Shougo/unite-help', {'autoload':{'unite_sources':'help'}}
+    nnoremap <silent> [unite]h :<C-u>Unite -auto-resize -buffer-name=help help<cr>
+  NeoBundleLazy 'Shougo/junkfile.vim', {'autoload':{'commands':'JunkfileOpen','unite_sources':['junkfile','junkfile/new']}}
+    let g:junkfile#directory=expand("~/.vim/.cache/junk")
+    nnoremap <silent> [unite]j :<C-u>Unite -auto-resize -buffer-name=junk junkfile junkfile/new<cr>
+endif
 
 " indents
 NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
