@@ -277,14 +277,14 @@ NeoBundleLazy 'mattn/emmet-vim', {'autoload':{'filetypes':['html','xml','xsl','x
 
 " javascript
 NeoBundleLazy 'marijnh/tern_for_vim', {
-  \ 'autoload': { 'filetypes': ['javascript'] },
-  \ 'build': {
-    \ 'mac': 'npm install',
-    \ 'unix': 'npm install',
-    \ 'cygwin': 'npm install',
-    \ 'windows': 'npm install',
-  \ },
-\ }
+      \ 'autoload': { 'filetypes': ['javascript'] },
+      \ 'build': {
+        \ 'mac': 'npm install',
+        \ 'unix': 'npm install',
+        \ 'cygwin': 'npm install',
+        \ 'windows': 'npm install',
+      \ },
+    \ }
 NeoBundleLazy 'pangloss/vim-javascript', {'autoload':{'filetypes':['javascript']}}
 NeoBundleLazy 'maksimr/vim-jsbeautify', {'autoload':{'filetypes':['javascript']}}
   nnoremap <leader>fjs :call JsBeautify()<cr>
@@ -349,7 +349,7 @@ if !g:slow_mode
   NeoBundleLazy 'Shougo/neosnippet.vim', { 'depends' : ['honza/vim-snippets', 'Shougo/neosnippet-snippets'], 'autoload' : { 'insert' : '1', 'unite_sources' : ['neosnippet/runtime', 'neosnippet/user', 'snippet']} }
     let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets,~/.vim/snippets'
     let g:neosnippet#enable_snipmate_compatibility=1
-    let g:neosnippet_data_directory='~/.vim/.cache/neosnippet'
+    let g:neosnippet_data_directory=expand('~/.vim/.cache/neosnippet')
 
     imap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : (pumvisible() ? "\<C-n>" : "\<TAB>")
     smap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
@@ -359,11 +359,11 @@ if !g:slow_mode
   if has('lua') && ( version > 703 || version == 703 && has('patch885') )
     NeoBundleLazy 'Shougo/neocomplete.vim', {'autoload':{'insert':1}, 'vim_version':'7.3.885'}
       let g:neocomplete#enable_at_startup=1
-      let g:neocomplete#data_directory='~/.vim/.cache/neocomplete'
+      let g:neocomplete#data_directory=expand('~/.vim/.cache/neocomplete')
   else
     NeoBundleLazy 'Shougo/neocomplcache.vim', {'autoload':{'insert':1}}
       let g:neocomplcache_enable_at_startup=1
-      let g:neocomplcache_temporary_dir='~/.vim/.cache/neocomplcache'
+      let g:neocomplcache_temporary_dir=expand('~/.vim/.cache/neocomplcache')
       let g:neocomplcache_enable_fuzzy_completion=1
   endif
 endif
@@ -390,7 +390,9 @@ NeoBundleLazy 'tpope/vim-endwise', {'autoload':{'filetypes':['lua','ruby','sh','
 NeoBundleLazy 'tpope/vim-speeddating'
 NeoBundleLazy 'thinca/vim-visualstar', {
       \   'autoload': {
-      \     'mappings': ['<Plug>(visualstar-']
+      \     'mappings': [
+      \       ['xv', '*'], ['xv', '#'], ['xv', 'g'], ['xv', 'g*']
+      \     ]
       \   }
       \ }
 NeoBundleLazy 'tomtom/tcomment_vim', {
@@ -398,7 +400,7 @@ NeoBundleLazy 'tomtom/tcomment_vim', {
       \   'mappings': [['nx', 'gc', 'gcc', 'gC']]
       \ }
       \}
-NeoBundleLazy 'terryma/vim-expand-region', { 'autoload' : { 'mappings' : [ [ 'ov', '<Plug>(expand_region_' ] ] } }
+NeoBundleLazy 'terryma/vim-expand-region', { 'autoload' : { 'mappings' : [ [ 'ov', '+' ], [ 'ov', '_' ] ] } }
 NeoBundleLazy 'godlygeek/tabular', {'autoload':{'commands':'Tabularize'}}
   nmap <Leader>a& :Tabularize /&<CR>
   vmap <Leader>a& :Tabularize /&<CR>
@@ -425,7 +427,7 @@ if !g:slow_mode
         \}
     let g:vimfiler_as_default_explorer=1
     let g:vimfiler_safe_mode_by_default = 0
-    let g:vimfiler_data_directory='~/.vim/.cache/vimfiler'
+    let g:vimfiler_data_directory=expand('~/.vim/.cache/vimfiler')
     nnoremap <F2> :VimFilerExplorer<CR>
     nnoremap <F3> :VimFilerBufferDir -quit<CR>
 endif
@@ -451,7 +453,7 @@ if !g:slow_mode
       call unite#custom#source('line,outline','matchers','matcher_fuzzy')
     endfunction
 
-    let g:unite_data_directory='~/.vim/.cache/unite'
+    let g:unite_data_directory=expand('~/.vim/.cache/unite')
     let g:unite_enable_start_insert=1
     let g:unite_source_history_yank_enable=1
     let g:unite_source_rec_max_cache_files=5000
@@ -499,8 +501,8 @@ if !g:slow_mode
     nnoremap <leader>nbu :Unite neobundle/update -vertical -no-start-insert<cr>
 
   NeoBundleLazy 'Shougo/neomru.vim', {'autoload':{'unite_sources':'file_mru'}}
-    let g:neomru#file_mru_path='~/.vim/.cache/neomru/file'
-    let g:neomru#directory_mru_path='~/.vim/.cache/neomru/directory'
+    let g:neomru#file_mru_path=expand('~/.vim/.cache/neomru/file')
+    let g:neomru#directory_mru_path=expand('~/.vim/.cache/neomru/directory')
   NeoBundleLazy 'tsukkee/unite-tag', {'autoload':{'unite_sources':['tag','tag/file']}}
     nnoremap <silent> [unite]t :<C-u>Unite -auto-resize -buffer-name=tag tag tag/file<cr>
   NeoBundleLazy 'Shougo/unite-outline', {'autoload':{'unite_sources':'outline'}}
@@ -514,9 +516,9 @@ endif
 
 " indents
 NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
-        \ 'autoload' : {
-        \   'commands' : ['IndentGuidesEnable', 'IndentGuidesDisable', 'IndentGuidesToggle'],
-        \ }}
+      \ 'autoload' : {
+      \   'commands' : ['IndentGuidesEnable', 'IndentGuidesDisable', 'IndentGuidesToggle'],
+      \ }}
   let g:indent_guides_start_level=1
   let g:indent_guides_guide_size=1
   let g:indent_guides_enable_on_vim_startup=0
@@ -533,7 +535,7 @@ NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
 " misc
 NeoBundle 'bufkill.vim'
 NeoBundle 'mhinz/vim-startify'
-  let g:startify_session_dir = '~/.vim/.cache/sessions'
+  let g:startify_session_dir = expand('~/.vim/.cache/sessions')
   let g:startify_change_to_vcs_root = 1
   let g:startify_show_sessions = 1
   nnoremap <F1> :Startify<cr>
@@ -561,6 +563,7 @@ NeoBundleLazy 'Shougo/vimshell.vim', {
       \ 'autoload' : {
       \   'commands' : [{ 'name' : 'VimShell',
       \                   'complete' : 'customlist,vimshell#complete'},
+      \                 'VimShell',
       \                 'VimShellExecute', 'VimShellInteractive',
       \                 'VimShellTerminal', 'VimShellPop'],
       \   'mappings' : ['<Plug>(vimshell_']
@@ -571,7 +574,7 @@ NeoBundleLazy 'Shougo/vimshell.vim', {
     let g:vimshell_editor_command='vim'
   endif
   let g:vimshell_right_prompt='getcwd()'
-  let g:vimshell_data_directory='~/.vim/.cache/vimshell'
+  let g:vimshell_data_directory=expand('~/.vim/.cache/vimshell')
 
   nnoremap <leader>c :VimShell -split<cr>
   nnoremap <leader>cc :VimShell -split<cr>
