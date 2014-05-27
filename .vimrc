@@ -336,7 +336,7 @@ if !g:slow_mode
     nnoremap <silent> <leader>gr :Gremove<CR>
     autocmd FileType gitcommit nmap <buffer> U :Git checkout -- <C-r><C-g><CR>
     autocmd BufReadPost fugitive://* set bufhidden=delete
-    set statusline+=%{fugitive#statusline()}
+    set statusline+=%{exists('g:loaded_fugitive')?fugitive#statusline():''}
   NeoBundleLazy 'gregsexton/gitv', {'depends':['tpope/vim-fugitive'], 'autoload':{'commands':'Gitv'}}
     nnoremap <silent> <leader>gv :Gitv<CR>
     nnoremap <silent> <leader>gV :Gitv!<CR>
