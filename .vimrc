@@ -542,6 +542,7 @@ NeoBundle 'mhinz/vim-startify'
 if exists('$TMUX')
   NeoBundle 'christoomey/vim-tmux-navigator'
 endif
+NeoBundle 'jamessan/vim-gnupg'
 NeoBundleLazy 'guns/xterm-color-table.vim', {'autoload':{'commands':'XtermColorTable'}}
 NeoBundleLazy 'scrooloose/syntastic', {
       \ 'autoload': {
