@@ -196,23 +196,15 @@ if has('gui_running')
   set guioptions-=L
 
   if s:is_macvim
-    set guifont=Source\ Code\ Pro:h14
+    set guifont=Source\ Code\ Pro\ Light:h14
   elseif s:is_windows
     set guifont=Source\ Code\ Pro:h10
+  elseif has('gui_gtk')
+    set guifont=Source\ Code\ Pro\ 10
   endif
 else
   if $COLORTERM == 'gnome-terminal'
     set t_Co=256 "why you no tell me correct colors?!?!
-  endif
-  if $TERM_PROGRAM == 'iTerm.app'
-    " different cursors for insert vs normal mode
-    if exists('$TMUX')
-      let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-      let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
-    else
-      let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-      let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-    endif
   endif
   " disable background color erase
   set t_ut=
