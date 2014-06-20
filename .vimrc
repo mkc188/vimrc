@@ -196,7 +196,7 @@ if has('gui_running')
   set guioptions-=L
 
   if s:is_macvim
-    set guifont=Source\ Code\ Pro\ Light:h14
+    set guifont=Source\ Code\ Pro\ Light:h13
   elseif s:is_windows
     set guifont=Source\ Code\ Pro:h10
   elseif has('gui_gtk')
