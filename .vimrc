@@ -368,7 +368,10 @@ NeoBundle 'justinmk/vim-sneak'
   hi link SneakPluginTarget Search
   hi link SneakPluginScope Search
   hi link SneakStreakTarget Search
-  hi SneakStreakMask guifg=yellow guibg=yellow ctermfg=yellow ctermbg=yellow
+  augroup SneakPluginColors
+    autocmd!
+    autocmd ColorScheme * hi SneakStreakMask guifg=#f0c674 ctermfg=221 guibg=#f0c674 ctermbg=221
+  augroup END
 NeoBundleLazy 'chrisbra/NrrwRgn', {
       \ 'autoload' : {
       \   'commands' : [
