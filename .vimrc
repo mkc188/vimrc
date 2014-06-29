@@ -66,8 +66,8 @@ function! CloseWindowOrKillBuffer()
 endfunction
 
 " -------- base configuration --------
-set timeoutlen=300                                  "mapping timeout
-set ttimeoutlen=50                                  "keycode timeout
+set ttimeout
+set ttimeoutlen=100
 
 set mouse=a                                         "enable mouse
 set history=1000                                    "number of command lines to remember
@@ -326,7 +326,6 @@ if !g:slow_mode
     nnoremap <silent> <leader>gp :Git push<CR>
     nnoremap <silent> <leader>gw :Gwrite<CR>
     nnoremap <silent> <leader>gr :Gremove<CR>
-    autocmd FileType gitcommit nmap <buffer> U :Git checkout -- <C-r><C-g><CR>
     autocmd BufReadPost fugitive://* set bufhidden=delete
     set statusline+=%{exists('g:loaded_fugitive')?fugitive#statusline():''}
   NeoBundleLazy 'gregsexton/gitv', {'depends':['tpope/vim-fugitive'], 'autoload':{'commands':'Gitv'}}
@@ -475,23 +474,20 @@ if !g:slow_mode
     endfunction
     autocmd FileType unite call s:unite_settings()
 
-    nmap <space> [unite]
-    nnoremap [unite] <nop>
-
     if s:is_windows
-      nnoremap <silent> [unite]<space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed file_rec:! buffer file_mru bookmark<cr>
-      nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec:!<cr>
+      nnoremap <silent> <leader><space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed file_rec:! buffer file_mru bookmark<cr>
+      nnoremap <silent> <leader>f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec:!<cr>
     else
-      nnoremap <silent> [unite]<space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed file_rec/async:! buffer file_mru bookmark<cr>
-      nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec/async:!<cr>
+      nnoremap <silent> <leader><space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed file_rec/async:! buffer file_mru bookmark<cr>
+      nnoremap <silent> <leader>f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec/async:!<cr>
     endif
-    nnoremap <silent> [unite]e :<C-u>Unite -buffer-name=recent file_mru<cr>
-    nnoremap <silent> [unite]y :<C-u>Unite -buffer-name=yanks history/yank<cr>
-    nnoremap <silent> [unite]l :<C-u>Unite -auto-resize -buffer-name=line line<cr>
-    nnoremap <silent> [unite]b :<C-u>Unite -auto-resize -buffer-name=buffers buffer<cr>
-    nnoremap <silent> [unite]/ :<C-u>Unite -no-quit -buffer-name=search grep:.<cr>
-    nnoremap <silent> [unite]m :<C-u>Unite -auto-resize -buffer-name=mappings mapping<cr>
-    nnoremap <silent> [unite]s :<C-u>Unite -quick-match buffer<cr>
+    nnoremap <silent> <leader>e :<C-u>Unite -buffer-name=recent file_mru<cr>
+    nnoremap <silent> <leader>y :<C-u>Unite -buffer-name=yanks history/yank<cr>
+    nnoremap <silent> <leader>l :<C-u>Unite -auto-resize -buffer-name=line line<cr>
+    nnoremap <silent> <leader>b :<C-u>Unite -auto-resize -buffer-name=buffers buffer<cr>
+    nnoremap <silent> <leader>/ :<C-u>Unite -no-quit -buffer-name=search grep:.<cr>
+    nnoremap <silent> <leader>m :<C-u>Unite -auto-resize -buffer-name=mappings mapping<cr>
+    nnoremap <silent> <leader>q :<C-u>Unite -quick-match buffer<cr>
 
     nnoremap <leader>nbu :Unite neobundle/update -vertical -no-start-insert<cr>
 
@@ -499,14 +495,14 @@ if !g:slow_mode
     let g:neomru#file_mru_path=expand('~/.vim/.cache/neomru/file')
     let g:neomru#directory_mru_path=expand('~/.vim/.cache/neomru/directory')
   NeoBundleLazy 'tsukkee/unite-tag', {'autoload':{'unite_sources':['tag','tag/file']}}
-    nnoremap <silent> [unite]t :<C-u>Unite -auto-resize -buffer-name=tag tag tag/file<cr>
+    nnoremap <silent> <leader>t :<C-u>Unite -auto-resize -buffer-name=tag tag tag/file<cr>
   NeoBundleLazy 'Shougo/unite-outline', {'autoload':{'unite_sources':'outline'}}
-    nnoremap <silent> [unite]o :<C-u>Unite -auto-resize -buffer-name=outline outline<cr>
+    nnoremap <silent> <leader>o :<C-u>Unite -auto-resize -buffer-name=outline outline<cr>
   NeoBundleLazy 'Shougo/unite-help', {'autoload':{'unite_sources':'help'}}
-    nnoremap <silent> [unite]h :<C-u>Unite -auto-resize -buffer-name=help help<cr>
+    nnoremap <silent> <leader>h :<C-u>Unite -auto-resize -buffer-name=help help<cr>
   NeoBundleLazy 'Shougo/junkfile.vim', {'autoload':{'commands':'JunkfileOpen','unite_sources':['junkfile','junkfile/new']}}
     let g:junkfile#directory=expand("~/.vim/.cache/junk")
-    nnoremap <silent> [unite]j :<C-u>Unite -auto-resize -buffer-name=junk junkfile junkfile/new<cr>
+    nnoremap <silent> <leader>j :<C-u>Unite -auto-resize -buffer-name=junk junkfile junkfile/new<cr>
 endif
 
 " indents
@@ -687,7 +683,7 @@ if neobundle#is_sourced('vim-dispatch')
 endif
 
 " general
-nmap <leader>l :set list! list?<cr>
+nmap <leader>ls :set list! list?<cr>
 nmap <leader>hs :set hlsearch! hlsearch?<cr>
 
 map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
