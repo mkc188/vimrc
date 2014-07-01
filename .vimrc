@@ -365,6 +365,7 @@ NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundle 'mkc188/auto-pairs'
 NeoBundle 'justinmk/vim-sneak'
   let g:sneak#streak = 1
+  let g:sneak#s_next = 1
   hi link SneakPluginTarget Search
   hi link SneakPluginScope Search
   hi link SneakStreakTarget Search
@@ -712,6 +713,10 @@ endif
 " format pasted text automatically
 nnoremap p p=`]
 nnoremap <c-p> p
+
+" map semicolon to colon
+map ; :
+nnoremap ;; ;
 
 " -------- commands --------
 command! -bang Q q<bang>
