@@ -67,6 +67,7 @@ endfunction
 
 " -------- base configuration --------
 set ttimeout
+set timeoutlen=500
 set ttimeoutlen=100
 
 set mouse=a                                         "enable mouse
