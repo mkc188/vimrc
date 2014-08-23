@@ -469,10 +469,6 @@ if !g:slow_mode
       nmap <buffer> Q <plug>(unite_exit)
       nmap <buffer> <esc> <plug>(unite_exit)
       imap <buffer> <esc> <plug>(unite_exit)
-
-      " Enable navigation with control-j and control-k in insert mode
-      imap <buffer> <C-j> <Plug>(unite_select_next_line)
-      imap <buffer> <C-k> <Plug>(unite_select_previous_line)
     endfunction
     autocmd FileType unite call s:unite_settings()
 
