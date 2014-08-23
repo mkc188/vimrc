@@ -99,13 +99,14 @@ endif
 
 " whitespace
 set backspace=indent,eol,start                      "allow backspacing everything in insert mode
+set nowrap                                          "do not wrap lines
 set autoindent                                      "automatically indent to match adjacent lines
 set expandtab                                       "spaces instead of tabs
 set smarttab                                        "use shiftwidth to enter tabs
 set tabstop=2                                       "number of spaces per tab for display
 set softtabstop=2                                   "number of spaces per tab in insert mode
 set shiftwidth=2                                    "number of spaces when indenting
-set listchars=tab:▸\ ,trail:·,eol:¬,nbsp:_,extends:>,precedes:<
+set listchars=tab:>-,trail:-,eol:<,nbsp:%,extends:>,precedes:<
 set shiftround
 set linebreak
 
