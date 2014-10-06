@@ -111,6 +111,8 @@ set shiftround
 set linebreak
 
 set scrolloff=1                                     "always show content after scroll
+set sidescroll=1
+set sidescrolloff=1
 set display+=lastline
 set wildmenu                                        "show list for autocomplete
 set wildmode=list:full
@@ -362,7 +364,6 @@ if !g:slow_mode
 endif
 
 " editing
-NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundle 'mkc188/auto-pairs'
 NeoBundle 'justinmk/vim-sneak'
   let g:sneak#streak = 1
@@ -374,6 +375,9 @@ NeoBundle 'justinmk/vim-sneak'
     autocmd!
     autocmd ColorScheme * hi SneakStreakMask guifg=#f0c674 ctermfg=221 guibg=#f0c674 ctermbg=221
   augroup END
+NeoBundle 'svermeulen/vim-easyclip'
+  let g:EasyClipAutoFormat = 1
+  let g:EasyClipDoSystemSync = 0
 NeoBundleLazy 'chrisbra/NrrwRgn', {
       \ 'autoload' : {
       \   'commands' : [
@@ -448,12 +452,13 @@ if !g:slow_mode
       call unite#filters#sorter_default#use(['sorter_rank'])
       call unite#custom#source('line,outline','matchers','matcher_fuzzy')
       call unite#custom#profile('default', 'context', {
+            \ 'no_split' : 1,
+            \ 'resize' : 0,
             \ 'start_insert': 1
             \ })
     endfunction
 
     let g:unite_data_directory=expand('~/.vim/.cache/unite')
-    let g:unite_source_history_yank_enable=1
     let g:unite_source_rec_max_cache_files=5000
 
     if executable('ag')
@@ -474,18 +479,17 @@ if !g:slow_mode
     autocmd FileType unite call s:unite_settings()
 
     if s:is_windows
-      nnoremap <silent> <leader><space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed file_rec:! buffer file_mru bookmark<cr>
-      nnoremap <silent> <leader>f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec:!<cr>
+      nnoremap <silent> <leader><space> :<C-u>Unite -toggle -buffer-name=mixed file_rec:! buffer file_mru bookmark<cr>
+      nnoremap <silent> <leader>f :<C-u>Unite -toggle -buffer-name=files file_rec:!<cr>
     else
-      nnoremap <silent> <leader><space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed file_rec/async:! buffer file_mru bookmark<cr>
-      nnoremap <silent> <leader>f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec/async:!<cr>
+      nnoremap <silent> <leader><space> :<C-u>Unite -toggle -buffer-name=mixed file_rec/async:! buffer file_mru bookmark<cr>
+      nnoremap <silent> <leader>f :<C-u>Unite -toggle -buffer-name=files file_rec/async:!<cr>
     endif
     nnoremap <silent> <leader>e :<C-u>Unite -buffer-name=recent file_mru<cr>
-    nnoremap <silent> <leader>y :<C-u>Unite -buffer-name=yanks history/yank<cr>
-    nnoremap <silent> <leader>l :<C-u>Unite -auto-resize -buffer-name=line line<cr>
-    nnoremap <silent> <leader>b :<C-u>Unite -auto-resize -buffer-name=buffers buffer<cr>
+    nnoremap <silent> <leader>l :<C-u>Unite -buffer-name=line line<cr>
+    nnoremap <silent> <leader>b :<C-u>Unite -buffer-name=buffers buffer<cr>
     nnoremap <silent> <leader>/ :<C-u>Unite -no-quit -buffer-name=search grep:.<cr>
-    nnoremap <silent> <leader>m :<C-u>Unite -auto-resize -buffer-name=mappings mapping<cr>
+    nnoremap <silent> <leader>m :<C-u>Unite -buffer-name=mappings mapping<cr>
     nnoremap <silent> <leader>q :<C-u>Unite -quick-match buffer<cr>
 
     nnoremap <leader>nbu :Unite neobundle/update -vertical -no-start-insert<cr>
@@ -494,14 +498,14 @@ if !g:slow_mode
     let g:neomru#file_mru_path=expand('~/.vim/.cache/neomru/file')
     let g:neomru#directory_mru_path=expand('~/.vim/.cache/neomru/directory')
   NeoBundleLazy 'tsukkee/unite-tag', {'autoload':{'unite_sources':['tag','tag/file']}}
-    nnoremap <silent> <leader>t :<C-u>Unite -auto-resize -buffer-name=tag tag tag/file<cr>
+    nnoremap <silent> <leader>t :<C-u>Unite -buffer-name=tag tag tag/file<cr>
   NeoBundleLazy 'Shougo/unite-outline', {'autoload':{'unite_sources':'outline'}}
-    nnoremap <silent> <leader>o :<C-u>Unite -auto-resize -buffer-name=outline outline<cr>
+    nnoremap <silent> <leader>o :<C-u>Unite -buffer-name=outline outline<cr>
   NeoBundleLazy 'Shougo/unite-help', {'autoload':{'unite_sources':'help'}}
-    nnoremap <silent> <leader>h :<C-u>Unite -auto-resize -buffer-name=help help<cr>
+    nnoremap <silent> <leader>h :<C-u>Unite -buffer-name=help help<cr>
   NeoBundleLazy 'Shougo/junkfile.vim', {'autoload':{'commands':'JunkfileOpen','unite_sources':['junkfile','junkfile/new']}}
     let g:junkfile#directory=expand("~/.vim/.cache/junk")
-    nnoremap <silent> <leader>j :<C-u>Unite -auto-resize -buffer-name=junk junkfile junkfile/new<cr>
+    nnoremap <silent> <leader>j :<C-u>Unite -buffer-name=junk junkfile junkfile/new<cr>
 endif
 
 " indents
@@ -702,10 +706,6 @@ endfor
 if s:is_macvim
   set macmeta
 endif
-
-" format pasted text automatically
-nnoremap p p=`]
-nnoremap <c-p> p
 
 " map semicolon to colon
 map ; :
