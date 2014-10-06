@@ -55,15 +55,6 @@ function! EnsureExists(path)
     call mkdir(expand(a:path))
   endif
 endfunction
-function! CloseWindowOrKillBuffer()
-  let number_of_windows_to_this_buffer = len(filter(range(1, winnr('$')), "winbufnr(v:val) == bufnr('%')"))
-
-  if number_of_windows_to_this_buffer > 1
-    wincmd c
-  else
-    bdelete
-  endif
-endfunction
 
 " -------- base configuration --------
 set ttimeout
@@ -378,6 +369,7 @@ NeoBundle 'justinmk/vim-sneak'
 NeoBundle 'svermeulen/vim-easyclip'
   let g:EasyClipAutoFormat = 1
   let g:EasyClipDoSystemSync = 0
+  nnoremap gm m
 NeoBundleLazy 'chrisbra/NrrwRgn', {
       \ 'autoload' : {
       \   'commands' : [
@@ -450,7 +442,6 @@ if !g:slow_mode
     function! bundle.hooks.on_source(bundle)
       call unite#filters#matcher_default#use(['matcher_fuzzy'])
       call unite#filters#sorter_default#use(['sorter_rank'])
-      call unite#custom#source('line,outline','matchers','matcher_fuzzy')
       call unite#custom#profile('default', 'context', {
             \ 'no_split' : 1,
             \ 'resize' : 0,
@@ -479,13 +470,12 @@ if !g:slow_mode
     autocmd FileType unite call s:unite_settings()
 
     if s:is_windows
-      nnoremap <silent> <leader><space> :<C-u>Unite -toggle -buffer-name=mixed file_rec:! buffer file_mru bookmark<cr>
+      nnoremap <silent> <leader><space> :<C-u>Unite -toggle -buffer-name=mixed file_rec:! buffer bookmark<cr>
       nnoremap <silent> <leader>f :<C-u>Unite -toggle -buffer-name=files file_rec:!<cr>
     else
-      nnoremap <silent> <leader><space> :<C-u>Unite -toggle -buffer-name=mixed file_rec/async:! buffer file_mru bookmark<cr>
+      nnoremap <silent> <leader><space> :<C-u>Unite -toggle -buffer-name=mixed file_rec/async:! buffer bookmark<cr>
       nnoremap <silent> <leader>f :<C-u>Unite -toggle -buffer-name=files file_rec/async:!<cr>
     endif
-    nnoremap <silent> <leader>e :<C-u>Unite -buffer-name=recent file_mru<cr>
     nnoremap <silent> <leader>l :<C-u>Unite -buffer-name=line line<cr>
     nnoremap <silent> <leader>b :<C-u>Unite -buffer-name=buffers buffer<cr>
     nnoremap <silent> <leader>/ :<C-u>Unite -no-quit -buffer-name=search grep:.<cr>
@@ -493,19 +483,6 @@ if !g:slow_mode
     nnoremap <silent> <leader>q :<C-u>Unite -quick-match buffer<cr>
 
     nnoremap <leader>nbu :Unite neobundle/update -vertical -no-start-insert<cr>
-
-  NeoBundleLazy 'Shougo/neomru.vim', {'autoload':{'unite_sources':'file_mru'}}
-    let g:neomru#file_mru_path=expand('~/.vim/.cache/neomru/file')
-    let g:neomru#directory_mru_path=expand('~/.vim/.cache/neomru/directory')
-  NeoBundleLazy 'tsukkee/unite-tag', {'autoload':{'unite_sources':['tag','tag/file']}}
-    nnoremap <silent> <leader>t :<C-u>Unite -buffer-name=tag tag tag/file<cr>
-  NeoBundleLazy 'Shougo/unite-outline', {'autoload':{'unite_sources':'outline'}}
-    nnoremap <silent> <leader>o :<C-u>Unite -buffer-name=outline outline<cr>
-  NeoBundleLazy 'Shougo/unite-help', {'autoload':{'unite_sources':'help'}}
-    nnoremap <silent> <leader>h :<C-u>Unite -buffer-name=help help<cr>
-  NeoBundleLazy 'Shougo/junkfile.vim', {'autoload':{'commands':'JunkfileOpen','unite_sources':['junkfile','junkfile/new']}}
-    let g:junkfile#directory=expand("~/.vim/.cache/junk")
-    nnoremap <silent> <leader>j :<C-u>Unite -buffer-name=junk junkfile junkfile/new<cr>
 endif
 
 " indents
@@ -527,7 +504,7 @@ NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
   endif
 
 " misc
-NeoBundle 'bufkill.vim'
+NeoBundle 'mattdbridges/bufkill.vim'
 NeoBundle 'mhinz/vim-startify'
   let g:startify_session_dir = expand('~/.vim/.cache/sessions')
   let g:startify_change_to_vcs_root = 1
@@ -546,33 +523,6 @@ NeoBundleLazy 'scrooloose/syntastic', {
       \     'SyntasticReset', 'SyntasticToggleMode'
       \   ]
       \ }}
-NeoBundleLazy 'mattn/gist-vim', { 'depends': 'mattn/webapi-vim', 'autoload': { 'commands': 'Gist' } }
-  let g:gist_post_private=1
-  let g:gist_show_privates=1
-NeoBundleLazy 'Shougo/vimshell.vim', {
-      \ 'depends' : 'Shougo/vimproc.vim',
-      \ 'autoload' : {
-      \   'commands' : [{ 'name' : 'VimShell',
-      \                   'complete' : 'customlist,vimshell#complete'},
-      \                 'VimShell',
-      \                 'VimShellExecute', 'VimShellInteractive',
-      \                 'VimShellTerminal', 'VimShellPop'],
-      \   'mappings' : ['<Plug>(vimshell_']
-      \ }}
-  if s:is_macvim
-    let g:vimshell_editor_command='mvim'
-  else
-    let g:vimshell_editor_command='vim'
-  endif
-  let g:vimshell_right_prompt='getcwd()'
-  let g:vimshell_data_directory=expand('~/.vim/.cache/vimshell')
-
-  nnoremap <leader>c :VimShell -split<cr>
-  nnoremap <leader>cc :VimShell -split<cr>
-  nnoremap <leader>cn :VimShellInteractive node<cr>
-  nnoremap <leader>cl :VimShellInteractive lua<cr>
-  nnoremap <leader>cr :VimShellInteractive irb<cr>
-  nnoremap <leader>cp :VimShellInteractive python<cr>
 NeoBundleLazy 'zhaocai/GoldenView.Vim', {'autoload':{'mappings':['<Plug>ToggleGoldenViewAutoResize']}}
   let g:goldenview__enable_default_mapping=0
   nmap <F4> <Plug>ToggleGoldenViewAutoResize
@@ -670,9 +620,6 @@ nnoremap Y y$
 
 " hide annoying quit message
 nnoremap <C-c> <C-c>:echo<cr>
-
-" window killer
-nnoremap <silent> Q :call CloseWindowOrKillBuffer()<cr>
 
 " quick buffer open
 nnoremap gb :ls<cr>:e #
