@@ -447,13 +447,14 @@ if !g:slow_mode
       call unite#filters#matcher_default#use(['matcher_fuzzy'])
       call unite#filters#sorter_default#use(['sorter_rank'])
       call unite#custom#source('line,outline','matchers','matcher_fuzzy')
+      call unite#custom#profile('default', 'context', {
+            \ 'start_insert': 1
+            \ })
     endfunction
 
     let g:unite_data_directory=expand('~/.vim/.cache/unite')
-    let g:unite_enable_start_insert=1
     let g:unite_source_history_yank_enable=1
     let g:unite_source_rec_max_cache_files=5000
-    let g:unite_prompt='» '
 
     if executable('ag')
       let g:unite_source_grep_command='ag'
@@ -541,10 +542,6 @@ NeoBundleLazy 'scrooloose/syntastic', {
       \     'SyntasticReset', 'SyntasticToggleMode'
       \   ]
       \ }}
-  let g:syntastic_error_symbol = '✗'
-  let g:syntastic_style_error_symbol = '✠'
-  let g:syntastic_warning_symbol = '∆'
-  let g:syntastic_style_warning_symbol = '≈'
 NeoBundleLazy 'mattn/gist-vim', { 'depends': 'mattn/webapi-vim', 'autoload': { 'commands': 'Gist' } }
   let g:gist_post_private=1
   let g:gist_show_privates=1
