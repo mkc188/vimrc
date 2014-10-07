@@ -366,10 +366,8 @@ NeoBundle 'justinmk/vim-sneak'
     autocmd!
     autocmd ColorScheme * hi SneakStreakMask guifg=#f0c674 ctermfg=221 guibg=#f0c674 ctermbg=221
   augroup END
-NeoBundle 'svermeulen/vim-easyclip'
-  let g:EasyClipAutoFormat = 1
-  let g:EasyClipDoSystemSync = 0
-  nnoremap gm m
+NeoBundle 'ReplaceWithRegister'
+NeoBundle 'sickill/vim-pasta'
 NeoBundleLazy 'chrisbra/NrrwRgn', {
       \ 'autoload' : {
       \   'commands' : [
@@ -657,6 +655,10 @@ endif
 " map semicolon to colon
 map ; :
 nnoremap ;; ;
+
+" Black Hole Redirection
+nnoremap x "_x
+xnoremap x "_x
 
 " -------- commands --------
 command! -bang Q q<bang>
