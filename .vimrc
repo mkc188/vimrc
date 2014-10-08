@@ -99,6 +99,10 @@ set noshelltemp                                     "use pipes
 " whitespace
 set backspace=indent,eol,start                      "allow backspacing everything in insert mode
 set autoindent                                      "automatically indent to match adjacent lines
+set expandtab                                       "spaces instead of tabs
+set smarttab                                        "use shiftwidth to enter tabs
+set softtabstop=2                                   "number of spaces per tab in insert mode
+set shiftwidth=2                                    "number of spaces when indenting
 set listchars=tab:>-,trail:-,eol:<,nbsp:%,extends:>,precedes:<
 set shiftround
 set linebreak
@@ -490,8 +494,11 @@ if !g:slow_mode
 endif
 
 " indents
-NeoBundle 'tpope/vim-sleuth'
 NeoBundle 'sickill/vim-pasta'
+NeoBundle 'ciaranm/detectindent'
+  let g:detectindent_preferred_expandtab=1
+  let g:detectindent_preferred_indent=4
+  nnoremap <silent> <leader>di :DetectIndent<CR>
 NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
       \ 'autoload' : {
       \   'commands' : ['IndentGuidesEnable', 'IndentGuidesDisable', 'IndentGuidesToggle'],
