@@ -36,6 +36,12 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 call neobundle#end()
 
 " -------- functions --------
+function! Source(begin, end)
+  let lines = getline(a:begin, a:end)
+  for line in lines
+    execute line
+  endfor
+endfunction
 function! Preserve(command)
   " preparation: save last search, and cursor position.
   let _s=@/
@@ -88,22 +94,21 @@ if s:is_windows && !s:is_cygwin
   set shell=c:\windows\system32\cmd.exe
 endif
 
+set noshelltemp                                     "use pipes
+
 " whitespace
 set backspace=indent,eol,start                      "allow backspacing everything in insert mode
-set nowrap                                          "do not wrap lines
 set autoindent                                      "automatically indent to match adjacent lines
-set expandtab                                       "spaces instead of tabs
-set smarttab                                        "use shiftwidth to enter tabs
-set tabstop=2                                       "number of spaces per tab for display
-set softtabstop=2                                   "number of spaces per tab in insert mode
-set shiftwidth=2                                    "number of spaces when indenting
 set listchars=tab:>-,trail:-,eol:<,nbsp:%,extends:>,precedes:<
 set shiftround
 set linebreak
+if exists('+breakindent')
+  set breakindent showbreak=\ +
+endif
 
 set scrolloff=1                                     "always show content after scroll
+set sidescrolloff=5
 set sidescroll=1
-set sidescrolloff=1
 set display+=lastline
 set wildmenu                                        "show list for autocomplete
 set wildmode=list:full
@@ -367,7 +372,6 @@ NeoBundle 'justinmk/vim-sneak'
     autocmd ColorScheme * hi SneakStreakMask guifg=#f0c674 ctermfg=221 guibg=#f0c674 ctermbg=221
   augroup END
 NeoBundle 'ReplaceWithRegister'
-NeoBundle 'sickill/vim-pasta'
 NeoBundleLazy 'chrisbra/NrrwRgn', {
       \ 'autoload' : {
       \   'commands' : [
@@ -486,6 +490,8 @@ if !g:slow_mode
 endif
 
 " indents
+NeoBundle 'tpope/vim-sleuth'
+NeoBundle 'sickill/vim-pasta'
 NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
       \ 'autoload' : {
       \   'commands' : ['IndentGuidesEnable', 'IndentGuidesDisable', 'IndentGuidesToggle'],
@@ -532,6 +538,10 @@ NeoBundleLazy 'zhaocai/GoldenView.Vim', {'autoload':{'mappings':['<Plug>ToggleGo
 nmap <leader>fef :call Preserve("normal gg=G")<CR>
 nmap <leader>f$ :call StripTrailingWhitespace()<CR>
 vmap <leader>s :sort<cr>
+
+" eval vimscript by line or visual selection
+nmap <silent> <leader>e :call Source(line('.'), line('.'))<CR>
+vmap <silent> <leader>e :call Source(line('v'), line('.'))<CR>
 
 " toggle paste
 map <F6> :set invpaste<CR>:set paste?<CR>
