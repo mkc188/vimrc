@@ -622,10 +622,6 @@ if neobundle#is_sourced('vim-dispatch')
   nnoremap <leader>tag :Dispatch ctags -R<cr>
 endif
 
-" general
-nmap <leader>ls :set list! list?<cr>
-nmap <leader>hs :set hlsearch! hlsearch?<cr>
-
 map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
       \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
       \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
