@@ -448,6 +448,7 @@ if !g:slow_mode
     endfunction
 
     let g:unite_data_directory=expand('~/.vim/.cache/unite')
+    let g:unite_source_history_yank_enable=1
     let g:unite_source_rec_max_cache_files=5000
 
     if executable('ag')
@@ -468,19 +469,20 @@ if !g:slow_mode
     autocmd FileType unite call s:unite_settings()
 
     if s:is_windows
-      nnoremap <silent> <leader><space> :<C-u>Unite -toggle -buffer-name=mixed file_rec:! buffer bookmark<cr>
-      nnoremap <silent> <leader>f :<C-u>Unite -toggle -buffer-name=files file_rec:!<cr>
+      nnoremap <silent> <space><space> :<C-u>Unite -toggle -buffer-name=mixed file_rec:! buffer bookmark<cr>
+      nnoremap <silent> <space>f :<C-u>Unite -toggle -buffer-name=files file_rec:!<cr>
     else
-      nnoremap <silent> <leader><space> :<C-u>Unite -toggle -buffer-name=mixed file_rec/async:! buffer bookmark<cr>
-      nnoremap <silent> <leader>f :<C-u>Unite -toggle -buffer-name=files file_rec/async:!<cr>
+      nnoremap <silent> <space><space> :<C-u>Unite -toggle -buffer-name=mixed file_rec/async:! buffer bookmark<cr>
+      nnoremap <silent> <space>f :<C-u>Unite -toggle -buffer-name=files file_rec/async:!<cr>
     endif
-    nnoremap <silent> <leader>l :<C-u>Unite -buffer-name=line line<cr>
-    nnoremap <silent> <leader>b :<C-u>Unite -buffer-name=buffers buffer<cr>
-    nnoremap <silent> <leader>/ :<C-u>Unite -no-quit -buffer-name=search grep:.<cr>
-    nnoremap <silent> <leader>m :<C-u>Unite -buffer-name=mappings mapping<cr>
-    nnoremap <silent> <leader>q :<C-u>Unite -quick-match buffer<cr>
+    nnoremap <silent> <space>y :<C-u>Unite -buffer-name=yanks history/yank<cr>
+    nnoremap <silent> <space>l :<C-u>Unite -buffer-name=line line<cr>
+    nnoremap <silent> <space>b :<C-u>Unite -buffer-name=buffers buffer<cr>
+    nnoremap <silent> <space>/ :<C-u>Unite -no-quit -buffer-name=search grep:.<cr>
+    nnoremap <silent> <space>m :<C-u>Unite -buffer-name=mappings mapping<cr>
+    nnoremap <silent> <space>s :<C-u>Unite -quick-match buffer<cr>
 
-    nnoremap <leader>nbu :Unite neobundle/update -vertical -no-start-insert<cr>
+    nnoremap <space>nbu :Unite neobundle/update -vertical -no-start-insert<cr>
 endif
 
 " indents
@@ -530,8 +532,6 @@ NeoBundleLazy 'zhaocai/GoldenView.Vim', {'autoload':{'mappings':['<Plug>ToggleGo
 nmap <leader>fef :call Preserve("normal gg=G")<CR>
 nmap <leader>f$ :call StripTrailingWhitespace()<CR>
 vmap <leader>s :sort<cr>
-
-nnoremap <leader>w :w<cr>
 
 " toggle paste
 map <F6> :set invpaste<CR>:set paste?<CR>
@@ -593,7 +593,7 @@ vnoremap < <gv
 vnoremap > >gv
 
 " reselect last paste
-nnoremap <expr> gp '`[' . strpart(getregtype(), 0, 1) . '`]'
+nnoremap <expr> gb '`[' . strpart(getregtype(), 0, 1) . '`]'
 
 " find current word in quickfix
 nnoremap <leader>fw :execute "vimgrep ".expand("<cword>")." %"<cr>:copen<cr>
@@ -603,7 +603,6 @@ nnoremap <leader>ff :execute 'vimgrep /'.@/.'/g %'<cr>:copen<cr>
 " shortcuts for windows
 nnoremap <leader>v <C-w>v<C-w>l
 nnoremap <leader>s <C-w>s
-nnoremap <leader>vsa :vert sba<cr>
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
@@ -618,9 +617,6 @@ nnoremap Y y$
 
 " hide annoying quit message
 nnoremap <C-c> <C-c>:echo<cr>
-
-" quick buffer open
-nnoremap gb :ls<cr>:e #
 
 if neobundle#is_sourced('vim-dispatch')
   nnoremap <leader>tag :Dispatch ctags -R<cr>
@@ -656,7 +652,7 @@ endif
 map ; :
 nnoremap ;; ;
 
-" Black Hole Redirection
+" delete character to black hole register
 nnoremap x "_x
 xnoremap x "_x
 
