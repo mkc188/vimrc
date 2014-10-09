@@ -217,11 +217,6 @@ endif
 " -------- plugin configuration --------
 " core
 NeoBundle 'tpope/vim-surround'
-NeoBundle 'tpope/vim-unimpaired'
-  nmap <M-k> [e
-  nmap <M-j> ]e
-  vmap <M-k> [egv
-  vmap <M-j> ]egv
 NeoBundle 'Shougo/vimproc.vim', {
       \ 'build' : {
       \     'windows' : 'make -f make_mingw32.mak',
@@ -237,6 +232,13 @@ NeoBundleLazy 'matchit.zip', { 'autoload' : {
   function! bundle.hooks.on_post_source(bundle)
     silent! execute 'doautocmd Filetype' &filetype
   endfunction
+NeoBundleLazy 'tpope/vim-unimpaired', { 'autoload' : {
+      \ 'mappings' : ['[', ']', 'co']
+      \ }}
+  nmap <M-k> [e
+  nmap <M-j> ]e
+  vmap <M-k> [egv
+  vmap <M-j> ]egv
 NeoBundleLazy 'tpope/vim-repeat', {
       \ 'mappings' : '.',
       \ }
