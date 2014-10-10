@@ -8,7 +8,8 @@ let s:is_macvim = has('gui_macvim')
 " -------- detect cpuinfo --------
 let g:slow_mode = 0
 let s:cpu_list = []
-call add(s:cpu_list, 'ARMv6-compatible processor rev 7')  " Raspberry Pi
+" Raspberry Pi
+call add(s:cpu_list, 'ARMv6-compatible processor rev 7')
 if filereadable('/proc/cpuinfo')
   for cpu in s:cpu_list
     let g:slow_mode = system('grep -c "'.cpu.'" /proc/cpuinfo')
@@ -67,22 +68,32 @@ set ttimeout
 set timeoutlen=500
 set ttimeoutlen=100
 
-set mouse=a                                         "enable mouse
-set history=1000                                    "number of command lines to remember
-set ttyfast                                         "assume fast terminal connection
-set viewoptions=folds,options,cursor,unix,slash     "unix/windows compatibility
-set encoding=utf-8                                  "set encoding for text
+" enable mouse
+set mouse=a
+" number of command lines to remember
+set history=1000
+" assume fast terminal connection
+set ttyfast
+" unix/windows compatibility
+set viewoptions=folds,options,cursor,unix,slash
+" set encoding for text
+set encoding=utf-8
+" sync with OS clipboard
 if exists('$TMUX')
   set clipboard=
 elseif has('unnamedplus')
   set clipboard=unnamedplus
 else
-  set clipboard=unnamed                             "sync with OS clipboard
+  set clipboard=unnamed
 endif
-set hidden                                          "allow buffer switching without saving
-set autoread                                        "auto reload if file saved externally
-set fileformats+=mac                                "add mac to auto-detection of file format line endings
-set nrformats-=octal                                "always assume decimal numbers
+" allow buffer switching without saving
+set hidden
+" auto reload if file saved externally
+set autoread
+" add mac to auto-detection of file format line endings
+set fileformats+=mac
+" always assume decimal numbers
+set nrformats-=octal
 set showcmd
 set tags=tags;/
 set showfulltag
@@ -94,15 +105,22 @@ if s:is_windows && !s:is_cygwin
   set shell=c:\windows\system32\cmd.exe
 endif
 
-set noshelltemp                                     "use pipes
+" use pipes
+set noshelltemp
 
 " whitespace
-set backspace=indent,eol,start                      "allow backspacing everything in insert mode
-set autoindent                                      "automatically indent to match adjacent lines
-set expandtab                                       "spaces instead of tabs
-set smarttab                                        "use shiftwidth to enter tabs
-set softtabstop=2                                   "number of spaces per tab in insert mode
-set shiftwidth=2                                    "number of spaces when indenting
+" allow backspacing everything in insert mode
+set backspace=indent,eol,start
+" automatically indent to match adjacent lines
+set autoindent
+" spaces instead of tabs
+set expandtab
+" use shiftwidth to enter tabs
+set smarttab
+" number of spaces per tab in insert mode
+set softtabstop=2
+" number of spaces when indenting
+set shiftwidth=2
 set listchars=tab:>-,trail:-,eol:<,nbsp:%,extends:>,precedes:<
 set shiftround
 set linebreak
@@ -110,11 +128,13 @@ if exists('+breakindent')
   set breakindent showbreak=\ +
 endif
 
-set scrolloff=1                                     "always show content after scroll
+" always show content after scroll
+set scrolloff=1
 set sidescrolloff=5
 set sidescroll=1
 set display+=lastline
-set wildmenu                                        "show list for autocomplete
+" show list for autocomplete
+set wildmenu
 set wildmode=list:full
 set wildignorecase
 set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.idea/*,*/.DS_Store
@@ -128,11 +148,16 @@ set novisualbell
 set t_vb=
 
 " searching
-set hlsearch                                        "highlight searches
-set incsearch                                       "incremental searching
-set ignorecase                                      "ignore case for searching
-set smartcase                                       "do case-sensitive if there's a capital letter
-set gdefault                                        "add the g flag to search/replace by default
+" highlight searches
+set hlsearch
+" incremental searching
+set incsearch
+" ignore case for searching
+set ignorecase
+" do case-sensitive if there's a capital letter
+set smartcase
+" add the g flag to search/replace by default
+set gdefault
 if executable('ag')
   set grepprg=ag\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow
   set grepformat=%f:%l:%c:%m
@@ -167,16 +192,19 @@ let g:mapleader = ","
 let g:netrw_home=expand('~/.vim/.cache')
 
 " -------- ui configuration --------
-set showmatch                                       "automatically highlight matching braces/brackets/etc.
-set matchtime=2                                     "tens of a second to show matching parentheses
+" automatically highlight matching braces/brackets/etc.
+set showmatch
+" tens of a second to show matching parentheses
+set matchtime=2
 set number
 set lazyredraw
 set showtabline=0
-set foldmethod=syntax                               "fold via syntax of files
-set foldlevelstart=99                               "open all folds by default
-let g:xml_syntax_folding=1                          "enable xml folding
-
-autocmd VimResized * wincmd =                       " automatically resize splits when resizing MacVim window
+" fold via syntax of files
+set foldmethod=syntax
+" open all folds by default
+set foldlevelstart=99
+" enable xml folding
+let g:xml_syntax_folding=1
 
 if has("statusline") && !&cp
   set laststatus=2
@@ -208,7 +236,7 @@ if has('gui_running')
   endif
 else
   if $COLORTERM == 'gnome-terminal'
-    set t_Co=256 "why you no tell me correct colors?!?!
+    set t_Co=256
   endif
   " disable background color erase
   set t_ut=
@@ -270,8 +298,6 @@ NeoBundleLazy 'mattn/emmet-vim', {'autoload':{'filetypes':['html','xml','xsl','x
     endif
     return "\<c-y>n"
   endfunction
-  autocmd FileType xml,xsl,xslt,xsd,css,sass,scss,less,mustache imap <buffer><tab> <c-y>,
-  autocmd FileType html imap <buffer><expr><tab> <sid>zen_html_tab()
 
 " javascript
 NeoBundleLazy 'marijnh/tern_for_vim', {
@@ -332,7 +358,6 @@ if !g:slow_mode
     nnoremap <silent> <leader>gp :Git push<CR>
     nnoremap <silent> <leader>gw :Gwrite<CR>
     nnoremap <silent> <leader>gr :Gremove<CR>
-    autocmd BufReadPost fugitive://* set bufhidden=delete
     set statusline+=%{exists('g:loaded_fugitive')?fugitive#statusline():''}
   NeoBundleLazy 'gregsexton/gitv', {'depends':['tpope/vim-fugitive'], 'autoload':{'commands':'Gitv'}}
     nnoremap <silent> <leader>gv :Gitv<CR>
@@ -373,10 +398,6 @@ NeoBundle 'justinmk/vim-sneak'
   hi link SneakPluginTarget Search
   hi link SneakPluginScope Search
   hi link SneakStreakTarget Search
-  augroup SneakPluginColors
-    autocmd!
-    autocmd ColorScheme * hi SneakStreakMask guifg=#f0c674 ctermfg=221 guibg=#f0c674 ctermbg=221
-  augroup END
 NeoBundle 'ReplaceWithRegister'
 NeoBundleLazy 'chrisbra/NrrwRgn', {
       \ 'autoload' : {
@@ -471,13 +492,6 @@ if !g:slow_mode
       let g:unite_source_grep_recursive_opt=''
     endif
 
-    function! s:unite_settings()
-      nmap <buffer> Q <plug>(unite_exit)
-      nmap <buffer> <esc> <plug>(unite_exit)
-      imap <buffer> <esc> <plug>(unite_exit)
-    endfunction
-    autocmd FileType unite call s:unite_settings()
-
     if s:is_windows
       nnoremap <silent> <space><space> :<C-u>Unite -toggle -buffer-name=mixed file_rec:! buffer bookmark<cr>
       nnoremap <silent> <space>f :<C-u>Unite -toggle -buffer-name=files file_rec:!<cr>
@@ -511,14 +525,10 @@ NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
   let g:indent_guides_guide_size=1
   let g:indent_guides_enable_on_vim_startup=0
   let g:indent_guides_color_change_percent=3
-  if !has('gui_running')
-    let g:indent_guides_auto_colors=0
-    function! s:indent_set_console_colors()
-      hi IndentGuidesOdd ctermbg=235
-      hi IndentGuidesEven ctermbg=236
-    endfunction
-    autocmd VimEnter,Colorscheme * call s:indent_set_console_colors()
-  endif
+  function! s:indent_set_console_colors()
+    hi IndentGuidesOdd ctermbg=235
+    hi IndentGuidesEven ctermbg=236
+  endfunction
 
 " misc
 NeoBundle 'mattdbridges/bufkill.vim'
@@ -678,18 +688,46 @@ command! -bang QA qa<bang>
 command! -bang Qa qa<bang>
 
 " -------- autocmd --------
-" go back to previous position of cursor if any
-autocmd BufReadPost *
-  \ if line("'\"") > 0 && line("'\"") <= line("$") |
-  \  exe 'normal! g`"zvzz' |
-  \ endif
+if has("autocmd")
+  augroup Misc
+    autocmd!
+    " automatically resize splits when resizing MacVim window
+    autocmd VimResized * wincmd =
+    " go back to previous position of cursor if any
+    autocmd BufReadPost *
+          \ if line("'\"") > 0 && line("'\"") <= line("$") |
+          \  exe 'normal! g`"zvzz' |
+          \ endif
 
-autocmd FileType js,scss,css autocmd BufWritePre <buffer> call StripTrailingWhitespace()
-autocmd FileType css,scss setlocal foldmethod=marker foldmarker={,}
-autocmd FileType css,scss nnoremap <silent> <leader>S vi{:sort<CR>
-autocmd FileType python setlocal foldmethod=indent
-autocmd FileType markdown setlocal nolist
-autocmd FileType vim setlocal fdm=indent keywordprg=:help
+    autocmd BufReadPost fugitive://* set bufhidden=delete
+  augroup END
+
+  augroup FTOptions
+    autocmd!
+    autocmd FileType xml,xsl,xslt,xsd,css,sass,scss,less,mustache imap <buffer><tab> <c-y>,
+    autocmd FileType html imap <buffer><expr><tab> <sid>zen_html_tab()
+
+    autocmd FileType js,scss,css autocmd BufWritePre <buffer> call StripTrailingWhitespace()
+    autocmd FileType css,scss setlocal foldmethod=marker foldmarker={,}
+    autocmd FileType css,scss nnoremap <silent> <leader>S vi{:sort<CR>
+    autocmd FileType python setlocal foldmethod=indent
+    autocmd FileType markdown setlocal nolist
+    autocmd FileType vim setlocal fdm=indent keywordprg=:help
+  augroup END
+
+  augroup SneakPluginColors
+    autocmd!
+    autocmd ColorScheme * hi SneakStreakMask guifg=#f0c674 ctermfg=221 guibg=#f0c674 ctermbg=221
+  augroup END
+
+  if !has('gui_running')
+    let g:indent_guides_auto_colors=0
+    augroup IndentGuidesColors
+      autocmd!
+      autocmd VimEnter,Colorscheme * call s:indent_set_console_colors()
+    augroup END
+  endif
+endif
 
 " -------- color schemes --------
 NeoBundle 'w0ng/vim-hybrid'
