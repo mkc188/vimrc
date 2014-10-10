@@ -233,14 +233,14 @@ NeoBundleLazy 'matchit.zip', { 'autoload' : {
     silent! execute 'doautocmd Filetype' &filetype
   endfunction
 NeoBundleLazy 'tpope/vim-unimpaired', { 'autoload' : {
-      \ 'mappings' : ['[', ']', 'co', 'yo', 'yO']
+      \ 'mappings' : [['n', '[', ']', 'co', 'yo', 'yO']]
       \ }}
   nmap <M-k> [e
   nmap <M-j> ]e
   vmap <M-k> [egv
   vmap <M-j> ]egv
 NeoBundleLazy 'tpope/vim-repeat', {
-      \ 'mappings' : '.',
+      \ 'mappings' : [['n', '.']],
       \ }
 NeoBundleLazy 'tpope/vim-dispatch', {
       \ 'autoload': { 'commands': ['Dispatch', 'Make', 'Start'] }
