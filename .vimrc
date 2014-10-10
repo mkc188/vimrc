@@ -233,7 +233,7 @@ NeoBundleLazy 'matchit.zip', { 'autoload' : {
     silent! execute 'doautocmd Filetype' &filetype
   endfunction
 NeoBundleLazy 'tpope/vim-unimpaired', { 'autoload' : {
-      \ 'mappings' : ['[', ']', 'co']
+      \ 'mappings' : ['[', ']', 'co', 'yo', 'yO']
       \ }}
   nmap <M-k> [e
   nmap <M-j> ]e
@@ -497,7 +497,9 @@ endif
 
 " indents
 NeoBundle 'sickill/vim-pasta'
-NeoBundle 'ciaranm/detectindent'
+NeoBundleLazy 'ciaranm/detectindent', {
+      \ 'autoload': { 'commands': ['DetectIndent']
+      \ }}
   let g:detectindent_preferred_expandtab=1
   let g:detectindent_preferred_indent=4
   nnoremap <silent> <leader>di :DetectIndent<CR>
@@ -528,7 +530,6 @@ NeoBundle 'mhinz/vim-startify'
 if exists('$TMUX')
   NeoBundle 'christoomey/vim-tmux-navigator'
 endif
-NeoBundle 'jamessan/vim-gnupg'
 NeoBundleLazy 'guns/xterm-color-table.vim', {'autoload':{'commands':'XtermColorTable'}}
 NeoBundleLazy 'scrooloose/syntastic', {
       \ 'autoload': {
