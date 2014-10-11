@@ -5,36 +5,104 @@ let s:is_windows = has('win32') || has('win64')
 let s:is_cygwin = has('win32unix')
 let s:is_macvim = has('gui_macvim')
 
-" -------- detect cpuinfo --------
-let g:slow_mode = 0
-let s:cpu_list = []
-" Raspberry Pi
-call add(s:cpu_list, 'ARMv6-compatible processor rev 7')
-if filereadable('/proc/cpuinfo')
-  for cpu in s:cpu_list
-    let g:slow_mode = system('grep -c "'.cpu.'" /proc/cpuinfo')
-    if g:slow_mode
-      break
-    endif
-  endfor
+" -------- plugin manager --------
+silent! if plug#begin('~/.vim/plugged')
+
+" core
+Plug 'matchit.zip'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-dispatch', { 'on': ['Dispatch', 'Make', 'Start'] }
+Plug 'tpope/vim-eunuch', { 'on': ['Unlink', 'Remove', 'Move', 'Rename', 'Chmod', 'Mkdir', 'SudoEdit', 'SudoWrite'] }
+Plug 'tpope/vim-unimpaired'
+Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+
+" web
+Plug 'groenewege/vim-less', { 'for': 'less' }
+Plug 'cakebaker/scss-syntax.vim', { 'for': ['scss', 'sass'] }
+Plug 'hail2u/vim-css3-syntax', { 'for': ['css', 'scss', 'sass'] }
+Plug 'ap/vim-css-color', { 'for': ['css', 'scss', 'sass', 'less', 'styl'] }
+Plug 'othree/html5.vim', { 'for': 'html' }
+Plug 'wavded/vim-stylus', { 'for': 'styl' }
+Plug 'digitaltoad/vim-jade', { 'for': 'jade' }
+Plug 'juvenn/mustache.vim', { 'for': 'mustache' }
+Plug 'gregsexton/MatchTag', { 'for': ['html', 'xml'] }
+Plug 'mattn/emmet-vim', { 'for': ['html', 'xml', 'xsl', 'xslt', 'xsd', 'css', 'sass', 'scss', 'less', 'mustache'] }
+
+" javascript
+Plug 'marijnh/tern_for_vim', { 'for': 'javascript', 'do': 'npm install' }
+Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
+Plug 'maksimr/vim-jsbeautify', { 'for': 'javascript' }
+Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
+Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
+Plug 'mmalecki/vim-node.js', { 'for': 'javascript' }
+Plug 'leshill/vim-json', { 'for': ['javascript', 'json'] }
+Plug 'othree/javascript-libraries-syntax.vim', { 'for': ['javascript', 'coffee', 'ls', 'typescript'] }
+
+" ruby
+Plug 'tpope/vim-rails', { 'for': ['ruby', 'rake'] }
+Plug 'tpope/vim-bundler', { 'for': ['ruby', 'rake'] }
+
+" python
+Plug 'klen/python-mode', { 'for': 'python' }
+Plug 'davidhalter/jedi-vim', { 'for': 'python' }
+
+" scala
+Plug 'derekwyatt/vim-scala', { 'for': 'scala' }
+Plug 'megaannum/vimside', { 'for': 'scala' }
+
+" go
+Plug 'jnwhiteh/vim-golang', { 'for': 'go' }
+Plug 'nsf/gocode', { 'for': 'go', 'rtp': 'vim' }
+
+" markdown
+Plug 'tpope/vim-markdown', { 'for': 'markdown' }
+if executable('redcarpet') && executable('instant-markdown-d')
+  Plug 'suan/vim-instant-markdown', { 'for': 'markdown' }
 endif
 
-" -------- setup & neobundle --------
-if has('vim_starting')
-set nocompatible               " Be iMproved
+" scm
+Plug 'mhinz/vim-signify'
+Plug 'tpope/vim-fugitive'
+Plug 'gregsexton/gitv', { 'on': 'Gitv' }
 
-" Required:
-set runtimepath+=~/.vim/bundle/neobundle.vim
+" editing
+Plug 'tpope/vim-endwise', { 'for': ['lua', 'ruby', 'sh', 'zsh', 'vb', 'vbnet', 'aspvbs', 'vim', 'c', 'cpp', 'xdefaults'] }
+Plug 'tpope/vim-speeddating'
+Plug 'tpope/vim-commentary', { 'on': '<Plug>Commentary' }
+Plug 'thinca/vim-visualstar'
+Plug 'terryma/vim-expand-region'
+Plug 'chrisbra/NrrwRgn', { 'on': ['NR', 'NarrowRegion', 'NW', 'NarrowWindow'] }
+Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
+Plug 'mkc188/auto-pairs'
+Plug 'justinmk/vim-sneak'
+Plug 'ReplaceWithRegister'
+
+" navigation
+Plug 'mileszs/ack.vim', { 'on': 'Ack' }
+Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
+Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
+
+" indents
+Plug 'nathanaelkane/vim-indent-guides', { 'on': ['IndentGuidesEnable', 'IndentGuidesDisable', 'IndentGuidesToggle'] }
+Plug 'sickill/vim-pasta'
+Plug 'ciaranm/detectindent', { 'on': 'DetectIndent' }
+
+" misc
+if exists('$TMUX')
+  Plug 'christoomey/vim-tmux-navigator'
 endif
+Plug 'mattdbridges/bufkill.vim'
+Plug 'mhinz/vim-startify'
+Plug 'guns/xterm-color-table.vim', { 'on': 'XtermColorTable' }
+Plug 'scrooloose/syntastic', { 'for': ['ruby', 'c'], 'on': ['SyntasticCheck', 'SyntasticInfo', 'SyntasticReset', 'SyntasticToggleMode'] }
+Plug 'zhaocai/GoldenView.Vim', { 'on': '<Plug>ToggleGoldenViewAutoResize' }
 
-" Required:
-call neobundle#begin(expand('~/.vim/bundle'))
+" colorscheme
+Plug 'w0ng/vim-hybrid'
 
-" Let NeoBundle manage NeoBundle
-" Required:
-NeoBundleFetch 'Shougo/neobundle.vim'
-
-call neobundle#end()
+call plug#end()
+endif
 
 " -------- functions --------
 function! Source(begin, end)
@@ -61,6 +129,20 @@ function! EnsureExists(path)
   if !isdirectory(expand(a:path))
     call mkdir(expand(a:path))
   endif
+endfunction
+
+" emmet-vim
+function! s:zen_html_tab()
+  let line = getline('.')
+  if match(line, '<.*>') < 0
+    return "\<c-y>,"
+  endif
+  return "\<c-y>n"
+endfunction
+" vim-indent-guides
+function! s:indent_set_console_colors()
+  hi IndentGuidesOdd ctermbg=235
+  hi IndentGuidesEven ctermbg=236
 endfunction
 
 " -------- base configuration --------
@@ -214,6 +296,8 @@ if has("statusline") && !&cp
   set statusline+=[%p%%]
   set statusline+=[%v]
   set statusline+=[%b][0x%B]
+  " vim-fugitive
+  set statusline+=%{exists('g:loaded_fugitive')?fugitive#statusline():''}
 endif
 
 if has('conceal')
@@ -243,315 +327,39 @@ else
 endif
 
 " -------- plugin configuration --------
-" core
-NeoBundle 'tpope/vim-surround'
-NeoBundle 'Shougo/vimproc.vim', {
-      \ 'build' : {
-      \     'windows' : 'make -f make_mingw32.mak',
-      \     'cygwin' : 'make -f make_cygwin.mak',
-      \     'mac' : 'make -f make_mac.mak',
-      \     'unix' : 'make -f make_unix.mak',
-      \    },
-      \ }
-NeoBundleLazy 'matchit.zip', { 'autoload' : {
-      \ 'mappings' : ['%', 'g%']
-      \ }}
-  let bundle = neobundle#get('matchit.zip')
-  function! bundle.hooks.on_post_source(bundle)
-    silent! execute 'doautocmd Filetype' &filetype
-  endfunction
-NeoBundleLazy 'tpope/vim-unimpaired', { 'autoload' : {
-      \ 'mappings' : [['n', '[', ']', 'co', 'yo', 'yO']]
-      \ }}
-  nmap <M-k> [e
-  nmap <M-j> ]e
-  vmap <M-k> [egv
-  vmap <M-j> ]egv
-NeoBundleLazy 'tpope/vim-repeat', {
-      \ 'mappings' : [['n', '.']],
-      \ }
-NeoBundleLazy 'tpope/vim-dispatch', {
-      \ 'autoload': { 'commands': ['Dispatch', 'Make', 'Start'] }
-      \ }
-NeoBundleLazy 'tpope/vim-eunuch', {
-      \   'autoload' : {
-      \     'commands' : ['Unlink', 'Remove', 'Move', 'Rename',
-      \                   'Chmod', 'Mkdir', 'SudoEdit', 'SudoWrite'],
-      \   }
-      \ }
-
-" web
-NeoBundleLazy 'groenewege/vim-less', {'autoload':{'filetypes':['less']}}
-NeoBundleLazy 'cakebaker/scss-syntax.vim', {'autoload':{'filetypes':['scss','sass']}}
-NeoBundleLazy 'hail2u/vim-css3-syntax', {'autoload':{'filetypes':['css','scss','sass']}}
-NeoBundleLazy 'ap/vim-css-color', {'autoload':{'filetypes':['css','scss','sass','less','styl']}}
-NeoBundleLazy 'othree/html5.vim', {'autoload':{'filetypes':['html']}}
-NeoBundleLazy 'wavded/vim-stylus', {'autoload':{'filetypes':['styl']}}
-NeoBundleLazy 'digitaltoad/vim-jade', {'autoload':{'filetypes':['jade']}}
-NeoBundleLazy 'juvenn/mustache.vim', {'autoload':{'filetypes':['mustache']}}
-NeoBundleLazy 'gregsexton/MatchTag', {'autoload':{'filetypes':['html','xml']}}
-NeoBundleLazy 'mattn/emmet-vim', {'autoload':{'filetypes':['html','xml','xsl','xslt','xsd','css','sass','scss','less','mustache']}}
-  function! s:zen_html_tab()
-    let line = getline('.')
-    if match(line, '<.*>') < 0
-      return "\<c-y>,"
-    endif
-    return "\<c-y>n"
-  endfunction
-
-" javascript
-NeoBundleLazy 'marijnh/tern_for_vim', {
-      \ 'autoload': { 'filetypes': ['javascript'] },
-      \ 'build': {
-        \ 'mac': 'npm install',
-        \ 'unix': 'npm install',
-        \ 'cygwin': 'npm install',
-        \ 'windows': 'npm install',
-      \ },
-    \ }
-NeoBundleLazy 'pangloss/vim-javascript', {'autoload':{'filetypes':['javascript']}}
-NeoBundleLazy 'maksimr/vim-jsbeautify', {'autoload':{'filetypes':['javascript']}}
-  nnoremap <leader>fjs :call JsBeautify()<cr>
-NeoBundleLazy 'leafgarland/typescript-vim', {'autoload':{'filetypes':['typescript']}}
-NeoBundleLazy 'kchmck/vim-coffee-script', {'autoload':{'filetypes':['coffee']}}
-NeoBundleLazy 'mmalecki/vim-node.js', {'autoload':{'filetypes':['javascript']}}
-NeoBundleLazy 'leshill/vim-json', {'autoload':{'filetypes':['javascript','json']}}
-NeoBundleLazy 'othree/javascript-libraries-syntax.vim', {'autoload':{'filetypes':['javascript','coffee','ls','typescript']}}
-
-" ruby
-NeoBundleLazy 'tpope/vim-rails', {'autoload': {'filetypes': ['ruby', 'rake']}}
-NeoBundleLazy 'tpope/vim-bundler', {'autoload': {'filetypes': ['ruby', 'rake']}}
-
-" python
-NeoBundleLazy 'klen/python-mode', {'autoload':{'filetypes':['python']}}
-  let g:pymode_rope=0
-NeoBundleLazy 'davidhalter/jedi-vim', {'autoload':{'filetypes':['python']}}
-  let g:jedi#popup_on_dot=0
-
-" scala
-NeoBundleLazy 'derekwyatt/vim-scala', {'autoload': {'filetypes': ['scala']}}
-NeoBundleLazy 'megaannum/vimside', {'autoload': {'filetypes': ['scala']}}
-
-" go
-NeoBundleLazy 'jnwhiteh/vim-golang', {'autoload':{'filetypes':['go']}}
-NeoBundleLazy 'nsf/gocode', {'autoload': {'filetypes':['go']}, 'rtp': 'vim'}
-
-" markdown
-NeoBundleLazy 'tpope/vim-markdown', {'autoload':{'filetypes':['markdown']}}
-if executable('redcarpet') && executable('instant-markdown-d')
-  NeoBundleLazy 'suan/vim-instant-markdown', {'autoload':{'filetypes':['markdown']}}
+" python-mode
+let g:pymode_rope=0
+" jedi-vim
+let g:jedi#popup_on_dot=0
+" vim-signify
+let g:signify_update_on_bufenter=0
+" vim-sneak
+let g:sneak#streak = 1
+let g:sneak#s_next = 1
+hi link SneakPluginTarget Search
+hi link SneakPluginScope Search
+hi link SneakStreakTarget Search
+" ack.vim
+if executable('ag')
+  let g:ackprg = "ag --nogroup --column --smart-case --follow"
 endif
-
-" scm
-if !g:slow_mode
-  NeoBundle 'mhinz/vim-signify'
-    let g:signify_update_on_bufenter=0
-  if executable('hg')
-    NeoBundle 'bitbucket:ludovicchabant/vim-lawrencium'
-  endif
-  NeoBundle 'tpope/vim-fugitive'
-    nnoremap <silent> <leader>gs :Gstatus<CR>
-    nnoremap <silent> <leader>gd :Gdiff<CR>
-    nnoremap <silent> <leader>gc :Gcommit<CR>
-    nnoremap <silent> <leader>gb :Gblame<CR>
-    nnoremap <silent> <leader>gl :Glog<CR>
-    nnoremap <silent> <leader>gp :Git push<CR>
-    nnoremap <silent> <leader>gw :Gwrite<CR>
-    nnoremap <silent> <leader>gr :Gremove<CR>
-    set statusline+=%{exists('g:loaded_fugitive')?fugitive#statusline():''}
-  NeoBundleLazy 'gregsexton/gitv', {'depends':['tpope/vim-fugitive'], 'autoload':{'commands':'Gitv'}}
-    nnoremap <silent> <leader>gv :Gitv<CR>
-    nnoremap <silent> <leader>gV :Gitv!<CR>
-endif
-
-" autocomplete
-if !g:slow_mode
-  NeoBundleLazy 'honza/vim-snippets'
-  NeoBundleLazy 'Shougo/neosnippet-snippets'
-  NeoBundleLazy 'Shougo/neosnippet.vim', { 'depends' : ['honza/vim-snippets', 'Shougo/neosnippet-snippets'], 'autoload' : { 'insert' : '1', 'unite_sources' : ['neosnippet/runtime', 'neosnippet/user', 'snippet']} }
-    let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets,~/.vim/snippets'
-    let g:neosnippet#enable_snipmate_compatibility=1
-    let g:neosnippet_data_directory=expand('~/.vim/.cache/neosnippet')
-
-    imap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : (pumvisible() ? "\<C-n>" : "\<TAB>")
-    smap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-    imap <expr><S-TAB> pumvisible() ? "\<C-p>" : ""
-    smap <expr><S-TAB> pumvisible() ? "\<C-p>" : ""
-
-  if has('lua') && ( version > 703 || version == 703 && has('patch885') )
-    NeoBundleLazy 'Shougo/neocomplete.vim', {'autoload':{'insert':1}, 'vim_version':'7.3.885'}
-      let g:neocomplete#enable_at_startup=1
-      let g:neocomplete#data_directory=expand('~/.vim/.cache/neocomplete')
-  else
-    NeoBundleLazy 'Shougo/neocomplcache.vim', {'autoload':{'insert':1}}
-      let g:neocomplcache_enable_at_startup=1
-      let g:neocomplcache_temporary_dir=expand('~/.vim/.cache/neocomplcache')
-      let g:neocomplcache_enable_fuzzy_completion=1
-  endif
-endif
-
-" editing
-NeoBundle 'mkc188/auto-pairs'
-NeoBundle 'justinmk/vim-sneak'
-  let g:sneak#streak = 1
-  let g:sneak#s_next = 1
-  hi link SneakPluginTarget Search
-  hi link SneakPluginScope Search
-  hi link SneakStreakTarget Search
-NeoBundle 'ReplaceWithRegister'
-NeoBundleLazy 'chrisbra/NrrwRgn', {
-      \ 'autoload' : {
-      \   'commands' : [
-      \     'NR',
-      \     'NarrowRegion',
-      \     'NW',
-      \     'NarrowWindow',
-      \   ]},
-      \ }
-NeoBundleLazy 'tpope/vim-endwise', {'autoload':{'filetypes':['lua','ruby','sh','zsh','vb','vbnet','aspvbs','vim','c','cpp','xdefaults']}}
-NeoBundleLazy 'tpope/vim-speeddating'
-NeoBundleLazy 'thinca/vim-visualstar', {
-      \   'autoload': {
-      \     'mappings': [
-      \       ['xv', '*'], ['xv', '#'], ['xv', 'g'], ['xv', 'g*']
-      \     ]
-      \   }
-      \ }
-NeoBundleLazy 'tomtom/tcomment_vim', {
-      \ 'autoload': {
-      \   'mappings': [['nx', 'gc', 'gcc', 'gC']]
-      \ }
-      \}
-NeoBundleLazy 'terryma/vim-expand-region', { 'autoload' : { 'mappings' : [ [ 'ov', '+' ], [ 'ov', '_' ] ] } }
-NeoBundleLazy 'godlygeek/tabular', {'autoload':{'commands':'Tabularize'}}
-  nmap <Leader>a& :Tabularize /&<CR>
-  vmap <Leader>a& :Tabularize /&<CR>
-  nmap <Leader>a= :Tabularize /=<CR>
-  vmap <Leader>a= :Tabularize /=<CR>
-  nmap <Leader>a: :Tabularize /:<CR>
-  vmap <Leader>a: :Tabularize /:<CR>
-  nmap <Leader>a:: :Tabularize /:\zs<CR>
-  vmap <Leader>a:: :Tabularize /:\zs<CR>
-  nmap <Leader>a, :Tabularize /,<CR>
-  vmap <Leader>a, :Tabularize /,<CR>
-  nmap <Leader>a<Bar> :Tabularize /<Bar><CR>
-  vmap <Leader>a<Bar> :Tabularize /<Bar><CR>
-
-" navigation
-if !g:slow_mode
-  NeoBundleLazy 'Shougo/vimfiler.vim', {
-        \  'autoload': {'commands': [
-        \                  'VimFiler',
-        \                  'VimFilerExplorer',
-        \                  'VimFilerBufferDir',
-        \              ]},
-        \  'depends': ['Shougo/unite.vim', 'Shougo/vimproc.vim']
-        \}
-    let g:vimfiler_as_default_explorer=1
-    let g:vimfiler_safe_mode_by_default = 0
-    let g:vimfiler_data_directory=expand('~/.vim/.cache/vimfiler')
-    nnoremap <F2> :VimFilerExplorer<CR>
-    nnoremap <F3> :VimFilerBufferDir -quit<CR>
-endif
-NeoBundleLazy 'mileszs/ack.vim', { 'autoload' : {'commands': 'Ack'}}
-  if executable('ag')
-    let g:ackprg = "ag --nogroup --column --smart-case --follow"
-  endif
-NeoBundleLazy 'mbbill/undotree', {'autoload':{'commands':'UndotreeToggle'}}
-  let g:undotree_SplitLocation='botright'
-  let g:undotree_SetFocusWhenToggle=1
-  nnoremap <silent> <F5> :UndotreeToggle<CR>
-NeoBundleLazy 'majutsushi/tagbar', {'autoload':{'commands':'TagbarToggle'}}
-  nnoremap <silent> <F9> :TagbarToggle<CR>
-
-" unite
-if !g:slow_mode
-  NeoBundleLazy "Shougo/unite.vim", { "autoload" : { "commands" : ["Unite"] } }
-    let bundle = neobundle#get('unite.vim')
-    function! bundle.hooks.on_source(bundle)
-      call unite#filters#matcher_default#use(['matcher_fuzzy'])
-      call unite#filters#sorter_default#use(['sorter_rank'])
-      call unite#custom#profile('default', 'context', {
-            \ 'no_split' : 1,
-            \ 'resize' : 0,
-            \ 'start_insert': 1
-            \ })
-    endfunction
-
-    let g:unite_data_directory=expand('~/.vim/.cache/unite')
-    let g:unite_source_history_yank_enable=1
-    let g:unite_source_rec_max_cache_files=5000
-
-    if executable('ag')
-      let g:unite_source_grep_command='ag'
-      let g:unite_source_grep_default_opts='--nocolor --line-numbers --nogroup -S -C4'
-      let g:unite_source_grep_recursive_opt=''
-    elseif executable('ack')
-      let g:unite_source_grep_command='ack'
-      let g:unite_source_grep_default_opts='--no-heading --no-color -C4'
-      let g:unite_source_grep_recursive_opt=''
-    endif
-
-    if s:is_windows
-      nnoremap <silent> <space><space> :<C-u>Unite -toggle -buffer-name=mixed file_rec:! buffer bookmark<cr>
-      nnoremap <silent> <space>f :<C-u>Unite -toggle -buffer-name=files file_rec:!<cr>
-    else
-      nnoremap <silent> <space><space> :<C-u>Unite -toggle -buffer-name=mixed file_rec/async:! buffer bookmark<cr>
-      nnoremap <silent> <space>f :<C-u>Unite -toggle -buffer-name=files file_rec/async:!<cr>
-    endif
-    nnoremap <silent> <space>y :<C-u>Unite -buffer-name=yanks history/yank<cr>
-    nnoremap <silent> <space>l :<C-u>Unite -buffer-name=line line<cr>
-    nnoremap <silent> <space>b :<C-u>Unite -buffer-name=buffers buffer<cr>
-    nnoremap <silent> <space>/ :<C-u>Unite -no-quit -buffer-name=search grep:.<cr>
-    nnoremap <silent> <space>m :<C-u>Unite -buffer-name=mappings mapping<cr>
-    nnoremap <silent> <space>s :<C-u>Unite -quick-match buffer<cr>
-
-    nnoremap <space>nbu :Unite neobundle/update -vertical -no-start-insert<cr>
-endif
-
-" indents
-NeoBundle 'sickill/vim-pasta'
-NeoBundleLazy 'ciaranm/detectindent', {
-      \ 'autoload': { 'commands': ['DetectIndent']
-      \ }}
-  let g:detectindent_preferred_expandtab=1
-  let g:detectindent_preferred_indent=4
-  nnoremap <silent> <leader>di :DetectIndent<CR>
-NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
-      \ 'autoload' : {
-      \   'commands' : ['IndentGuidesEnable', 'IndentGuidesDisable', 'IndentGuidesToggle'],
-      \ }}
-  let g:indent_guides_start_level=1
-  let g:indent_guides_guide_size=1
-  let g:indent_guides_enable_on_vim_startup=0
-  let g:indent_guides_color_change_percent=3
-  function! s:indent_set_console_colors()
-    hi IndentGuidesOdd ctermbg=235
-    hi IndentGuidesEven ctermbg=236
-  endfunction
-
-" misc
-NeoBundle 'mattdbridges/bufkill.vim'
-NeoBundle 'mhinz/vim-startify'
-  let g:startify_session_dir = expand('~/.vim/.cache/sessions')
-  let g:startify_change_to_vcs_root = 1
-  let g:startify_show_sessions = 1
-  nnoremap <F1> :Startify<cr>
-if exists('$TMUX')
-  NeoBundle 'christoomey/vim-tmux-navigator'
-endif
-NeoBundleLazy 'guns/xterm-color-table.vim', {'autoload':{'commands':'XtermColorTable'}}
-NeoBundleLazy 'scrooloose/syntastic', {
-      \ 'autoload': {
-      \   'filetypes' : ['ruby', 'c'],
-      \   'commands' : [
-      \     'SyntasticCheck', 'SyntasticInfo',
-      \     'SyntasticReset', 'SyntasticToggleMode'
-      \   ]
-      \ }}
-NeoBundleLazy 'zhaocai/GoldenView.Vim', {'autoload':{'mappings':['<Plug>ToggleGoldenViewAutoResize']}}
-  let g:goldenview__enable_default_mapping=0
-  nmap <F4> <Plug>ToggleGoldenViewAutoResize
+" undotree
+let g:undotree_SplitLocation='botright'
+let g:undotree_SetFocusWhenToggle=1
+" vim-indent-guides
+let g:indent_guides_start_level=1
+let g:indent_guides_guide_size=1
+let g:indent_guides_enable_on_vim_startup=0
+let g:indent_guides_color_change_percent=3
+" detectindent
+let g:detectindent_preferred_expandtab=1
+let g:detectindent_preferred_indent=4
+" vim-startify
+let g:startify_session_dir = expand('~/.vim/.cache/sessions')
+let g:startify_change_to_vcs_root = 1
+let g:startify_show_sessions = 1
+" GoldenView.Vim
+let g:goldenview__enable_default_mapping=0
 
 " -------- mappings --------
 " formatting shortcuts
@@ -648,10 +456,6 @@ nnoremap Y y$
 " hide annoying quit message
 nnoremap <C-c> <C-c>:echo<cr>
 
-if neobundle#is_sourced('vim-dispatch')
-  nnoremap <leader>tag :Dispatch ctags -R<cr>
-endif
-
 map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
       \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
       \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
@@ -682,6 +486,54 @@ nnoremap ;; ;
 nnoremap x "_x
 xnoremap x "_x
 
+" vim-jsbeautify
+nnoremap <leader>fjs :call JsBeautify()<cr>
+" vim-unimpaired
+nmap <M-k> [e
+nmap <M-j> ]e
+vmap <M-k> [egv
+vmap <M-j> ]egv
+" vim-fugitive
+nnoremap <silent> <leader>gs :Gstatus<CR>
+nnoremap <silent> <leader>gd :Gdiff<CR>
+nnoremap <silent> <leader>gc :Gcommit<CR>
+nnoremap <silent> <leader>gb :Gblame<CR>
+nnoremap <silent> <leader>gl :Glog<CR>
+nnoremap <silent> <leader>gp :Git push<CR>
+nnoremap <silent> <leader>gw :Gwrite<CR>
+nnoremap <silent> <leader>gr :Gremove<CR>
+" gitv
+nnoremap <silent> <leader>gv :Gitv<CR>
+nnoremap <silent> <leader>gV :Gitv!<CR>
+" vim-commentary
+map  gc  <Plug>Commentary
+nmap gcc <Plug>CommentaryLine
+" tabular
+nmap <Leader>a& :Tabularize /&<CR>
+vmap <Leader>a& :Tabularize /&<CR>
+nmap <Leader>a= :Tabularize /=<CR>
+vmap <Leader>a= :Tabularize /=<CR>
+nmap <Leader>a: :Tabularize /:<CR>
+vmap <Leader>a: :Tabularize /:<CR>
+nmap <Leader>a:: :Tabularize /:\zs<CR>
+vmap <Leader>a:: :Tabularize /:\zs<CR>
+nmap <Leader>a, :Tabularize /,<CR>
+vmap <Leader>a, :Tabularize /,<CR>
+nmap <Leader>a<Bar> :Tabularize /<Bar><CR>
+vmap <Leader>a<Bar> :Tabularize /<Bar><CR>
+" undotree
+nnoremap <silent> <F5> :UndotreeToggle<CR>
+" tagbar
+nnoremap <silent> <F9> :TagbarToggle<CR>
+" detectindent
+nnoremap <silent> <leader>di :DetectIndent<CR>
+" vim-startify
+nnoremap <F1> :Startify<cr>
+" GoldenView.Vim
+nmap <F4> <Plug>ToggleGoldenViewAutoResize
+" vim-dispatch
+nnoremap <leader>tag :Dispatch ctags -R<cr>
+
 " -------- commands --------
 command! -bang Q q<bang>
 command! -bang QA qa<bang>
@@ -699,20 +551,22 @@ if has("autocmd")
           \  exe 'normal! g`"zvzz' |
           \ endif
 
+    " vim-fugitive
     autocmd BufReadPost fugitive://* set bufhidden=delete
   augroup END
 
   augroup FTOptions
     autocmd!
-    autocmd FileType xml,xsl,xslt,xsd,css,sass,scss,less,mustache imap <buffer><tab> <c-y>,
-    autocmd FileType html imap <buffer><expr><tab> <sid>zen_html_tab()
-
     autocmd FileType js,scss,css autocmd BufWritePre <buffer> call StripTrailingWhitespace()
     autocmd FileType css,scss setlocal foldmethod=marker foldmarker={,}
     autocmd FileType css,scss nnoremap <silent> <leader>S vi{:sort<CR>
     autocmd FileType python setlocal foldmethod=indent
     autocmd FileType markdown setlocal nolist
     autocmd FileType vim setlocal fdm=indent keywordprg=:help
+
+    " emmet-vim
+    autocmd FileType xml,xsl,xslt,xsd,css,sass,scss,less,mustache imap <buffer><tab> <c-y>,
+    autocmd FileType html imap <buffer><expr><tab> <sid>zen_html_tab()
   augroup END
 
   augroup SneakPluginColors
@@ -730,14 +584,4 @@ if has("autocmd")
 endif
 
 " -------- color schemes --------
-NeoBundle 'w0ng/vim-hybrid'
 colorscheme hybrid
-
-" -------- finish loading --------
-" Required:
-filetype plugin indent on
-syntax enable
-
-" If there are uninstalled bundles found on startup,
-" this will conveniently prompt you to install them.
-NeoBundleCheck
