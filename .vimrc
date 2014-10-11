@@ -591,4 +591,6 @@ if has("autocmd")
 endif
 
 " -------- color schemes --------
-colorscheme hybrid
+if !empty(glob('~/.vim/plugged/vim-hybrid'))
+  colorscheme hybrid
+endif
