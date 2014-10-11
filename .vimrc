@@ -6,6 +6,13 @@ let s:is_cygwin = has('win32unix')
 let s:is_macvim = has('gui_macvim')
 
 " -------- plugin manager --------
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !mkdir -p ~/.vim/autoload
+  silent !curl -fLo ~/.vim/autoload/plug.vim
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall
+endif
+
 silent! if plug#begin('~/.vim/plugged')
 
 " core
