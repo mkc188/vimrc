@@ -22,7 +22,6 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-dispatch', { 'on': ['Dispatch', 'Make', 'Start'] }
 Plug 'tpope/vim-eunuch', { 'on': ['Unlink', 'Remove', 'Move', 'Rename', 'Chmod', 'Mkdir', 'SudoEdit', 'SudoWrite'] }
 Plug 'tpope/vim-unimpaired'
-Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 
 " web
 Plug 'groenewege/vim-less', { 'for': 'less' }
@@ -73,6 +72,13 @@ Plug 'mhinz/vim-signify'
 Plug 'tpope/vim-fugitive'
 Plug 'gregsexton/gitv', { 'on': 'Gitv' }
 
+" autocomplete
+Plug 'MarcWeber/vim-addon-mw-utils'
+Plug 'tomtom/tlib_vim'
+Plug 'garbas/vim-snipmate'
+Plug 'honza/vim-snippets'
+Plug 'ervandew/supertab'
+
 " editing
 Plug 'tpope/vim-endwise', { 'for': ['lua', 'ruby', 'sh', 'zsh', 'vb', 'vbnet', 'aspvbs', 'vim', 'c', 'cpp', 'xdefaults'] }
 Plug 'tpope/vim-speeddating'
@@ -89,6 +95,9 @@ Plug 'ReplaceWithRegister'
 Plug 'mileszs/ack.vim', { 'on': 'Ack' }
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
+Plug 'jeetsukumaran/vim-filebeagle'
+Plug 'jeetsukumaran/vim-buffergator'
 
 " indents
 Plug 'nathanaelkane/vim-indent-guides', { 'on': ['IndentGuidesEnable', 'IndentGuidesDisable', 'IndentGuidesToggle'] }
@@ -99,7 +108,6 @@ Plug 'ciaranm/detectindent', { 'on': 'DetectIndent' }
 if exists('$TMUX')
   Plug 'christoomey/vim-tmux-navigator'
 endif
-Plug 'mattdbridges/bufkill.vim'
 Plug 'mhinz/vim-startify'
 Plug 'guns/xterm-color-table.vim', { 'on': 'XtermColorTable' }
 Plug 'scrooloose/syntastic', { 'for': ['ruby', 'c'], 'on': ['SyntasticCheck', 'SyntasticInfo', 'SyntasticReset', 'SyntasticToggleMode'] }
@@ -151,6 +159,29 @@ function! s:indent_set_console_colors()
   hi IndentGuidesOdd ctermbg=235
   hi IndentGuidesEven ctermbg=236
 endfunction
+" fzf
+function! s:buflist()
+  redir => ls
+  silent ls
+  redir END
+  return split(ls, '\n')
+endfunction
+function! s:bufopen(e)
+  execute 'buffer' matchstr(a:e, '^[ 0-9]*')
+endfunction
+function! s:line_handler(l)
+  let keys = split(a:l, ':\t')
+  exec 'buf ' . keys[0]
+  exec keys[1]
+  normal! ^zz
+endfunction
+function! s:buffer_lines()
+  let res = []
+  for b in filter(range(1, bufnr('$')), 'buflisted(v:val)')
+    call extend(res, map(getbufline(b,0,"$"), 'b . ":\t" . (v:key + 1) . ":\t" . v:val '))
+  endfor
+  return res
+endfunction
 
 " -------- base configuration --------
 set ttimeout
@@ -188,6 +219,8 @@ set tags=tags;/
 set showfulltag
 set modeline
 set modelines=2
+" searching includes can be slow
+set complete-=i
 
 if s:is_windows && !s:is_cygwin
   " ensure correct shell in gvim
@@ -278,8 +311,6 @@ call EnsureExists(&directory)
 let mapleader = ","
 let g:mapleader = ","
 
-let g:netrw_home=expand('~/.vim/.cache')
-
 " -------- ui configuration --------
 " automatically highlight matching braces/brackets/etc.
 set showmatch
@@ -353,6 +384,12 @@ endif
 " undotree
 let g:undotree_SplitLocation='botright'
 let g:undotree_SetFocusWhenToggle=1
+" vim-filebeagle
+let g:filebeagle_suppress_keymaps=1
+let g:loaded_netrw=1
+let g:loaded_netrwPlugin=1
+" vim-buffergator
+let g:buffergator_suppress_keymaps=1
 " vim-indent-guides
 let g:indent_guides_start_level=1
 let g:indent_guides_guide_size=1
@@ -407,11 +444,6 @@ vnoremap / /\v
 nnoremap ? ?\v
 vnoremap ? ?\v
 nnoremap :s/ :s/\v
-
-" command-line window
-nnoremap q: q:i
-nnoremap q/ q/i
-nnoremap q? q?i
 
 " folds
 nnoremap zr zr:echo &foldlevel<cr>
@@ -532,6 +564,29 @@ vmap <Leader>a<Bar> :Tabularize /<Bar><CR>
 nnoremap <silent> <F5> :UndotreeToggle<CR>
 " tagbar
 nnoremap <silent> <F9> :TagbarToggle<CR>
+" vim-filebeagle
+map <silent> <space>f <Plug>FileBeagleOpenCurrentWorkingDir
+map <silent> - <Plug>FileBeagleOpenCurrentBufferDir
+" vim-buffergator
+nnoremap <silent> <space>b :BuffergatorOpen<CR>
+nnoremap <silent> <space>t :BuffergatorTabsOpen<CR>
+" fzf
+" Open files
+nnoremap <silent> <space><space> :FZF -m<CR>
+nnoremap <silent> <space>s :call fzf#run({
+\   'tmux_height': '40%',
+\   'sink':        'botright split' })<CR>
+nnoremap <silent> <space>v :call fzf#run({
+\   'tmux_width': winwidth('.') / 2,
+\   'sink':       'vertical botright split' })<CR>
+" Select buffer
+nnoremap <silent> <space><enter> :call fzf#run({
+\   'source':      reverse(<sid>buflist()),
+\   'sink':        function('<sid>bufopen'),
+\   'options':     '+m',
+\   'tmux_height': '40%'
+\ })<CR>
+
 " detectindent
 nnoremap <silent> <leader>di :DetectIndent<CR>
 " vim-startify
@@ -545,6 +600,15 @@ nnoremap <leader>tag :Dispatch ctags -R<cr>
 command! -bang Q q<bang>
 command! -bang QA qa<bang>
 command! -bang Qa qa<bang>
+
+" fzf
+" Buffer search
+command! FZFLines call fzf#run({
+\   'source':  <sid>buffer_lines(),
+\   'sink':    function('<sid>line_handler'),
+\   'options': '--extended --nth=3..,',
+\   'tmux_height': '60%'
+\})
 
 " -------- autocmd --------
 if has("autocmd")
