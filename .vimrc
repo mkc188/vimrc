@@ -6,13 +6,6 @@ let s:is_cygwin = has('win32unix')
 let s:is_macvim = has('gui_macvim')
 
 " -------- plugin manager --------
-if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !mkdir -p ~/.vim/autoload
-  silent !curl -fLo ~/.vim/autoload/plug.vim
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall
-endif
-
 silent! if plug#begin('~/.vim/plugged')
 
 " core
@@ -27,7 +20,6 @@ Plug 'tpope/vim-unimpaired'
 Plug 'groenewege/vim-less', { 'for': 'less' }
 Plug 'cakebaker/scss-syntax.vim', { 'for': ['scss', 'sass'] }
 Plug 'hail2u/vim-css3-syntax', { 'for': ['css', 'scss', 'sass'] }
-Plug 'ap/vim-css-color', { 'for': ['css', 'scss', 'sass', 'less', 'styl'] }
 Plug 'othree/html5.vim', { 'for': 'html' }
 Plug 'wavded/vim-stylus', { 'for': 'styl' }
 Plug 'digitaltoad/vim-jade', { 'for': 'jade' }
@@ -95,9 +87,9 @@ Plug 'ReplaceWithRegister'
 Plug 'mileszs/ack.vim', { 'on': 'Ack' }
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
 Plug 'jeetsukumaran/vim-filebeagle'
 Plug 'jeetsukumaran/vim-buffergator'
+Plug 'wincent/Command-T', { 'do': 'cd ruby/command-t && ruby extconf.rb && make' }
 
 " indents
 Plug 'nathanaelkane/vim-indent-guides', { 'on': ['IndentGuidesEnable', 'IndentGuidesDisable', 'IndentGuidesToggle'] }
@@ -112,6 +104,7 @@ Plug 'mhinz/vim-startify'
 Plug 'guns/xterm-color-table.vim', { 'on': 'XtermColorTable' }
 Plug 'scrooloose/syntastic', { 'for': ['ruby', 'c'], 'on': ['SyntasticCheck', 'SyntasticInfo', 'SyntasticReset', 'SyntasticToggleMode'] }
 Plug 'zhaocai/GoldenView.Vim', { 'on': '<Plug>ToggleGoldenViewAutoResize' }
+Plug 'KabbAmine/vCoolor.vim'
 
 " colorscheme
 Plug 'w0ng/vim-hybrid'
@@ -129,8 +122,8 @@ endfunction
 function! Preserve(command)
   " preparation: save last search, and cursor position.
   let _s=@/
-  let l = line(".")
-  let c = col(".")
+  let l = line('.')
+  let c = col('.')
   " do the business:
   execute a:command
   " clean up: restore previous search history, and cursor position
@@ -142,7 +135,7 @@ function! StripTrailingWhitespace()
 endfunction
 function! EnsureExists(path)
   if !isdirectory(expand(a:path))
-    call mkdir(expand(a:path))
+    call mkdir(expand(a:path), 'p')
   endif
 endfunction
 
@@ -158,29 +151,6 @@ endfunction
 function! s:indent_set_console_colors()
   hi IndentGuidesOdd ctermbg=235
   hi IndentGuidesEven ctermbg=236
-endfunction
-" fzf
-function! s:buflist()
-  redir => ls
-  silent ls
-  redir END
-  return split(ls, '\n')
-endfunction
-function! s:bufopen(e)
-  execute 'buffer' matchstr(a:e, '^[ 0-9]*')
-endfunction
-function! s:line_handler(l)
-  let keys = split(a:l, ':\t')
-  exec 'buf ' . keys[0]
-  exec keys[1]
-  normal! ^zz
-endfunction
-function! s:buffer_lines()
-  let res = []
-  for b in filter(range(1, bufnr('$')), 'buflisted(v:val)')
-    call extend(res, map(getbufline(b,0,"$"), 'b . ":\t" . (v:key + 1) . ":\t" . v:val '))
-  endfor
-  return res
 endfunction
 
 " -------- base configuration --------
@@ -303,7 +273,6 @@ set backupdir=~/.vim/.cache/backup
 set swapfile
 set directory=~/.vim/.cache/swap
 
-call EnsureExists('~/.vim/.cache')
 call EnsureExists(&undodir)
 call EnsureExists(&backupdir)
 call EnsureExists(&directory)
@@ -326,7 +295,7 @@ set foldlevelstart=99
 " enable xml folding
 let g:xml_syntax_folding=1
 
-if has("statusline") && !&cp
+if has('statusline') && !&cp
   set laststatus=2
   set statusline=%f\ %m\ %r
   set statusline+=[#%n]
@@ -382,7 +351,6 @@ if executable('ag')
   let g:ackprg = "ag --nogroup --column --smart-case --follow"
 endif
 " undotree
-let g:undotree_SplitLocation='botright'
 let g:undotree_SetFocusWhenToggle=1
 " vim-filebeagle
 let g:filebeagle_suppress_keymaps=1
@@ -570,23 +538,9 @@ map <silent> - <Plug>FileBeagleOpenCurrentBufferDir
 " vim-buffergator
 nnoremap <silent> <space>b :BuffergatorOpen<CR>
 nnoremap <silent> <space>t :BuffergatorTabsOpen<CR>
-" fzf
-" Open files
-nnoremap <silent> <space><space> :FZF -m<CR>
-nnoremap <silent> <space>s :call fzf#run({
-\   'tmux_height': '40%',
-\   'sink':        'botright split' })<CR>
-nnoremap <silent> <space>v :call fzf#run({
-\   'tmux_width': winwidth('.') / 2,
-\   'sink':       'vertical botright split' })<CR>
-" Select buffer
-nnoremap <silent> <space><enter> :call fzf#run({
-\   'source':      reverse(<sid>buflist()),
-\   'sink':        function('<sid>bufopen'),
-\   'options':     '+m',
-\   'tmux_height': '40%'
-\ })<CR>
-
+" Command-T
+nnoremap <silent> <space><space> :CommandT<CR>
+nnoremap <silent> <space>m :CommandTMRU<CR>
 " detectindent
 nnoremap <silent> <leader>di :DetectIndent<CR>
 " vim-startify
@@ -601,17 +555,8 @@ command! -bang Q q<bang>
 command! -bang QA qa<bang>
 command! -bang Qa qa<bang>
 
-" fzf
-" Buffer search
-command! FZFLines call fzf#run({
-\   'source':  <sid>buffer_lines(),
-\   'sink':    function('<sid>line_handler'),
-\   'options': '--extended --nth=3..,',
-\   'tmux_height': '60%'
-\})
-
 " -------- autocmd --------
-if has("autocmd")
+if has('autocmd')
   augroup Misc
     autocmd!
     " automatically resize splits when resizing MacVim window
