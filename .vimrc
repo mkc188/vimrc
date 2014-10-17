@@ -377,11 +377,11 @@ let g:goldenview__enable_default_mapping=0
 " formatting shortcuts
 nmap <leader>fef :call Preserve("normal gg=G")<CR>
 nmap <leader>f$ :call StripTrailingWhitespace()<CR>
-vmap <leader>s :sort<cr>
+xmap <leader>s :sort<cr>
 
 " eval vimscript by line or visual selection
 nmap <silent> <leader>e :call Source(line('.'), line('.'))<CR>
-vmap <silent> <leader>e :call Source(line('v'), line('.'))<CR>
+xmap <silent> <leader>e :call Source(line('v'), line('.'))<CR>
 
 " toggle paste
 map <F6> :set invpaste<CR>:set paste?<CR>
@@ -394,11 +394,12 @@ nnoremap <down> :tabprev<CR>
 
 " smash escape
 inoremap jk <esc>
-inoremap kj <esc>
 
 " change cursor position in insert mode
 inoremap <C-h> <left>
 inoremap <C-l> <right>
+inoremap <C-j> <down>
+inoremap <C-k> <up>
 
 inoremap <C-u> <C-g>u<C-u>
 
@@ -408,9 +409,9 @@ endif
 
 " sane regex
 nnoremap / /\v
-vnoremap / /\v
+xnoremap / /\v
 nnoremap ? ?\v
-vnoremap ? ?\v
+xnoremap ? ?\v
 nnoremap :s/ :s/\v
 
 " folds
@@ -434,8 +435,8 @@ nnoremap <silent> <C-o> <C-o>zz
 nnoremap <silent> <C-i> <C-i>zz
 
 " reselect visual block after indent
-vnoremap < <gv
-vnoremap > >gv
+xnoremap < <gv
+xnoremap > >gv
 
 " reselect last paste
 nnoremap <expr> gb '`[' . strpart(getregtype(), 0, 1) . '`]'
@@ -498,8 +499,8 @@ nnoremap <leader>fjs :call JsBeautify()<cr>
 " vim-unimpaired
 nmap <M-k> [e
 nmap <M-j> ]e
-vmap <M-k> [egv
-vmap <M-j> ]egv
+xmap <M-k> [egv
+xmap <M-j> ]egv
 " vim-fugitive
 nnoremap <silent> <leader>gs :Gstatus<CR>
 nnoremap <silent> <leader>gd :Gdiff<CR>
@@ -517,17 +518,17 @@ map  gc  <Plug>Commentary
 nmap gcc <Plug>CommentaryLine
 " tabular
 nmap <Leader>a& :Tabularize /&<CR>
-vmap <Leader>a& :Tabularize /&<CR>
+xmap <Leader>a& :Tabularize /&<CR>
 nmap <Leader>a= :Tabularize /=<CR>
-vmap <Leader>a= :Tabularize /=<CR>
+xmap <Leader>a= :Tabularize /=<CR>
 nmap <Leader>a: :Tabularize /:<CR>
-vmap <Leader>a: :Tabularize /:<CR>
+xmap <Leader>a: :Tabularize /:<CR>
 nmap <Leader>a:: :Tabularize /:\zs<CR>
-vmap <Leader>a:: :Tabularize /:\zs<CR>
+xmap <Leader>a:: :Tabularize /:\zs<CR>
 nmap <Leader>a, :Tabularize /,<CR>
-vmap <Leader>a, :Tabularize /,<CR>
+xmap <Leader>a, :Tabularize /,<CR>
 nmap <Leader>a<Bar> :Tabularize /<Bar><CR>
-vmap <Leader>a<Bar> :Tabularize /<Bar><CR>
+xmap <Leader>a<Bar> :Tabularize /<Bar><CR>
 " undotree
 nnoremap <silent> <F5> :UndotreeToggle<CR>
 " tagbar
