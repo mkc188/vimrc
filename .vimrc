@@ -97,9 +97,6 @@ Plug 'sickill/vim-pasta'
 Plug 'ciaranm/detectindent', { 'on': 'DetectIndent' }
 
 " misc
-if exists('$TMUX')
-  Plug 'christoomey/vim-tmux-navigator'
-endif
 Plug 'mhinz/vim-startify'
 Plug 'guns/xterm-color-table.vim', { 'on': 'XtermColorTable' }
 Plug 'scrooloose/syntastic', { 'for': ['ruby', 'c'], 'on': ['SyntasticCheck', 'SyntasticInfo', 'SyntasticReset', 'SyntasticToggleMode'] }
@@ -169,9 +166,7 @@ set viewoptions=folds,options,cursor,unix,slash
 " set encoding for text
 set encoding=utf-8
 " sync with OS clipboard
-if exists('$TMUX')
-  set clipboard=
-elseif has('unnamedplus')
+if has('unnamedplus')
   set clipboard=unnamedplus
 else
   set clipboard=unnamed
@@ -216,8 +211,9 @@ set shiftwidth=2
 set listchars=tab:>-,trail:-,eol:<,nbsp:%,extends:>,precedes:<
 set shiftround
 set linebreak
+let &showbreak='+++ '
 if exists('+breakindent')
-  set breakindent showbreak=\ +
+  set breakindent
 endif
 
 " always show content after scroll
