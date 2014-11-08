@@ -175,8 +175,6 @@ endif
 set hidden
 " auto reload if file saved externally
 set autoread
-" add mac to auto-detection of file format line endings
-set fileformats+=mac
 " always assume decimal numbers
 set nrformats-=octal
 set showcmd
@@ -334,11 +332,13 @@ endif
 let g:pymode_rope=0
 " jedi-vim
 let g:jedi#popup_on_dot=0
+let g:jedi#show_call_signatures=0
 " vim-signify
 let g:signify_update_on_bufenter=0
 " vim-sneak
-let g:sneak#streak = 1
 let g:sneak#s_next = 1
+let g:sneak#streak = 1
+let g:sneak#target_labels = "asdfghkl;qwertyuiopzxcvbnm/ASDFGHJKL:QWERTYUIOPZXCVBNM?"
 hi link SneakPluginTarget Search
 hi link SneakPluginScope Search
 hi link SneakStreakTarget Search
