@@ -110,12 +110,6 @@ call plug#end()
 endif
 
 " -------- functions --------
-function! Source(begin, end)
-  let lines = getline(a:begin, a:end)
-  for line in lines
-    execute line
-  endfor
-endfunction
 function! Preserve(command)
   " preparation: save last search, and cursor position.
   let _s=@/
@@ -209,9 +203,9 @@ set shiftwidth=2
 set listchars=tab:>-,trail:-,eol:<,nbsp:%,extends:>,precedes:<
 set shiftround
 set linebreak
-let &showbreak='+++ '
 if exists('+breakindent')
   set breakindent
+  set showbreak=\ +
 endif
 
 " always show content after scroll
@@ -282,12 +276,8 @@ set matchtime=2
 set number
 set lazyredraw
 set showtabline=0
-" fold via syntax of files
-set foldmethod=syntax
-" open all folds by default
-set foldlevelstart=99
-" enable xml folding
-let g:xml_syntax_folding=1
+" folds are created manually
+set foldmethod=manual
 
 if has('statusline') && !&cp
   set laststatus=2
@@ -375,13 +365,6 @@ nmap <leader>fef :call Preserve("normal gg=G")<CR>
 nmap <leader>f$ :call StripTrailingWhitespace()<CR>
 xmap <leader>s :sort<cr>
 
-" eval vimscript by line or visual selection
-nmap <silent> <leader>e :call Source(line('.'), line('.'))<CR>
-xmap <silent> <leader>e :call Source(line('v'), line('.'))<CR>
-
-" toggle paste
-map <F6> :set invpaste<CR>:set paste?<CR>
-
 " remap arrow keys
 nnoremap <left> :bprev<CR>
 nnoremap <right> :bnext<CR>
@@ -397,11 +380,8 @@ inoremap <C-l> <right>
 inoremap <C-j> <down>
 inoremap <C-k> <up>
 
+" recover from accidental Ctrl-U
 inoremap <C-u> <C-g>u<C-u>
-
-if mapcheck('<space>/') == ''
-  nnoremap <space>/ :vimgrep //gj **/*<left><left><left><left><left><left><left><left>
-endif
 
 " sane regex
 nnoremap / /\v
@@ -409,12 +389,6 @@ xnoremap / /\v
 nnoremap ? ?\v
 xnoremap ? ?\v
 nnoremap :s/ :s/\v
-
-" folds
-nnoremap zr zr:echo &foldlevel<cr>
-nnoremap zm zm:echo &foldlevel<cr>
-nnoremap zR zR:echo &foldlevel<cr>
-nnoremap zM zM:echo &foldlevel<cr>
 
 " screen line scroll
 nnoremap <silent> j gj
@@ -459,16 +433,6 @@ nnoremap Y y$
 
 " hide annoying quit message
 nnoremap <C-c> <C-c>:echo<cr>
-
-map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
-      \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
-      \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
-
-" helpers for profiling
-nnoremap <silent> <leader>DD :exe ":profile start profile.log"<cr>:exe ":profile func *"<cr>:exe ":profile file *"<cr>
-nnoremap <silent> <leader>DP :exe ":profile pause"<cr>
-nnoremap <silent> <leader>DC :exe ":profile continue"<cr>
-nnoremap <silent> <leader>DQ :exe ":profile pause"<cr>:noautocmd qall!<cr>
 
 " fix meta-keys which generate <Esc>a .. <Esc>z
 for i in range(97,122)
@@ -570,13 +534,6 @@ if has('autocmd')
 
   augroup FTOptions
     autocmd!
-    autocmd FileType js,scss,css autocmd BufWritePre <buffer> call StripTrailingWhitespace()
-    autocmd FileType css,scss setlocal foldmethod=marker foldmarker={,}
-    autocmd FileType css,scss nnoremap <silent> <leader>S vi{:sort<CR>
-    autocmd FileType python setlocal foldmethod=indent
-    autocmd FileType markdown setlocal nolist
-    autocmd FileType vim setlocal fdm=indent keywordprg=:help
-
     " emmet-vim
     autocmd FileType xml,xsl,xslt,xsd,css,sass,scss,less,mustache imap <buffer><tab> <c-y>,
     autocmd FileType html imap <buffer><expr><tab> <sid>zen_html_tab()
