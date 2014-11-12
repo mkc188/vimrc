@@ -89,7 +89,7 @@ Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'jeetsukumaran/vim-filebeagle'
 Plug 'jeetsukumaran/vim-buffergator'
-Plug 'kien/ctrlp.vim', { 'on': ['CtrlP', 'CtrlPBuffer', 'CtrlPMRU'] }
+Plug 'ctrlpvim/ctrlp.vim', { 'on': ['CtrlP', 'CtrlPBuffer', 'CtrlPMRU'] }
 Plug 'FelikZ/ctrlp-py-matcher'
 
 " indents
