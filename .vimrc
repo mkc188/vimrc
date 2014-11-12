@@ -89,7 +89,8 @@ Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'jeetsukumaran/vim-filebeagle'
 Plug 'jeetsukumaran/vim-buffergator'
-Plug 'wincent/Command-T', { 'do': 'cd ruby/command-t && ruby extconf.rb && make' }
+Plug 'kien/ctrlp.vim', { 'on': ['CtrlP', 'CtrlPBuffer', 'CtrlPMRU'] }
+Plug 'FelikZ/ctrlp-py-matcher'
 
 " indents
 Plug 'nathanaelkane/vim-indent-guides', { 'on': ['IndentGuidesEnable', 'IndentGuidesDisable', 'IndentGuidesToggle'] }
@@ -217,7 +218,11 @@ set display+=lastline
 set wildmenu
 set wildmode=list:full
 set wildignorecase
-set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.idea/*,*/.DS_Store
+if s:is_windows
+  set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe
+else
+  set wildignore+=*/tmp/*,*.so,*.swp,*.zip
+endif
 
 set splitbelow
 set splitright
@@ -334,7 +339,7 @@ hi link SneakPluginScope Search
 hi link SneakStreakTarget Search
 " ack.vim
 if executable('ag')
-  let g:ackprg = "ag --nogroup --column --smart-case --follow"
+  let g:ackprg = "ag --nogroup --nocolor --column --smart-case --follow"
 endif
 " undotree
 let g:undotree_SetFocusWhenToggle=1
@@ -358,6 +363,30 @@ let g:startify_change_to_vcs_root = 1
 let g:startify_show_sessions = 1
 " GoldenView.Vim
 let g:goldenview__enable_default_mapping=0
+" ctrlp.vim
+let g:ctrlp_map = ''
+let g:ctrlp_clear_cache_on_exit = 0
+let g:ctrlp_max_files = 0
+let g:ctrlp_cache_dir = expand('~/.vim/.cache/ctrlp')
+let g:ctrlp_reuse_window = 'startify'
+let g:ctrlp_lazy_update = 1
+let g:ctrlp_working_path_mode = ''
+let g:ctrlp_custom_ignore = {
+      \ 'dir': '\v[\/]\.(git|hg|svn|idea)$',
+      \ 'file': '\v\.(DS_Store|exe|so|dll)$',
+      \ }
+if has('python') && v:version >= 704
+  let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
+endif
+if executable('ag')
+  let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
+        \ --ignore .git
+        \ --ignore .svn
+        \ --ignore .hg
+        \ --ignore .DS_Store
+        \ --ignore "**/*.pyc"
+        \ -g ""'
+endif
 
 " -------- mappings --------
 " formatting shortcuts
@@ -497,11 +526,8 @@ nnoremap <silent> <F9> :TagbarToggle<CR>
 map <silent> <space>f <Plug>FileBeagleOpenCurrentWorkingDir
 map <silent> - <Plug>FileBeagleOpenCurrentBufferDir
 " vim-buffergator
-nnoremap <silent> <space>b :BuffergatorOpen<CR>
-nnoremap <silent> <space>t :BuffergatorTabsOpen<CR>
-" Command-T
-nnoremap <silent> <space><space> :CommandT<CR>
-nnoremap <silent> <space>m :CommandTMRU<CR>
+nnoremap <silent> \b :BuffergatorOpen<CR>
+nnoremap <silent> \t :BuffergatorTabsOpen<CR>
 " detectindent
 nnoremap <silent> <leader>di :DetectIndent<CR>
 " vim-startify
@@ -510,6 +536,10 @@ nnoremap <F1> :Startify<cr>
 nmap <F4> <Plug>ToggleGoldenViewAutoResize
 " vim-dispatch
 nnoremap <leader>tag :Dispatch ctags -R<cr>
+" ctrlp.vim
+nnoremap <silent> <space><space> :CtrlP<CR>
+nnoremap <silent> <space>b :CtrlPBuffer<CR>
+nnoremap <silent> <space>m :CtrlPMRU<CR>
 
 " -------- commands --------
 command! -bang Q q<bang>
