@@ -68,9 +68,11 @@ Plug 'tpope/vim-fugitive'
 Plug 'gregsexton/gitv', { 'on': 'Gitv' }
 
 " autocomplete
-Plug 'ervandew/supertab'
-Plug 'SirVer/ultisnips'
+Plug 'MarcWeber/vim-addon-mw-utils'
+Plug 'tomtom/tlib_vim'
+Plug 'garbas/vim-snipmate'
 Plug 'honza/vim-snippets'
+Plug 'ervandew/supertab'
 Plug 'Rip-Rip/clang_complete'
 
 " editing
@@ -390,10 +392,6 @@ if executable('ag')
         \ --ignore "**/*.pyc"
         \ -g ""'
 endif
-" ultisnips
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 " clang_complete
 let g:clang_library_path="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib"
 let g:clang_auto_user_options="compile_commands.json, path, .clang_complete"
@@ -402,7 +400,6 @@ let g:clang_periodic_quickfix = 0
 let g:clang_close_preview = 1
 let g:clang_snippets = 1
 let g:clang_auto_select = 1
-let g:clang_snippets_engine = 'ultisnips'
 let g:clang_complete_copen = 1
 " vim-objc
 let c_no_curly_error = 1
