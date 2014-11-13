@@ -59,17 +59,19 @@ if executable('redcarpet') && executable('instant-markdown-d')
   Plug 'suan/vim-instant-markdown', { 'for': 'markdown' }
 endif
 
+" objective-c
+Plug 'b4winckler/vim-objc'
+
 " scm
 Plug 'mhinz/vim-signify'
 Plug 'tpope/vim-fugitive'
 Plug 'gregsexton/gitv', { 'on': 'Gitv' }
 
 " autocomplete
-Plug 'MarcWeber/vim-addon-mw-utils'
-Plug 'tomtom/tlib_vim'
-Plug 'garbas/vim-snipmate'
-Plug 'honza/vim-snippets'
 Plug 'ervandew/supertab'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+Plug 'Rip-Rip/clang_complete'
 
 " editing
 Plug 'tpope/vim-endwise', { 'for': ['lua', 'ruby', 'sh', 'zsh', 'vb', 'vbnet', 'aspvbs', 'vim', 'c', 'cpp', 'xdefaults'] }
@@ -289,7 +291,6 @@ if has('statusline') && !&cp
   set statusline=%f\ %m\ %r
   set statusline+=[#%n]
   set statusline+=[%l/%L]
-  set statusline+=[%p%%]
   set statusline+=[%v]
   set statusline+=[%b][0x%B]
   " vim-fugitive
@@ -325,6 +326,8 @@ endif
 " -------- plugin configuration --------
 " python-mode
 let g:pymode_rope=0
+let g:pymode_folding=0
+let g:pymode_syntax=0
 " jedi-vim
 let g:jedi#popup_on_dot=0
 let g:jedi#show_call_signatures=0
@@ -387,6 +390,22 @@ if executable('ag')
         \ --ignore "**/*.pyc"
         \ -g ""'
 endif
+" ultisnips
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+" clang_complete
+let g:clang_library_path="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib"
+let g:clang_auto_user_options="compile_commands.json, path, .clang_complete"
+let g:clang_complete_auto = 0
+let g:clang_periodic_quickfix = 0
+let g:clang_close_preview = 1
+let g:clang_snippets = 1
+let g:clang_auto_select = 1
+let g:clang_snippets_engine = 'ultisnips'
+let g:clang_complete_copen = 1
+" vim-objc
+let c_no_curly_error = 1
 
 " -------- mappings --------
 " formatting shortcuts
@@ -540,6 +559,9 @@ nnoremap <leader>tag :Dispatch ctags -R<cr>
 nnoremap <silent> <space><space> :CtrlP<CR>
 nnoremap <silent> <space>b :CtrlPBuffer<CR>
 nnoremap <silent> <space>m :CtrlPMRU<CR>
+" clang_complete
+nnoremap <Leader>q :call g:ClangUpdateQuickFix()<CR>
+nnoremap <leader>c :cc<cr>
 
 " -------- commands --------
 command! -bang Q q<bang>
