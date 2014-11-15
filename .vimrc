@@ -62,6 +62,7 @@ endif
 " objective-c
 Plug 'b4winckler/vim-objc', { 'for': 'objc' }
 Plug 'tokorom/xcode-actions.vim', { 'for': ['objc', 'swift'] }
+Plug 'brow/vim-xctool', { 'for': ['objc', 'swift'] }
 
 " scm
 Plug 'mhinz/vim-signify'
@@ -184,6 +185,7 @@ set modeline
 set modelines=2
 " searching includes can be slow
 set complete-=i
+set completeopt-=preview
 
 if s:is_windows && !s:is_cygwin
   " ensure correct shell in gvim
@@ -398,12 +400,15 @@ let g:clang_library_path = "/Applications/Xcode.app/Contents/Developer/Toolchain
 let g:clang_auto_user_options = "compile_commands.json, path, .clang_complete"
 let g:clang_complete_auto = 0
 let g:clang_periodic_quickfix = 0
-let g:clang_close_preview = 1
 let g:clang_snippets = 1
 let g:clang_auto_select = 1
 let g:clang_complete_copen = 1
 " vim-objc
 let c_no_curly_error = 1
+" supertab
+let g:SuperTabDefaultCompletionType = "context"
+let g:SuperTabCompletionContexts = ['s:ContextText', 's:ContextDiscover']
+let g:SuperTabContextDiscoverDiscovery = ["&completefunc:<c-x><c-u>", "&omnifunc:<c-x><c-o>"]
 
 " -------- mappings --------
 " formatting shortcuts
