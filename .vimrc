@@ -60,7 +60,8 @@ if executable('redcarpet') && executable('instant-markdown-d')
 endif
 
 " objective-c
-Plug 'b4winckler/vim-objc'
+Plug 'b4winckler/vim-objc', { 'for': 'objc' }
+Plug 'tokorom/xcode-actions.vim', { 'for': ['objc', 'swift'] }
 
 " scm
 Plug 'mhinz/vim-signify'
@@ -327,14 +328,14 @@ endif
 
 " -------- plugin configuration --------
 " python-mode
-let g:pymode_rope=0
-let g:pymode_folding=0
-let g:pymode_syntax=0
+let g:pymode_rope = 0
+let g:pymode_folding = 0
+let g:pymode_syntax = 0
 " jedi-vim
-let g:jedi#popup_on_dot=0
-let g:jedi#show_call_signatures=0
+let g:jedi#popup_on_dot = 0
+let g:jedi#show_call_signatures = 0
 " vim-signify
-let g:signify_update_on_bufenter=0
+let g:signify_update_on_bufenter = 0
 " vim-sneak
 let g:sneak#s_next = 1
 let g:sneak#streak = 1
@@ -347,27 +348,27 @@ if executable('ag')
   let g:ackprg = "ag --nogroup --nocolor --column --smart-case --follow"
 endif
 " undotree
-let g:undotree_SetFocusWhenToggle=1
+let g:undotree_SetFocusWhenToggle = 1
 " vim-filebeagle
-let g:filebeagle_suppress_keymaps=1
-let g:loaded_netrw=1
-let g:loaded_netrwPlugin=1
+let g:filebeagle_suppress_keymaps = 1
+let g:loaded_netrw = 1
+let g:loaded_netrwPlugin = 1
 " vim-buffergator
-let g:buffergator_suppress_keymaps=1
+let g:buffergator_suppress_keymaps = 1
 " vim-indent-guides
-let g:indent_guides_start_level=1
-let g:indent_guides_guide_size=1
-let g:indent_guides_enable_on_vim_startup=0
-let g:indent_guides_color_change_percent=3
+let g:indent_guides_start_level = 1
+let g:indent_guides_guide_size = 1
+let g:indent_guides_enable_on_vim_startup = 0
+let g:indent_guides_color_change_percent = 3
 " detectindent
-let g:detectindent_preferred_expandtab=1
-let g:detectindent_preferred_indent=4
+let g:detectindent_preferred_expandtab = 1
+let g:detectindent_preferred_indent = 4
 " vim-startify
 let g:startify_session_dir = expand('~/.vim/.cache/sessions')
 let g:startify_change_to_vcs_root = 1
 let g:startify_show_sessions = 1
 " GoldenView.Vim
-let g:goldenview__enable_default_mapping=0
+let g:goldenview__enable_default_mapping = 0
 " ctrlp.vim
 let g:ctrlp_map = ''
 let g:ctrlp_clear_cache_on_exit = 0
@@ -393,8 +394,8 @@ if executable('ag')
         \ -g ""'
 endif
 " clang_complete
-let g:clang_library_path="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib"
-let g:clang_auto_user_options="compile_commands.json, path, .clang_complete"
+let g:clang_library_path = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib"
+let g:clang_auto_user_options = "compile_commands.json, path, .clang_complete"
 let g:clang_complete_auto = 0
 let g:clang_periodic_quickfix = 0
 let g:clang_close_preview = 1
@@ -557,8 +558,14 @@ nnoremap <silent> <space><space> :CtrlP<CR>
 nnoremap <silent> <space>b :CtrlPBuffer<CR>
 nnoremap <silent> <space>m :CtrlPMRU<CR>
 " clang_complete
-nnoremap <Leader>q :call g:ClangUpdateQuickFix()<CR>
+nnoremap <leader>q :call g:ClangUpdateQuickFix()<CR>
 nnoremap <leader>c :cc<cr>
+" xcode-actions.vim
+nmap <silent> <leader>xb <Plug>(xcode-actions-build)
+nmap <silent> <leader>xr <Plug>(xcode-actions-run)
+nmap <silent> <leader>xc <Plug>(xcode-actions-clean)
+nmap <silent> <leader>xt <Plug>(xcode-actions-test)
+nmap <silent> <leader>xo <Plug>(xcode-actions-openfile)
 
 " -------- commands --------
 command! -bang Q q<bang>
@@ -594,7 +601,7 @@ if has('autocmd')
   augroup END
 
   if !has('gui_running')
-    let g:indent_guides_auto_colors=0
+    let g:indent_guides_auto_colors = 0
     augroup IndentGuidesColors
       autocmd!
       autocmd VimEnter,Colorscheme * call s:indent_set_console_colors()
