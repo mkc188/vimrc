@@ -61,8 +61,9 @@ endif
 
 " objective-c
 Plug 'b4winckler/vim-objc', { 'for': 'objc' }
+Plug 'Keithbsmiley/swift.vim', { 'for': 'swift' }
 Plug 'tokorom/xcode-actions.vim', { 'for': ['objc', 'swift'] }
-Plug 'brow/vim-xctool', { 'for': ['objc', 'swift'] }
+Plug 'mkc188/vim-xctool', { 'for': ['objc', 'swift'] }
 
 " scm
 Plug 'mhinz/vim-signify'
@@ -82,8 +83,6 @@ Plug 'tpope/vim-endwise', { 'for': ['lua', 'ruby', 'sh', 'zsh', 'vb', 'vbnet', '
 Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-commentary', { 'on': '<Plug>Commentary' }
 Plug 'thinca/vim-visualstar'
-Plug 'terryma/vim-expand-region'
-Plug 'chrisbra/NrrwRgn', { 'on': ['NR', 'NarrowRegion', 'NW', 'NarrowWindow'] }
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 Plug 'mkc188/auto-pairs'
 Plug 'justinmk/vim-sneak'
@@ -99,7 +98,6 @@ Plug 'ctrlpvim/ctrlp.vim', { 'on': ['CtrlP', 'CtrlPBuffer', 'CtrlPMRU'] }
 Plug 'FelikZ/ctrlp-py-matcher'
 
 " indents
-Plug 'nathanaelkane/vim-indent-guides', { 'on': ['IndentGuidesEnable', 'IndentGuidesDisable', 'IndentGuidesToggle'] }
 Plug 'sickill/vim-pasta'
 Plug 'ciaranm/detectindent', { 'on': 'DetectIndent' }
 
@@ -107,7 +105,6 @@ Plug 'ciaranm/detectindent', { 'on': 'DetectIndent' }
 Plug 'mhinz/vim-startify'
 Plug 'guns/xterm-color-table.vim', { 'on': 'XtermColorTable' }
 Plug 'scrooloose/syntastic', { 'for': ['ruby', 'c'], 'on': ['SyntasticCheck', 'SyntasticInfo', 'SyntasticReset', 'SyntasticToggleMode'] }
-Plug 'zhaocai/GoldenView.Vim', { 'on': '<Plug>ToggleGoldenViewAutoResize' }
 Plug 'KabbAmine/vCoolor.vim'
 
 " colorscheme
@@ -144,11 +141,6 @@ function! s:zen_html_tab()
     return "\<c-y>,"
   endif
   return "\<c-y>n"
-endfunction
-" vim-indent-guides
-function! s:indent_set_console_colors()
-  hi IndentGuidesOdd ctermbg=235
-  hi IndentGuidesEven ctermbg=236
 endfunction
 
 " -------- base configuration --------
@@ -357,11 +349,6 @@ let g:loaded_netrw = 1
 let g:loaded_netrwPlugin = 1
 " vim-buffergator
 let g:buffergator_suppress_keymaps = 1
-" vim-indent-guides
-let g:indent_guides_start_level = 1
-let g:indent_guides_guide_size = 1
-let g:indent_guides_enable_on_vim_startup = 0
-let g:indent_guides_color_change_percent = 3
 " detectindent
 let g:detectindent_preferred_expandtab = 1
 let g:detectindent_preferred_indent = 4
@@ -369,8 +356,6 @@ let g:detectindent_preferred_indent = 4
 let g:startify_session_dir = expand('~/.vim/.cache/sessions')
 let g:startify_change_to_vcs_root = 1
 let g:startify_show_sessions = 1
-" GoldenView.Vim
-let g:goldenview__enable_default_mapping = 0
 " ctrlp.vim
 let g:ctrlp_map = ''
 let g:ctrlp_clear_cache_on_exit = 0
@@ -554,8 +539,6 @@ nnoremap <silent> \t :BuffergatorTabsOpen<CR>
 nnoremap <silent> <leader>di :DetectIndent<CR>
 " vim-startify
 nnoremap <F1> :Startify<cr>
-" GoldenView.Vim
-nmap <F4> <Plug>ToggleGoldenViewAutoResize
 " vim-dispatch
 nnoremap <leader>tag :Dispatch ctags -R<cr>
 " ctrlp.vim
@@ -604,14 +587,6 @@ if has('autocmd')
     autocmd!
     autocmd ColorScheme * hi SneakStreakMask guifg=#f0c674 ctermfg=221 guibg=#f0c674 ctermbg=221
   augroup END
-
-  if !has('gui_running')
-    let g:indent_guides_auto_colors = 0
-    augroup IndentGuidesColors
-      autocmd!
-      autocmd VimEnter,Colorscheme * call s:indent_set_console_colors()
-    augroup END
-  endif
 endif
 
 " -------- color schemes --------
