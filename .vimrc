@@ -152,8 +152,6 @@ set ttimeoutlen=100
 set mouse=a
 " number of command lines to remember
 set history=1000
-" assume fast terminal connection
-set ttyfast
 " unix/windows compatibility
 set viewoptions=folds,options,cursor,unix,slash
 " set encoding for text
@@ -262,7 +260,7 @@ set backup
 set backupdir=~/.vim/.cache/backup
 
 " swap files
-set swapfile
+set noswapfile
 set directory=~/.vim/.cache/swap
 
 call EnsureExists(&undodir)
@@ -278,10 +276,15 @@ set showmatch
 " tens of a second to show matching parentheses
 set matchtime=2
 set number
-set lazyredraw
 set showtabline=0
 " folds are created manually
 set foldmethod=manual
+" speedup vim
+set synmaxcol=200
+syntax sync minlines=256
+set ttyfast
+set ttyscroll=3
+set lazyredraw
 
 if has('statusline') && !&cp
   set laststatus=2
