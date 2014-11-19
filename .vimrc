@@ -176,6 +176,7 @@ set modelines=2
 " searching includes can be slow
 set complete-=i
 set completeopt-=preview
+set completeopt+=longest
 
 if s:is_windows && !s:is_cygwin
   " ensure correct shell in gvim
@@ -397,6 +398,8 @@ let c_no_curly_error = 1
 let g:SuperTabDefaultCompletionType = "context"
 let g:SuperTabCompletionContexts = ['s:ContextText', 's:ContextDiscover']
 let g:SuperTabContextDiscoverDiscovery = ["&completefunc:<c-x><c-u>", "&omnifunc:<c-x><c-o>"]
+let g:SuperTabLongestEnhanced = 1
+let g:SuperTabLongestHighlight = 1
 
 " -------- mappings --------
 " formatting shortcuts
