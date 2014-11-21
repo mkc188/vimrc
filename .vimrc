@@ -82,6 +82,7 @@ Plug 'Rip-Rip/clang_complete'
 Plug 'tpope/vim-endwise', { 'for': ['lua', 'ruby', 'sh', 'zsh', 'vb', 'vbnet', 'aspvbs', 'vim', 'c', 'cpp', 'xdefaults'] }
 Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-commentary', { 'on': '<Plug>Commentary' }
+Plug 'tpope/vim-rsi'
 Plug 'thinca/vim-visualstar'
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 Plug 'mkc188/auto-pairs'
@@ -177,6 +178,8 @@ set modelines=2
 set complete-=i
 set completeopt-=preview
 set completeopt+=longest
+set tabpagemax=50
+set sessionoptions-=options
 
 if s:is_windows && !s:is_cygwin
   " ensure correct shell in gvim
@@ -400,6 +403,8 @@ let g:SuperTabCompletionContexts = ['s:ContextText', 's:ContextDiscover']
 let g:SuperTabContextDiscoverDiscovery = ["&completefunc:<c-x><c-u>", "&omnifunc:<c-x><c-o>"]
 let g:SuperTabLongestEnhanced = 1
 let g:SuperTabLongestHighlight = 1
+" vim-rsi
+let g:rsi_no_meta = 1
 
 " -------- mappings --------
 " formatting shortcuts
