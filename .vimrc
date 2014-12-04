@@ -62,21 +62,11 @@ endif
 " objective-c
 Plug 'b4winckler/vim-objc', { 'for': 'objc' }
 Plug 'Keithbsmiley/swift.vim', { 'for': 'swift' }
-Plug 'tokorom/xcode-actions.vim', { 'for': ['objc', 'swift'] }
-Plug 'mkc188/vim-xctool', { 'for': ['objc', 'swift'] }
 
 " scm
 Plug 'mhinz/vim-signify'
 Plug 'tpope/vim-fugitive'
 Plug 'gregsexton/gitv', { 'on': 'Gitv' }
-
-" autocomplete
-Plug 'MarcWeber/vim-addon-mw-utils'
-Plug 'tomtom/tlib_vim'
-Plug 'garbas/vim-snipmate'
-Plug 'honza/vim-snippets'
-Plug 'ervandew/supertab'
-Plug 'Rip-Rip/clang_complete'
 
 " editing
 Plug 'tpope/vim-endwise', { 'for': ['lua', 'ruby', 'sh', 'zsh', 'vb', 'vbnet', 'aspvbs', 'vim', 'c', 'cpp', 'xdefaults'] }
@@ -86,17 +76,17 @@ Plug 'tpope/vim-rsi'
 Plug 'thinca/vim-visualstar'
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 Plug 'mkc188/auto-pairs'
-Plug 'justinmk/vim-sneak'
 Plug 'ReplaceWithRegister'
+Plug 'rhysd/clever-f.vim'
 
 " navigation
-Plug 'mileszs/ack.vim', { 'on': 'Ack' }
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'jeetsukumaran/vim-filebeagle'
 Plug 'jeetsukumaran/vim-buffergator'
-Plug 'ctrlpvim/ctrlp.vim', { 'on': ['CtrlP', 'CtrlPBuffer', 'CtrlPMRU'] }
-Plug 'FelikZ/ctrlp-py-matcher'
+if executable('ag')
+  Plug 'rking/ag.vim', { 'on': ['Ag', 'AgFile'] }
+endif
 
 " indents
 Plug 'sickill/vim-pasta'
@@ -219,11 +209,6 @@ set display+=lastline
 set wildmenu
 set wildmode=list:full
 set wildignorecase
-if s:is_windows
-  set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe
-else
-  set wildignore+=*/tmp/*,*.so,*.swp,*.zip
-endif
 
 set splitbelow
 set splitright
@@ -244,13 +229,6 @@ set ignorecase
 set smartcase
 " add the g flag to search/replace by default
 set gdefault
-if executable('ag')
-  set grepprg=ag\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow
-  set grepformat=%f:%l:%c:%m
-elseif executable('ack')
-  set grepprg=ack\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow\ $*
-  set grepformat=%f:%l:%c:%m
-endif
 
 " vim file/folder management
 " persistent undo
@@ -337,17 +315,6 @@ let g:jedi#popup_on_dot = 0
 let g:jedi#show_call_signatures = 0
 " vim-signify
 let g:signify_update_on_bufenter = 0
-" vim-sneak
-let g:sneak#s_next = 1
-let g:sneak#streak = 1
-let g:sneak#target_labels = "asdfghkl;qwertyuiopzxcvbnm/ASDFGHJKL:QWERTYUIOPZXCVBNM?"
-hi link SneakPluginTarget Search
-hi link SneakPluginScope Search
-hi link SneakStreakTarget Search
-" ack.vim
-if executable('ag')
-  let g:ackprg = "ag --nogroup --nocolor --column --smart-case --follow"
-endif
 " undotree
 let g:undotree_SetFocusWhenToggle = 1
 " vim-filebeagle
@@ -363,48 +330,15 @@ let g:detectindent_preferred_indent = 4
 let g:startify_session_dir = expand('~/.vim/.cache/sessions')
 let g:startify_change_to_vcs_root = 1
 let g:startify_show_sessions = 1
-" ctrlp.vim
-let g:ctrlp_map = ''
-let g:ctrlp_clear_cache_on_exit = 0
-let g:ctrlp_max_files = 0
-let g:ctrlp_cache_dir = expand('~/.vim/.cache/ctrlp')
-let g:ctrlp_reuse_window = 'startify'
-let g:ctrlp_lazy_update = 1
-let g:ctrlp_working_path_mode = ''
-let g:ctrlp_custom_ignore = {
-      \ 'dir': '\v[\/]\.(git|hg|svn|idea)$',
-      \ 'file': '\v\.(DS_Store|exe|so|dll)$',
-      \ }
-if has('python') && v:version >= 704
-  let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
-endif
-if executable('ag')
-  let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
-        \ --ignore .git
-        \ --ignore .svn
-        \ --ignore .hg
-        \ --ignore .DS_Store
-        \ --ignore "**/*.pyc"
-        \ -g ""'
-endif
-" clang_complete
-let g:clang_library_path = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib"
-let g:clang_auto_user_options = "compile_commands.json, path, .clang_complete"
-let g:clang_complete_auto = 0
-let g:clang_periodic_quickfix = 0
-let g:clang_snippets = 1
-let g:clang_auto_select = 1
-let g:clang_complete_copen = 1
 " vim-objc
 let c_no_curly_error = 1
-" supertab
-let g:SuperTabDefaultCompletionType = "context"
-let g:SuperTabCompletionContexts = ['s:ContextText', 's:ContextDiscover']
-let g:SuperTabContextDiscoverDiscovery = ["&completefunc:<c-x><c-u>", "&omnifunc:<c-x><c-o>"]
-let g:SuperTabLongestEnhanced = 1
-let g:SuperTabLongestHighlight = 1
 " vim-rsi
 let g:rsi_no_meta = 1
+" ag.vim
+let g:agprg = "ag -U --silent --nogroup --nocolor --column --smart-case --follow"
+let g:ag_mapping_message = 0
+" gitv
+let g:Gitv_DoNotMapCtrlKey = 1
 
 " -------- mappings --------
 " formatting shortcuts
@@ -552,19 +486,6 @@ nnoremap <silent> <leader>di :DetectIndent<CR>
 nnoremap <F1> :Startify<cr>
 " vim-dispatch
 nnoremap <leader>tag :Dispatch ctags -R<cr>
-" ctrlp.vim
-nnoremap <silent> <space><space> :CtrlP<CR>
-nnoremap <silent> <space>b :CtrlPBuffer<CR>
-nnoremap <silent> <space>m :CtrlPMRU<CR>
-" clang_complete
-nnoremap <leader>q :call g:ClangUpdateQuickFix()<CR>
-nnoremap <leader>c :cc<cr>
-" xcode-actions.vim
-nmap <silent> <leader>xb <Plug>(xcode-actions-build)
-nmap <silent> <leader>xr <Plug>(xcode-actions-run)
-nmap <silent> <leader>xc <Plug>(xcode-actions-clean)
-nmap <silent> <leader>xt <Plug>(xcode-actions-test)
-nmap <silent> <leader>xo <Plug>(xcode-actions-openfile)
 
 " -------- commands --------
 command! -bang Q q<bang>
@@ -592,11 +513,6 @@ if has('autocmd')
     " emmet-vim
     autocmd FileType xml,xsl,xslt,xsd,css,sass,scss,less,mustache imap <buffer><tab> <c-y>,
     autocmd FileType html imap <buffer><expr><tab> <sid>zen_html_tab()
-  augroup END
-
-  augroup SneakPluginColors
-    autocmd!
-    autocmd ColorScheme * hi SneakStreakMask guifg=#f0c674 ctermfg=221 guibg=#f0c674 ctermbg=221
   augroup END
 endif
 
