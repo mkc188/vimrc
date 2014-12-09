@@ -1,9 +1,27 @@
 " vim: fdm=marker ts=2 sts=2 sw=2 fdl=0
 
-" -------- detect OS --------
+" -------- basic initialization --------
 let s:is_windows = has('win32') || has('win64')
 let s:is_cygwin = has('win32unix')
 let s:is_macvim = has('gui_macvim')
+
+" disable default menus for big boost to gvim startup speed.
+" dlso disables toolbars, etc, but menus can be made later in startup
+let g:did_install_default_menus = 1
+let g:did_install_syntax_menu = 1
+" disable mandatory-load stuff from OS packages, sourced early...
+let g:loaded_vimballPlugin = 1
+let g:loaded_vimball = 1
+let g:loaded_getscriptPlugin = 1
+let g:loaded_netrwPlugin = 1
+let loaded_spellfile_plugin = 1
+let g:loaded_tarPlugin = 1
+let g:loaded_zipPlugin = 1
+let loaded_gzip = 1
+let g:loaded_2html_plugin = 1
+let g:loaded_matchparen = 1
+let loaded_remote_plugins = 1
+let loaded_rrhelper = 1
 
 " -------- plugin manager --------
 silent! if plug#begin('~/.vim/plugged')
@@ -24,7 +42,6 @@ Plug 'othree/html5.vim', { 'for': 'html' }
 Plug 'wavded/vim-stylus', { 'for': 'styl' }
 Plug 'digitaltoad/vim-jade', { 'for': 'jade' }
 Plug 'juvenn/mustache.vim', { 'for': 'mustache' }
-Plug 'gregsexton/MatchTag', { 'for': ['html', 'xml'] }
 Plug 'mattn/emmet-vim', { 'for': ['html', 'xml', 'xsl', 'xslt', 'xsd', 'css', 'sass', 'scss', 'less', 'mustache'] }
 
 " javascript
@@ -68,6 +85,13 @@ Plug 'mhinz/vim-signify'
 Plug 'tpope/vim-fugitive'
 Plug 'gregsexton/gitv', { 'on': 'Gitv' }
 
+" autocomplete
+if (v:version + has('patch584') >= 704) && has('python')
+  Plug 'Valloric/YouCompleteMe', { 'do': './install.sh --clang-completer' ,'on': [] }
+endif
+Plug 'SirVer/ultisnips', { 'on': [] }
+Plug 'honza/vim-snippets'
+
 " editing
 Plug 'tpope/vim-endwise', { 'for': ['lua', 'ruby', 'sh', 'zsh', 'vb', 'vbnet', 'aspvbs', 'vim', 'c', 'cpp', 'xdefaults'] }
 Plug 'tpope/vim-speeddating'
@@ -80,13 +104,12 @@ Plug 'ReplaceWithRegister'
 Plug 'rhysd/clever-f.vim'
 
 " navigation
+Plug 'mileszs/ack.vim', { 'on': 'Ack' }
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'jeetsukumaran/vim-filebeagle'
 Plug 'jeetsukumaran/vim-buffergator'
-if executable('ag')
-  Plug 'rking/ag.vim', { 'on': ['Ag', 'AgFile'] }
-endif
+Plug 'junegunn/fzf', { 'do': 'yes \| ./install' }
 
 " indents
 Plug 'sickill/vim-pasta'
@@ -125,13 +148,15 @@ function! EnsureExists(path)
   endif
 endfunction
 
-" emmet-vim
-function! s:zen_html_tab()
-  let line = getline('.')
-  if match(line, '<.*>') < 0
-    return "\<c-y>,"
-  endif
-  return "\<c-y>n"
+" fzf
+function! BufList()
+  redir => ls
+  silent ls
+  redir END
+  return split(ls, '\n')
+endfunction
+function! BufOpen(e)
+  execute 'buffer '. matchstr(a:e, '^[ 0-9]*')
 endfunction
 
 " -------- base configuration --------
@@ -249,8 +274,8 @@ call EnsureExists(&undodir)
 call EnsureExists(&backupdir)
 call EnsureExists(&directory)
 
-let mapleader = ","
-let g:mapleader = ","
+let mapleader = ','
+let g:mapleader = ','
 
 " -------- ui configuration --------
 " automatically highlight matching braces/brackets/etc.
@@ -315,6 +340,11 @@ let g:jedi#popup_on_dot = 0
 let g:jedi#show_call_signatures = 0
 " vim-signify
 let g:signify_update_on_bufenter = 0
+" ack.vim
+if executable('ag')
+  let g:ackprg = 'ag -U --silent --nogroup --nocolor'
+endif
+let g:ack_use_dispatch = 1
 " undotree
 let g:undotree_SetFocusWhenToggle = 1
 " vim-filebeagle
@@ -334,11 +364,15 @@ let g:startify_show_sessions = 1
 let c_no_curly_error = 1
 " vim-rsi
 let g:rsi_no_meta = 1
-" ag.vim
-let g:agprg = "ag -U --silent --nogroup --nocolor --column --smart-case --follow"
-let g:ag_mapping_message = 0
 " gitv
 let g:Gitv_DoNotMapCtrlKey = 1
+" YouCompleteMe
+let g:ycm_show_diagnostics_ui = 0
+let g:ycm_path_to_python_interpreter = '/usr/bin/python'
+" ultisnips
+let g:UltiSnipsExpandTrigger = '<C-j>'
+" emmet-vim
+let g:user_emmet_leader_key = '<C-k>'
 
 " -------- mappings --------
 " formatting shortcuts
@@ -354,12 +388,6 @@ nnoremap <down> :tabprev<CR>
 
 " smash escape
 inoremap jk <esc>
-
-" change cursor position in insert mode
-inoremap <C-h> <left>
-inoremap <C-l> <right>
-inoremap <C-j> <down>
-inoremap <C-k> <up>
 
 " recover from accidental Ctrl-U
 inoremap <C-u> <C-g>u<C-u>
@@ -391,11 +419,6 @@ xnoremap > >gv
 
 " reselect last paste
 nnoremap <expr> gb '`[' . strpart(getregtype(), 0, 1) . '`]'
-
-" find current word in quickfix
-nnoremap <leader>fw :execute "vimgrep ".expand("<cword>")." %"<cr>:copen<cr>
-" find last search in quickfix
-nnoremap <leader>ff :execute 'vimgrep /'.@/.'/g %'<cr>:copen<cr>
 
 " shortcuts for windows
 nnoremap <leader>v <C-w>v<C-w>l
@@ -486,15 +509,22 @@ nnoremap <silent> <leader>di :DetectIndent<CR>
 nnoremap <F1> :Startify<cr>
 " vim-dispatch
 nnoremap <leader>tag :Dispatch ctags -R<cr>
+" fzf
+nnoremap <silent> <space><space> :FZF -m<CR>
+nnoremap <silent> <space>b :call fzf#run({
+      \   'source':      reverse(BufList()),
+      \   'sink':        function('BufOpen'),
+      \   'options':     '+m',
+      \   'tmux_height': '40%'
+      \ })<CR>
 
 " -------- commands --------
-command! -bang Q q<bang>
-command! -bang QA qa<bang>
-command! -bang Qa qa<bang>
+command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
+      \ | wincmd p | diffthis
 
 " -------- autocmd --------
 if has('autocmd')
-  augroup Misc
+  augroup global_settings
     autocmd!
     " automatically resize splits when resizing MacVim window
     autocmd VimResized * wincmd =
@@ -503,16 +533,22 @@ if has('autocmd')
           \ if line("'\"") > 0 && line("'\"") <= line("$") |
           \  exe 'normal! g`"zvzz' |
           \ endif
-
-    " vim-fugitive
-    autocmd BufReadPost fugitive://* set bufhidden=delete
   augroup END
 
-  augroup FTOptions
+  augroup filetype_settings
     autocmd!
-    " emmet-vim
-    autocmd FileType xml,xsl,xslt,xsd,css,sass,scss,less,mustache imap <buffer><tab> <c-y>,
-    autocmd FileType html imap <buffer><expr><tab> <sid>zen_html_tab()
+    autocmd FileType js,scss,css autocmd BufWritePre <buffer> call StripTrailingWhitespace()
+    autocmd FileType css,scss setlocal foldmethod=marker foldmarker={,}
+    autocmd FileType css,scss nnoremap <silent> <leader>S vi{:sort<CR>
+    autocmd FileType python setlocal foldmethod=indent
+    autocmd FileType markdown setlocal nolist
+    autocmd FileType vim setlocal fdm=indent keywordprg=:help
+  augroup END
+
+  augroup load_us_ycm
+    autocmd!
+    autocmd InsertEnter * call plug#load('ultisnips', 'YouCompleteMe')
+          \| call youcompleteme#Enable() | autocmd! load_us_ycm
   augroup END
 endif
 
