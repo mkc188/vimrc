@@ -120,6 +120,7 @@ Plug 'mhinz/vim-startify'
 Plug 'guns/xterm-color-table.vim', { 'on': 'XtermColorTable' }
 Plug 'scrooloose/syntastic', { 'for': ['ruby', 'c'], 'on': ['SyntasticCheck', 'SyntasticInfo', 'SyntasticReset', 'SyntasticToggleMode'] }
 Plug 'KabbAmine/vCoolor.vim'
+Plug 'Valloric/ListToggle'
 
 " colorscheme
 Plug 'w0ng/vim-hybrid'
@@ -371,6 +372,9 @@ let g:user_emmet_leader_key = '<C-k>'
 " eclim
 let g:EclimMenus = 0
 let g:EclimCompletionMethod = 'omnifunc'
+" ListToggle
+let g:lt_location_list_toggle_map = '<leader>l'
+let g:lt_quickfix_list_toggle_map = '<leader>q'
 
 " -------- mappings --------
 " formatting shortcuts
