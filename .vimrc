@@ -13,10 +13,13 @@ let g:did_install_syntax_menu = 1
 let g:loaded_vimballPlugin = 1
 let g:loaded_vimball = 1
 let g:loaded_getscriptPlugin = 1
+let g:loaded_netrw = 1
 let g:loaded_netrwPlugin = 1
 let loaded_spellfile_plugin = 1
 let g:loaded_tarPlugin = 1
+let g:loaded_tar = 1
 let g:loaded_zipPlugin = 1
+let g:loaded_zip = 1
 let loaded_gzip = 1
 let g:loaded_2html_plugin = 1
 let g:loaded_matchparen = 1
@@ -346,8 +349,6 @@ let g:ack_use_dispatch = 1
 let g:undotree_SetFocusWhenToggle = 1
 " vim-filebeagle
 let g:filebeagle_suppress_keymaps = 1
-let g:loaded_netrw = 1
-let g:loaded_netrwPlugin = 1
 " vim-buffergator
 let g:buffergator_suppress_keymaps = 1
 " detectindent
