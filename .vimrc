@@ -309,11 +309,7 @@ if has('conceal')
 endif
 
 if has('gui_running')
-  set guioptions-=m
-  set guioptions-=T
-  set guioptions-=r
-  set guioptions-=b
-  set guioptions-=L
+  set guioptions=
 
   if s:is_macvim
     set guifont=Source\ Code\ Pro\ Light:h13
@@ -367,12 +363,14 @@ let g:rsi_no_meta = 1
 " gitv
 let g:Gitv_DoNotMapCtrlKey = 1
 " YouCompleteMe
-let g:ycm_show_diagnostics_ui = 0
 let g:ycm_path_to_python_interpreter = '/usr/bin/python'
 " ultisnips
 let g:UltiSnipsExpandTrigger = '<C-j>'
 " emmet-vim
 let g:user_emmet_leader_key = '<C-k>'
+" eclim
+let g:EclimMenus = 0
+let g:EclimCompletionMethod = 'omnifunc'
 
 " -------- mappings --------
 " formatting shortcuts
