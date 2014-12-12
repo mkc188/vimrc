@@ -366,10 +366,14 @@ let g:rsi_no_meta = 1
 let g:Gitv_DoNotMapCtrlKey = 1
 " YouCompleteMe
 let g:ycm_path_to_python_interpreter = '/usr/bin/python'
+let g:ycm_key_list_select_completion = ['<Down>']
+let g:ycm_key_list_previous_completion = ['<Up>']
 " ultisnips
-let g:UltiSnipsExpandTrigger = '<C-j>'
+let g:UltiSnipsExpandTrigger = '<tab>'
+let g:UltiSnipsJumpForwardTrigger = '<tab>'
+let g:UltiSnipsJumpBackwardTrigger = '<s-tab>'
 " emmet-vim
-let g:user_emmet_leader_key = '<C-k>'
+let g:user_emmet_leader_key = '<C-z>'
 " eclim
 let g:EclimMenus = 0
 let g:EclimCompletionMethod = 'omnifunc'
