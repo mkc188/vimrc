@@ -105,6 +105,7 @@ Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 Plug 'mkc188/auto-pairs'
 Plug 'ReplaceWithRegister'
 Plug 'rhysd/clever-f.vim'
+Plug 'bruno-/vim-husk'
 
 " navigation
 Plug 'mileszs/ack.vim', { 'on': 'Ack' }
@@ -236,7 +237,7 @@ set sidescroll=1
 set display+=lastline
 " show list for autocomplete
 set wildmenu
-set wildmode=list:full
+set wildmode=longest:full,full
 set wildignorecase
 
 set splitbelow
