@@ -36,6 +36,7 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-dispatch', { 'on': ['Dispatch', 'Make', 'Start'] }
 Plug 'tpope/vim-eunuch', { 'on': ['Unlink', 'Remove', 'Move', 'Rename', 'Chmod', 'Mkdir', 'SudoEdit', 'SudoWrite'] }
 Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-obsession', { 'on': 'Obsession' }
 
 " web
 Plug 'groenewege/vim-less', { 'for': 'less' }
@@ -97,7 +98,6 @@ Plug 'honza/vim-snippets'
 
 " editing
 Plug 'tpope/vim-endwise', { 'for': ['lua', 'ruby', 'sh', 'zsh', 'vb', 'vbnet', 'aspvbs', 'vim', 'c', 'cpp', 'xdefaults'] }
-Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-commentary', { 'on': '<Plug>Commentary' }
 Plug 'tpope/vim-rsi'
 Plug 'thinca/vim-visualstar'
@@ -105,14 +105,13 @@ Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 Plug 'mkc188/auto-pairs'
 Plug 'ReplaceWithRegister'
 Plug 'rhysd/clever-f.vim'
-Plug 'bruno-/vim-husk'
 
 " navigation
 Plug 'mileszs/ack.vim', { 'on': 'Ack' }
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'jeetsukumaran/vim-filebeagle'
-Plug 'jeetsukumaran/vim-buffergator'
+Plug 'jeetsukumaran/vim-buffergator', { 'on': ['BuffergatorOpen', 'BuffergatorTabsOpen'] }
 Plug 'junegunn/fzf', { 'do': 'yes \| ./install' }
 
 " indents
@@ -120,7 +119,6 @@ Plug 'sickill/vim-pasta'
 Plug 'ciaranm/detectindent', { 'on': 'DetectIndent' }
 
 " misc
-Plug 'mhinz/vim-startify'
 Plug 'guns/xterm-color-table.vim', { 'on': 'XtermColorTable' }
 Plug 'scrooloose/syntastic', { 'for': ['ruby', 'c'], 'on': ['SyntasticCheck', 'SyntasticInfo', 'SyntasticReset', 'SyntasticToggleMode'] }
 Plug 'KabbAmine/vCoolor.vim'
@@ -289,8 +287,10 @@ set showmatch
 set matchtime=2
 set number
 set showtabline=0
-" folds are created manually
-set foldmethod=manual
+" fold settings
+set nofoldenable
+set foldmethod=indent
+set foldlevel=20
 " speedup vim
 set synmaxcol=200
 syntax sync minlines=256
@@ -355,10 +355,6 @@ let g:buffergator_suppress_keymaps = 1
 " detectindent
 let g:detectindent_preferred_expandtab = 1
 let g:detectindent_preferred_indent = 4
-" vim-startify
-let g:startify_session_dir = expand('~/.vim/.cache/sessions')
-let g:startify_change_to_vcs_root = 1
-let g:startify_show_sessions = 1
 " vim-objc
 let c_no_curly_error = 1
 " vim-rsi
@@ -513,8 +509,6 @@ nnoremap <silent> \b :BuffergatorOpen<CR>
 nnoremap <silent> \t :BuffergatorTabsOpen<CR>
 " detectindent
 nnoremap <silent> <leader>di :DetectIndent<CR>
-" vim-startify
-nnoremap <F1> :Startify<cr>
 " vim-dispatch
 nnoremap <leader>tag :Dispatch ctags -R<cr>
 " fzf
@@ -539,7 +533,7 @@ if has('autocmd')
     " go back to previous position of cursor if any
     autocmd BufReadPost *
           \ if line("'\"") > 0 && line("'\"") <= line("$") |
-          \  exe 'normal! g`"zvzz' |
+          \   exe 'normal! g`"zvzz' |
           \ endif
   augroup END
 
@@ -548,19 +542,21 @@ if has('autocmd')
     autocmd FileType js,scss,css autocmd BufWritePre <buffer> call StripTrailingWhitespace()
     autocmd FileType css,scss setlocal foldmethod=marker foldmarker={,}
     autocmd FileType css,scss nnoremap <silent> <leader>S vi{:sort<CR>
-    autocmd FileType python setlocal foldmethod=indent
     autocmd FileType markdown setlocal nolist
-    autocmd FileType vim setlocal fdm=indent keywordprg=:help
+    autocmd FileType vim setlocal keywordprg=:help
   augroup END
 
-  augroup load_us_ycm
-    autocmd!
-    autocmd InsertEnter * call plug#load('ultisnips', 'YouCompleteMe')
-          \| call youcompleteme#Enable() | autocmd! load_us_ycm
-  augroup END
+  if !empty(glob('~/.vim/plugged/YouCompleteMe/third_party/ycmd/ycm_core.so'))
+    augroup load_us_ycm
+      autocmd!
+      autocmd InsertEnter * call plug#load('ultisnips', 'YouCompleteMe')
+            \| call youcompleteme#Enable() | autocmd! load_us_ycm
+    augroup END
+  endif
 endif
 
 " -------- color schemes --------
 if !empty(glob('~/.vim/plugged/vim-hybrid'))
+  let g:hybrid_use_Xresources = 1
   colorscheme hybrid
 endif
