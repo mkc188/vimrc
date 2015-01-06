@@ -37,25 +37,14 @@ Plug 'tpope/vim-dispatch', { 'on': ['Dispatch', 'Make', 'Start'] }
 Plug 'tpope/vim-eunuch', { 'on': ['Unlink', 'Remove', 'Move', 'Rename', 'Chmod', 'Mkdir', 'SudoEdit', 'SudoWrite'] }
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-obsession', { 'on': 'Obsession' }
+Plug 'sheerun/vim-polyglot'
 
 " web
-Plug 'groenewege/vim-less', { 'for': 'less' }
-Plug 'cakebaker/scss-syntax.vim', { 'for': ['scss', 'sass'] }
-Plug 'hail2u/vim-css3-syntax', { 'for': ['css', 'scss', 'sass'] }
-Plug 'othree/html5.vim', { 'for': 'html' }
-Plug 'wavded/vim-stylus', { 'for': 'styl' }
-Plug 'digitaltoad/vim-jade', { 'for': 'jade' }
-Plug 'juvenn/mustache.vim', { 'for': 'mustache' }
 Plug 'mattn/emmet-vim', { 'for': ['html', 'xml', 'xsl', 'xslt', 'xsd', 'css', 'sass', 'scss', 'less', 'mustache'] }
 
 " javascript
 Plug 'marijnh/tern_for_vim', { 'for': 'javascript', 'do': 'npm install' }
-Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
 Plug 'maksimr/vim-jsbeautify', { 'for': 'javascript' }
-Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
-Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
-Plug 'mmalecki/vim-node.js', { 'for': 'javascript' }
-Plug 'leshill/vim-json', { 'for': ['javascript', 'json'] }
 Plug 'othree/javascript-libraries-syntax.vim', { 'for': ['javascript', 'coffee', 'ls', 'typescript'] }
 
 " ruby
@@ -67,22 +56,18 @@ Plug 'klen/python-mode', { 'for': 'python' }
 Plug 'davidhalter/jedi-vim', { 'for': 'python' }
 
 " scala
-Plug 'derekwyatt/vim-scala', { 'for': 'scala' }
 Plug 'megaannum/vimside', { 'for': 'scala' }
 
 " go
-Plug 'jnwhiteh/vim-golang', { 'for': 'go' }
 Plug 'nsf/gocode', { 'for': 'go', 'rtp': 'vim' }
 
 " markdown
-Plug 'tpope/vim-markdown', { 'for': 'markdown' }
 if executable('redcarpet') && executable('instant-markdown-d')
   Plug 'suan/vim-instant-markdown', { 'for': 'markdown' }
 endif
 
 " objective-c
 Plug 'b4winckler/vim-objc', { 'for': 'objc' }
-Plug 'Keithbsmiley/swift.vim', { 'for': 'swift' }
 
 " scm
 Plug 'mhinz/vim-signify'
@@ -188,9 +173,7 @@ set autoread
 " always assume decimal numbers
 set nrformats-=octal
 set showcmd
-set tags=tags;/
-set showfulltag
-set modeline
+setglobal tags=./tags;
 set modelines=2
 " searching includes can be slow
 set complete-=i
@@ -198,6 +181,10 @@ set completeopt-=preview
 set completeopt+=longest
 set tabpagemax=50
 set sessionoptions-=options
+set virtualedit=block
+if v:version + has('patch541') >= 704
+  set formatoptions+=j
+endif
 
 if s:is_windows && !s:is_cygwin
   " ensure correct shell in gvim
@@ -220,7 +207,7 @@ set smarttab
 set softtabstop=2
 " number of spaces when indenting
 set shiftwidth=2
-set listchars=tab:>-,trail:-,eol:<,nbsp:%,extends:>,precedes:<
+set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
 set shiftround
 set linebreak
 if exists('+breakindent')
@@ -240,11 +227,6 @@ set wildignorecase
 
 set splitbelow
 set splitright
-
-" disable sounds
-set noerrorbells
-set novisualbell
-set t_vb=
 
 " searching
 " highlight searches
@@ -273,11 +255,14 @@ set backupdir=~/.vim/.cache/backup
 set noswapfile
 set directory=~/.vim/.cache/swap
 
+if v:version >= 700
+  set viminfo=!,'20,<50,s10,h
+endif
+
 call EnsureExists(&undodir)
 call EnsureExists(&backupdir)
 call EnsureExists(&directory)
 
-let mapleader = ','
 let g:mapleader = ','
 
 " -------- ui configuration --------
@@ -309,24 +294,18 @@ if has('statusline') && !&cp
   set statusline+=%{exists('g:loaded_fugitive')?fugitive#statusline():''}
 endif
 
-if has('conceal')
-  set conceallevel=1
-endif
-
 if has('gui_running')
   set guioptions=
 
   if s:is_macvim
-    set guifont=Source\ Code\ Pro\ Light:h13
+    set guifont=Fira\ Mono:h13
   elseif s:is_windows
-    set guifont=Source\ Code\ Pro:h10
+    set guifont=Fira\ Mono:h10
   elseif has('gui_gtk')
-    set guifont=Source\ Code\ Pro\ 10
+    set guifont=Fira\ Mono\ 10
   endif
 else
-  if $COLORTERM == 'gnome-terminal'
-    set t_Co=256
-  endif
+  set t_Co=256
   " disable background color erase
   set t_ut=
 endif
@@ -542,7 +521,6 @@ if has('autocmd')
     autocmd FileType js,scss,css autocmd BufWritePre <buffer> call StripTrailingWhitespace()
     autocmd FileType css,scss setlocal foldmethod=marker foldmarker={,}
     autocmd FileType css,scss nnoremap <silent> <leader>S vi{:sort<CR>
-    autocmd FileType markdown setlocal nolist
     autocmd FileType vim setlocal keywordprg=:help
   augroup END
 
