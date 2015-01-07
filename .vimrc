@@ -110,6 +110,7 @@ Plug 'scrooloose/syntastic', { 'for': ['ruby', 'c'], 'on': ['SyntasticCheck', 'S
 Plug 'KabbAmine/vCoolor.vim'
 Plug 'Valloric/ListToggle'
 Plug 'Shougo/vinarise.vim', { 'on': 'Vinarise' }
+Plug 'mbbill/fencview', { 'on': ['FencAutoDetect', 'FencView'] }
 
 " colorscheme
 Plug 'w0ng/vim-hybrid'
@@ -138,6 +139,20 @@ function! EnsureExists(path)
   endif
 endfunction
 
+function! SummarizeTabs()
+  try
+    echohl ModeMsg
+    echon 'ts='.&l:ts.' sw='.&l:sw.' sts='.&l:sts
+    if &l:et
+      echon ' et'
+    else
+      echon ' noet'
+    endif
+  finally
+    echohl None
+  endtry
+endfunction
+
 " fzf
 function! BufList()
   redir => ls
@@ -154,30 +169,22 @@ set ttimeout
 set timeoutlen=500
 set ttimeoutlen=100
 
-" enable mouse
 set mouse=a
-" number of command lines to remember
 set history=1000
-" unix/windows compatibility
 set viewoptions=folds,options,cursor,unix,slash
-" set encoding for text
 set encoding=utf-8
-" sync with OS clipboard
 if has('unnamedplus')
   set clipboard=unnamedplus
 else
   set clipboard=unnamed
 endif
-" allow buffer switching without saving
 set hidden
-" auto reload if file saved externally
 set autoread
-" always assume decimal numbers
+set fileformats=unix,dos,mac
 set nrformats-=octal
 set showcmd
 setglobal tags=./tags;
 set modelines=1
-" searching includes can be slow
 set complete-=i
 set completeopt=menu,menuone,longest
 set tabpagemax=50
@@ -188,27 +195,19 @@ if v:version + has('patch541') >= 704
 endif
 set nojoinspaces
 set nostartofline
+set noshelltemp
 
 if s:is_windows && !s:is_cygwin
   " ensure correct shell in gvim
   set shell=c:\windows\system32\cmd.exe
 endif
 
-" use pipes
-set noshelltemp
-
 " whitespace
-" allow backspacing everything in insert mode
 set backspace=indent,eol,start
-" automatically indent to match adjacent lines
 set autoindent
-" spaces instead of tabs
 set expandtab
-" use shiftwidth to enter tabs
 set smarttab
-" number of spaces per tab in insert mode
 set softtabstop=2
-" number of spaces when indenting
 set shiftwidth=2
 set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
 set shiftround
@@ -218,12 +217,10 @@ if exists('+breakindent')
   set showbreak=\ +
 endif
 
-" always show content after scroll
 set scrolloff=1
 set sidescrolloff=5
 set sidescroll=1
 set display+=lastline
-" show list for autocomplete
 set wildmenu
 set wildmode=longest:full,full
 set wildignorecase
@@ -236,32 +233,21 @@ set visualbell
 set t_vb=
 
 " searching
-" highlight searches
 set hlsearch
-" incremental searching
 set incsearch
-" ignore case for searching
 set ignorecase
-" do case-sensitive if there's a capital letter
 set smartcase
-" add the g flag to search/replace by default
 set gdefault
 
 " vim file/folder management
-" persistent undo
 if exists('+undofile')
   set undofile
   set undodir=~/.vim/.cache/undo
 endif
-
-" backups
 set backup
 set backupdir=~/.vim/.cache/backup
-
-" swap files
 set noswapfile
 set directory=~/.vim/.cache/swap
-
 if v:version >= 700
   set viminfo=!,'20,<50,s10,h
 endif
@@ -273,32 +259,24 @@ call EnsureExists(&directory)
 let g:mapleader = ','
 
 " -------- ui configuration --------
-" automatically highlight matching braces/brackets/etc.
 set showmatch
-" tens of a second to show matching parentheses
 set matchtime=2
 set number
 set showtabline=0
-" fold settings
 set nofoldenable
 set foldmethod=indent
 set foldlevel=20
-" speedup vim
 set synmaxcol=200
 syntax sync minlines=256
 set ttyfast
 set ttyscroll=3
 set lazyredraw
 
+
 if has('statusline') && !&cp
   set laststatus=2
-  set statusline=%f\ %m\ %r
-  set statusline+=[#%n]
-  set statusline+=[%l/%L]
-  set statusline+=[%v]
-  set statusline+=[%b][0x%B]
-  " vim-fugitive
-  set statusline+=%{exists('g:loaded_fugitive')?fugitive#statusline():''}
+  set statusline=%f\ %m%r%{exists('g:loaded_fugitive')?fugitive#statusline():''}\ %l,%v\ %=
+  set statusline+=[%{&fileformat}][%{strlen(&fenc)?&fenc:&enc}][%{strlen(&filetype)?&filetype:'None'}]
 endif
 
 if has('gui_running')
@@ -495,7 +473,7 @@ map <silent> - <Plug>FileBeagleOpenCurrentBufferDir
 nnoremap <silent> <leader>b :BuffergatorOpen<CR>
 nnoremap <silent> <leader>B :BuffergatorTabsOpen<CR>
 " detectindent
-nnoremap <silent> <leader>di :DetectIndent<CR>
+nnoremap <silent> <leader>di :DetectIndent<CR>:call SummarizeTabs()<CR>
 " vim-dispatch
 nnoremap <leader>tag :Dispatch ctags -R<cr>
 " fzf
