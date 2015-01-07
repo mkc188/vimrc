@@ -520,6 +520,8 @@ if has('autocmd')
           \ if line("'\"") > 0 && line("'\"") <= line("$") |
           \   exe 'normal! g`"zvzz' |
           \ endif
+    " disable beeping in gvim
+    autocmd GUIEnter * set visualbell t_vb=
   augroup END
 
   augroup filetype_settings
