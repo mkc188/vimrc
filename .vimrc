@@ -98,6 +98,7 @@ Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'jeetsukumaran/vim-filebeagle'
 Plug 'jeetsukumaran/vim-buffergator', { 'on': ['BuffergatorOpen', 'BuffergatorTabsOpen'] }
 Plug 'junegunn/fzf', { 'do': 'yes \| ./install' }
+Plug 'derekwyatt/vim-fswitch'
 
 " indents
 Plug 'sickill/vim-pasta'
@@ -178,8 +179,7 @@ setglobal tags=./tags;
 set modelines=1
 " searching includes can be slow
 set complete-=i
-set completeopt-=preview
-set completeopt+=longest
+set completeopt=menu,menuone,longest
 set tabpagemax=50
 set sessionoptions-=options
 set virtualedit=block
@@ -322,6 +322,8 @@ endif
 let g:pymode_rope = 0
 let g:pymode_folding = 0
 let g:pymode_syntax = 0
+let g:pymode_run_bind = '<leader>pr'
+let g:pymode_breakpoint_bind = '<leader>pb'
 " jedi-vim
 let g:jedi#popup_on_dot = 0
 let g:jedi#show_call_signatures = 0
@@ -504,6 +506,8 @@ nnoremap <silent> \b :call fzf#run({
       \   'options':     '+m',
       \   'tmux_height': '40%'
       \ })<CR>
+" vim-fswitch
+nmap <silent> <leader>of :FSHere<CR>
 
 " -------- commands --------
 command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
