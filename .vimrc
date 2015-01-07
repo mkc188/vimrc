@@ -108,6 +108,7 @@ Plug 'guns/xterm-color-table.vim', { 'on': 'XtermColorTable' }
 Plug 'scrooloose/syntastic', { 'for': ['ruby', 'c'], 'on': ['SyntasticCheck', 'SyntasticInfo', 'SyntasticReset', 'SyntasticToggleMode'] }
 Plug 'KabbAmine/vCoolor.vim'
 Plug 'Valloric/ListToggle'
+Plug 'Shougo/vinarise.vim', { 'on': 'Vinarise' }
 
 " colorscheme
 Plug 'w0ng/vim-hybrid'
@@ -174,7 +175,7 @@ set autoread
 set nrformats-=octal
 set showcmd
 setglobal tags=./tags;
-set modelines=2
+set modelines=1
 " searching includes can be slow
 set complete-=i
 set completeopt-=preview
@@ -185,6 +186,8 @@ set virtualedit=block
 if v:version + has('patch541') >= 704
   set formatoptions+=j
 endif
+set nojoinspaces
+set nostartofline
 
 if s:is_windows && !s:is_cygwin
   " ensure correct shell in gvim
@@ -227,6 +230,10 @@ set wildignorecase
 
 set splitbelow
 set splitright
+
+" disable sounds
+set visualbell
+set t_vb=
 
 " searching
 " highlight searches
@@ -401,7 +408,7 @@ xnoremap < <gv
 xnoremap > >gv
 
 " reselect last paste
-nnoremap <expr> gb '`[' . strpart(getregtype(), 0, 1) . '`]'
+nnoremap <expr> gV '`[' . strpart(getregtype(), 0, 1) . '`]'
 
 " shortcuts for windows
 nnoremap <leader>v <C-w>v<C-w>l
@@ -433,9 +440,8 @@ if s:is_macvim
   set macmeta
 endif
 
-" map semicolon to colon
-map ; :
-nnoremap ;; ;
+" map space to colon
+noremap <space> :
 
 " delete character to black hole register
 nnoremap x "_x
@@ -481,18 +487,18 @@ nnoremap <silent> <F5> :UndotreeToggle<CR>
 " tagbar
 nnoremap <silent> <F9> :TagbarToggle<CR>
 " vim-filebeagle
-map <silent> <space>f <Plug>FileBeagleOpenCurrentWorkingDir
+map <silent> <BS> <Plug>FileBeagleOpenCurrentWorkingDir
 map <silent> - <Plug>FileBeagleOpenCurrentBufferDir
 " vim-buffergator
-nnoremap <silent> \b :BuffergatorOpen<CR>
-nnoremap <silent> \t :BuffergatorTabsOpen<CR>
+nnoremap <silent> <leader>b :BuffergatorOpen<CR>
+nnoremap <silent> <leader>B :BuffergatorTabsOpen<CR>
 " detectindent
 nnoremap <silent> <leader>di :DetectIndent<CR>
 " vim-dispatch
 nnoremap <leader>tag :Dispatch ctags -R<cr>
 " fzf
-nnoremap <silent> <space><space> :FZF -m<CR>
-nnoremap <silent> <space>b :call fzf#run({
+nnoremap <silent> \\ :FZF -m<CR>
+nnoremap <silent> \b :call fzf#run({
       \   'source':      reverse(BufList()),
       \   'sink':        function('BufOpen'),
       \   'options':     '+m',
