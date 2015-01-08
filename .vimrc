@@ -40,7 +40,7 @@ Plug 'tpope/vim-obsession', { 'on': 'Obsession' }
 Plug 'sheerun/vim-polyglot'
 
 " web
-Plug 'mattn/emmet-vim', { 'for': ['html', 'xml', 'xsl', 'xslt', 'xsd', 'css', 'sass', 'scss', 'less', 'mustache'] }
+Plug 'rstacruz/sparkup', { 'rtp': 'vim' }
 
 " javascript
 Plug 'marijnh/tern_for_vim', { 'for': 'javascript', 'do': 'npm install' }
@@ -259,11 +259,11 @@ set lazyredraw
 
 if has('statusline') && !&cp
   set laststatus=2
-  set statusline=%f\ %m%r%{exists('g:loaded_fugitive')?fugitive#statusline():''}\ %3p%%,%v\ %=
-  set statusline+=[ts=%{&tabstop}:sw=%{&shiftwidth}:sts=%{&softtabstop}:%{&expandtab?'et':'noet'}
+  set statusline=%t\ %m%r%{exists('g:loaded_fugitive')?fugitive#statusline():''}\ %3p%%,%v\ %<%=
+  set statusline+=ts=%{&tabstop}:sw=%{&shiftwidth}:sts=%{&softtabstop}:%{&expandtab?'et':'noet'}
   set statusline+=\|%{&fileformat}
   set statusline+=\|%{strlen(&fenc)?&fenc:&enc}
-  set statusline+=\|%{strlen(&filetype)?&filetype:'None'}]
+  set statusline+=\|%{strlen(&filetype)?&filetype:'None'}
 endif
 
 if has('gui_running')
@@ -322,14 +322,15 @@ let g:ycm_key_list_previous_completion = ['<Up>']
 let g:UltiSnipsExpandTrigger = '<tab>'
 let g:UltiSnipsJumpForwardTrigger = '<tab>'
 let g:UltiSnipsJumpBackwardTrigger = '<s-tab>'
-" emmet-vim
-let g:user_emmet_leader_key = '<C-z>'
 " eclim
 let g:EclimMenus = 0
 let g:EclimCompletionMethod = 'omnifunc'
 " ListToggle
 let g:lt_location_list_toggle_map = '<leader>l'
 let g:lt_quickfix_list_toggle_map = '<leader>q'
+" sparkup
+let g:sparkupExecuteMapping = '<C-z>'
+let g:sparkupNextMapping = '<C-l>'
 
 " -------- mappings --------
 " formatting shortcuts
