@@ -113,7 +113,8 @@ Plug 'Shougo/vinarise.vim', { 'on': 'Vinarise' }
 Plug 'mbbill/fencview', { 'on': ['FencAutoDetect', 'FencView'] }
 
 " colorscheme
-Plug 'w0ng/vim-hybrid'
+Plug 'whatyouhide/vim-gotham'
+Plug 'edkolev/tmuxline.vim', { 'on': 'Tmuxline' }
 
 call plug#end()
 endif
@@ -331,6 +332,8 @@ let g:lt_quickfix_list_toggle_map = '<leader>q'
 " sparkup
 let g:sparkupExecuteMapping = '<C-z>'
 let g:sparkupNextMapping = '<C-l>'
+" tmuxline.vim
+let g:tmuxline_powerline_separators = 0
 
 " -------- mappings --------
 " formatting shortcuts
@@ -515,7 +518,6 @@ endif
 
 " -------- color schemes --------
 syntax enable
-if !empty(glob('~/.vim/plugged/vim-hybrid'))
-  let g:hybrid_use_Xresources = 1
-  colorscheme hybrid
+if !empty(glob('~/.vim/plugged/vim-gotham'))
+  colorscheme gotham
 endif
