@@ -209,7 +209,6 @@ set sidescroll=1
 set display+=lastline
 set wildmenu
 set wildmode=longest:full,full
-set wildignorecase
 
 set splitbelow
 set splitright
@@ -229,18 +228,18 @@ set gdefault
 if exists('+undofile')
   set undofile
   set undodir=~/.vim/.cache/undo
+  call EnsureExists(&undodir)
 endif
 set backup
 set backupdir=~/.vim/.cache/backup
 set noswapfile
 set directory=~/.vim/.cache/swap
+call EnsureExists(&backupdir)
+call EnsureExists(&directory)
+
 if v:version >= 700
   set viminfo=!,'20,<50,s10,h
 endif
-
-call EnsureExists(&undodir)
-call EnsureExists(&backupdir)
-call EnsureExists(&directory)
 
 let g:mapleader = ','
 
@@ -481,6 +480,8 @@ command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
 
 " -------- autocmd --------
 if has('autocmd')
+  filetype plugin indent on
+
   augroup global_settings
     autocmd!
     " automatically resize splits when resizing MacVim window
@@ -512,6 +513,7 @@ if has('autocmd')
 endif
 
 " -------- color schemes --------
+syntax enable
 if !empty(glob('~/.vim/plugged/vim-hybrid'))
   let g:hybrid_use_Xresources = 1
   colorscheme hybrid
