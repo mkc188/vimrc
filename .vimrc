@@ -139,20 +139,6 @@ function! EnsureExists(path)
   endif
 endfunction
 
-function! SummarizeTabs()
-  try
-    echohl ModeMsg
-    echon 'ts='.&l:ts.' sw='.&l:sw.' sts='.&l:sts
-    if &l:et
-      echon ' et'
-    else
-      echon ' noet'
-    endif
-  finally
-    echohl None
-  endtry
-endfunction
-
 " fzf
 function! BufList()
   redir => ls
@@ -272,11 +258,13 @@ set ttyfast
 set ttyscroll=3
 set lazyredraw
 
-
 if has('statusline') && !&cp
   set laststatus=2
-  set statusline=%f\ %m%r%{exists('g:loaded_fugitive')?fugitive#statusline():''}\ %l,%v\ %=
-  set statusline+=[%{&fileformat}][%{strlen(&fenc)?&fenc:&enc}][%{strlen(&filetype)?&filetype:'None'}]
+  set statusline=%f\ %m%r%{exists('g:loaded_fugitive')?fugitive#statusline():''}\ %3p%%,%v\ %=
+  set statusline+=[ts=%{&tabstop}:sw=%{&shiftwidth}:sts=%{&softtabstop}:%{&expandtab?'et':'noet'}
+  set statusline+=\|%{&fileformat}
+  set statusline+=\|%{strlen(&fenc)?&fenc:&enc}
+  set statusline+=\|%{strlen(&filetype)?&filetype:'None'}]
 endif
 
 if has('gui_running')
@@ -473,7 +461,7 @@ map <silent> - <Plug>FileBeagleOpenCurrentBufferDir
 nnoremap <silent> <leader>b :BuffergatorOpen<CR>
 nnoremap <silent> <leader>B :BuffergatorTabsOpen<CR>
 " detectindent
-nnoremap <silent> <leader>di :DetectIndent<CR>:call SummarizeTabs()<CR>
+nnoremap <silent> <leader>di :DetectIndent<CR>
 " vim-dispatch
 nnoremap <leader>tag :Dispatch ctags -R<cr>
 " fzf
