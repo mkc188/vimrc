@@ -41,6 +41,7 @@ Plug 'sheerun/vim-polyglot'
 
 " web
 Plug 'rstacruz/sparkup', { 'rtp': 'vim' }
+Plug 'jaxbot/browserlink.vim'
 
 " javascript
 Plug 'marijnh/tern_for_vim', { 'for': 'javascript', 'do': 'npm install' }
@@ -261,7 +262,7 @@ set lazyredraw
 if has('statusline') && !&cp
   set laststatus=2
   set statusline=%t\ %m%r%{exists('g:loaded_fugitive')?fugitive#statusline():''}\ %3p%%,%v\ %<%=
-  set statusline+=ts=%{&tabstop}:sw=%{&shiftwidth}:sts=%{&softtabstop}:%{&expandtab?'et':'noet'}
+  set statusline+=%{&tabstop}:%{&shiftwidth}:%{&softtabstop}:%{&expandtab?'et':'noet'}
   set statusline+=\|%{&fileformat}
   set statusline+=\|%{strlen(&fenc)?&fenc:&enc}
   set statusline+=\|%{strlen(&filetype)?&filetype:'None'}
