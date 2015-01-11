@@ -1,5 +1,3 @@
-" vim: fdm=marker ts=2 sts=2 sw=2 fdl=0
-
 " -------- basic initialization --------
 let s:is_windows = has('win32') || has('win64')
 let s:is_cygwin = has('win32unix')
@@ -45,7 +43,6 @@ Plug 'jaxbot/browserlink.vim', { 'for': ['html', 'javscript', 'css'] }
 
 " javascript
 Plug 'marijnh/tern_for_vim', { 'for': 'javascript', 'do': 'npm install' }
-Plug 'maksimr/vim-jsbeautify', { 'for': 'javascript' }
 Plug 'othree/javascript-libraries-syntax.vim', { 'for': ['javascript', 'coffee', 'ls', 'typescript'] }
 
 " ruby
@@ -105,6 +102,7 @@ Plug 'derekwyatt/vim-fswitch'
 " indents
 Plug 'sickill/vim-pasta'
 Plug 'ciaranm/detectindent', { 'on': 'DetectIndent' }
+Plug 'Chiel92/vim-autoformat', { 'on': 'Autoformat' }
 
 " misc
 Plug 'guns/xterm-color-table.vim', { 'on': 'XtermColorTable' }
@@ -173,7 +171,7 @@ set fileformats=unix,dos,mac
 set nrformats-=octal
 set showcmd
 setglobal tags=./tags;
-set modelines=1
+set nomodeline
 set complete-=i
 set completeopt=menu,menuone,longest
 set tabpagemax=50
@@ -422,8 +420,6 @@ noremap <space> :
 nnoremap x "_x
 xnoremap x "_x
 
-" vim-jsbeautify
-nnoremap <leader>fjs :call JsBeautify()<cr>
 " vim-unimpaired
 nmap <M-k> [e
 nmap <M-j> ]e
