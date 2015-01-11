@@ -41,7 +41,7 @@ Plug 'sheerun/vim-polyglot'
 
 " web
 Plug 'rstacruz/sparkup', { 'rtp': 'vim' }
-Plug 'jaxbot/browserlink.vim'
+Plug 'jaxbot/browserlink.vim', { 'for': ['html', 'javscript', 'css'] }
 
 " javascript
 Plug 'marijnh/tern_for_vim', { 'for': 'javascript', 'do': 'npm install' }
@@ -69,6 +69,7 @@ endif
 
 " objective-c
 Plug 'b4winckler/vim-objc', { 'for': 'objc' }
+Plug 'tokorom/xcode-actions.vim', { 'for': ['objc', 'swift'] }
 
 " scm
 Plug 'mhinz/vim-signify'
@@ -335,6 +336,8 @@ let g:sparkupExecuteMapping = '<C-z>'
 let g:sparkupNextMapping = '<C-l>'
 " tmuxline.vim
 let g:tmuxline_powerline_separators = 0
+" browserlink.vim
+let g:bl_no_mappings = 1
 
 " -------- mappings --------
 " formatting shortcuts
@@ -476,12 +479,24 @@ nnoremap <silent> \b :call fzf#run({
       \   'options':     '+m',
       \   'tmux_height': '40%'
       \ })<CR>
+nnoremap <silent> \m :FZFMru<CR>
 " vim-fswitch
 nmap <silent> <leader>of :FSHere<CR>
+" xcode-actions.vim
+nmap <silent> <leader>xb <Plug>(xcode-actions-build)
+nmap <silent> <leader>xr <Plug>(xcode-actions-run)
+nmap <silent> <leader>xc <Plug>(xcode-actions-clean)
+nmap <silent> <leader>xt <Plug>(xcode-actions-test)
+nmap <silent> <leader>xo <Plug>(xcode-actions-openfile)
 
 " -------- commands --------
 command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
       \ | wincmd p | diffthis
+command! FZFMru call fzf#run({
+      \'source': v:oldfiles,
+      \'sink' : 'e ',
+      \'options' : '-m',
+      \})
 
 " -------- autocmd --------
 if has('autocmd')
