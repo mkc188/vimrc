@@ -306,6 +306,7 @@ let g:undotree_SetFocusWhenToggle = 1
 let g:filebeagle_suppress_keymaps = 1
 " vim-buffergator
 let g:buffergator_suppress_keymaps = 1
+let g:buffergator_autoexpand_on_split = 0
 " detectindent
 let g:detectindent_preferred_expandtab = 1
 let g:detectindent_preferred_indent = 4
@@ -462,7 +463,7 @@ map <silent> <BS> <Plug>FileBeagleOpenCurrentWorkingDir
 map <silent> - <Plug>FileBeagleOpenCurrentBufferDir
 " vim-buffergator
 nnoremap <silent> <leader>b :BuffergatorOpen<CR>
-nnoremap <silent> <leader>B :BuffergatorTabsOpen<CR>
+nnoremap <silent> <leader>to :BuffergatorTabsOpen<CR>
 " detectindent
 nnoremap <silent> <leader>di :DetectIndent<CR>
 " vim-dispatch
