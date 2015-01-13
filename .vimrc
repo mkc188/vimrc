@@ -98,6 +98,7 @@ Plug 'jeetsukumaran/vim-filebeagle'
 Plug 'jeetsukumaran/vim-buffergator', { 'on': ['BuffergatorOpen', 'BuffergatorTabsOpen'] }
 Plug 'junegunn/fzf', { 'do': 'yes \| ./install' }
 Plug 'derekwyatt/vim-fswitch'
+Plug 'kshenoy/vim-signature'
 
 " indents
 Plug 'sickill/vim-pasta'
@@ -337,6 +338,8 @@ let g:sparkupNextMapping = '<C-l>'
 let g:tmuxline_powerline_separators = 0
 " browserlink.vim
 let g:bl_no_mappings = 1
+" vim-signature
+let g:SignatureEnabledAtStartup = 0
 
 " -------- mappings --------
 " formatting shortcuts
