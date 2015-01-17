@@ -39,7 +39,7 @@ Plug 'sheerun/vim-polyglot'
 
 " web
 Plug 'rstacruz/sparkup', { 'rtp': 'vim' }
-Plug 'jaxbot/browserlink.vim', { 'for': ['html', 'javscript', 'css'] }
+Plug 'jaxbot/browserlink.vim', { 'on': ['BLReloadPage', 'BLReloadCSS'] }
 
 " javascript
 Plug 'marijnh/tern_for_vim', { 'for': 'javascript', 'do': 'npm install' }
@@ -58,11 +58,6 @@ Plug 'megaannum/vimside', { 'for': 'scala' }
 
 " go
 Plug 'nsf/gocode', { 'for': 'go', 'rtp': 'vim' }
-
-" markdown
-if executable('redcarpet') && executable('instant-markdown-d')
-  Plug 'suan/vim-instant-markdown', { 'for': 'markdown' }
-endif
 
 " objective-c
 Plug 'b4winckler/vim-objc', { 'for': 'objc' }
@@ -112,9 +107,11 @@ Plug 'KabbAmine/vCoolor.vim'
 Plug 'Valloric/ListToggle'
 Plug 'Shougo/vinarise.vim', { 'on': 'Vinarise' }
 Plug 'mbbill/fencview', { 'on': ['FencAutoDetect', 'FencView'] }
+Plug 'fmoralesc/vim-pad', { 'branch': 'devel' , 'on': ['<Plug>(pad-'] }
 
 " colorscheme
 Plug 'whatyouhide/vim-gotham'
+Plug 'jonathanfilip/vim-lucius'
 Plug 'edkolev/tmuxline.vim', { 'on': 'Tmuxline' }
 
 call plug#end()
@@ -279,7 +276,6 @@ if has('gui_running')
     set guifont=Fira\ Mono\ 10
   endif
 else
-  set t_Co=256
   " disable background color erase
   set t_ut=
 endif
@@ -340,6 +336,9 @@ let g:tmuxline_powerline_separators = 0
 let g:bl_no_mappings = 1
 " vim-signature
 let g:SignatureEnabledAtStartup = 0
+" vim-pad
+let g:pad#dir = '~/Dropbox/notes/'
+let g:pad#set_mappings = 0
 
 " -------- mappings --------
 " formatting shortcuts
@@ -462,7 +461,7 @@ nnoremap <silent> <F5> :UndotreeToggle<CR>
 " tagbar
 nnoremap <silent> <F9> :TagbarToggle<CR>
 " vim-filebeagle
-map <silent> <BS> <Plug>FileBeagleOpenCurrentWorkingDir
+map <silent> \ <Plug>FileBeagleOpenCurrentWorkingDir
 map <silent> - <Plug>FileBeagleOpenCurrentBufferDir
 " vim-buffergator
 nnoremap <silent> <leader>b :BuffergatorOpen<CR>
@@ -472,14 +471,14 @@ nnoremap <silent> <leader>di :DetectIndent<CR>
 " vim-dispatch
 nnoremap <leader>tag :Dispatch ctags -R<cr>
 " fzf
-nnoremap <silent> \\ :FZF -m<CR>
-nnoremap <silent> \b :call fzf#run({
+nnoremap <silent> <leader>ff :FZF -m<CR>
+nnoremap <silent> <leader>fb :call fzf#run({
       \   'source':      reverse(BufList()),
       \   'sink':        function('BufOpen'),
       \   'options':     '+m',
       \   'tmux_height': '40%'
       \ })<CR>
-nnoremap <silent> \m :FZFMru<CR>
+nnoremap <silent> <leader>fm :FZFMru<CR>
 " vim-fswitch
 nmap <silent> <leader>of :FSHere<CR>
 " xcode-actions.vim
@@ -488,6 +487,10 @@ nmap <silent> <leader>xr <Plug>(xcode-actions-run)
 nmap <silent> <leader>xc <Plug>(xcode-actions-clean)
 nmap <silent> <leader>xt <Plug>(xcode-actions-test)
 nmap <silent> <leader>xo <Plug>(xcode-actions-openfile)
+" vim-pad
+nmap <silent> <leader>nl <Plug>(pad-list)
+nmap <silent> <leader>nn <Plug>(pad-new)
+nmap <silent> <leader>ns <Plug>(pad-search)
 
 " -------- commands --------
 command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
