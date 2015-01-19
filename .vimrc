@@ -70,7 +70,7 @@ Plug 'gregsexton/gitv', { 'on': 'Gitv' }
 
 " autocomplete
 if (v:version + has('patch584') >= 704) && has('python')
-  Plug 'Valloric/YouCompleteMe', { 'do': './install.sh --clang-completer' ,'on': [] }
+  Plug 'Valloric/YouCompleteMe', { 'do': './install.sh' ,'on': [] }
 endif
 Plug 'SirVer/ultisnips', { 'on': [] }
 Plug 'honza/vim-snippets'
@@ -110,8 +110,7 @@ Plug 'mbbill/fencview', { 'on': ['FencAutoDetect', 'FencView'] }
 Plug 'fmoralesc/vim-pad', { 'branch': 'devel' , 'on': ['<Plug>(pad-'] }
 
 " colorscheme
-Plug 'whatyouhide/vim-gotham'
-Plug 'jonathanfilip/vim-lucius'
+Plug 'romainl/Apprentice'
 Plug 'edkolev/tmuxline.vim', { 'on': 'Tmuxline' }
 
 call plug#end()
@@ -339,6 +338,7 @@ let g:SignatureEnabledAtStartup = 0
 " vim-pad
 let g:pad#dir = '~/Dropbox/notes/'
 let g:pad#set_mappings = 0
+let g:pad#search_backend = 'ag'
 
 " -------- mappings --------
 " formatting shortcuts
@@ -537,6 +537,6 @@ endif
 
 " -------- color schemes --------
 syntax enable
-if !empty(glob('~/.vim/plugged/vim-gotham'))
-  colorscheme gotham
+if !empty(glob('~/.vim/plugged/Apprentice'))
+  colorscheme apprentice
 endif
