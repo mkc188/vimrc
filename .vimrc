@@ -331,10 +331,9 @@ let g:bl_no_mappings = 1
 " vim-signature
 let g:SignatureEnabledAtStartup = 0
 " vim-pad
-let g:pad#dir = '~/Dropbox/notes/'
+let g:pad#dir = '~/Dropbox/notes'
 let g:pad#set_mappings = 0
 let g:pad#search_backend = 'ag'
-call EnsureExists(g:pad#dir)
 
 " -------- mappings --------
 " formatting shortcuts
