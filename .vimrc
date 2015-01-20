@@ -51,7 +51,6 @@ Plug 'tpope/vim-bundler', { 'for': ['ruby', 'rake'] }
 
 " python
 Plug 'klen/python-mode', { 'for': 'python' }
-Plug 'davidhalter/jedi-vim', { 'for': 'python' }
 
 " scala
 Plug 'megaannum/vimside', { 'for': 'scala' }
@@ -80,7 +79,6 @@ Plug 'tpope/vim-endwise', { 'for': ['lua', 'ruby', 'sh', 'zsh', 'vb', 'vbnet', '
 Plug 'tpope/vim-commentary', { 'on': '<Plug>Commentary' }
 Plug 'tpope/vim-rsi'
 Plug 'thinca/vim-visualstar'
-Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 Plug 'mkc188/auto-pairs'
 Plug 'ReplaceWithRegister'
 Plug 'rhysd/clever-f.vim'
@@ -286,9 +284,6 @@ let g:pymode_folding = 0
 let g:pymode_syntax = 0
 let g:pymode_run_bind = '<leader>pr'
 let g:pymode_breakpoint_bind = '<leader>pb'
-" jedi-vim
-let g:jedi#popup_on_dot = 0
-let g:jedi#show_call_signatures = 0
 " vim-signify
 let g:signify_update_on_bufenter = 0
 " ack.vim
@@ -339,6 +334,7 @@ let g:SignatureEnabledAtStartup = 0
 let g:pad#dir = '~/Dropbox/notes/'
 let g:pad#set_mappings = 0
 let g:pad#search_backend = 'ag'
+call EnsureExists(g:pad#dir)
 
 " -------- mappings --------
 " formatting shortcuts
@@ -443,19 +439,6 @@ nnoremap <silent> <leader>gV :Gitv!<CR>
 " vim-commentary
 map  gc  <Plug>Commentary
 nmap gcc <Plug>CommentaryLine
-" tabular
-nmap <Leader>a& :Tabularize /&<CR>
-xmap <Leader>a& :Tabularize /&<CR>
-nmap <Leader>a= :Tabularize /=<CR>
-xmap <Leader>a= :Tabularize /=<CR>
-nmap <Leader>a: :Tabularize /:<CR>
-xmap <Leader>a: :Tabularize /:<CR>
-nmap <Leader>a:: :Tabularize /:\zs<CR>
-xmap <Leader>a:: :Tabularize /:\zs<CR>
-nmap <Leader>a, :Tabularize /,<CR>
-xmap <Leader>a, :Tabularize /,<CR>
-nmap <Leader>a<Bar> :Tabularize /<Bar><CR>
-xmap <Leader>a<Bar> :Tabularize /<Bar><CR>
 " undotree
 nnoremap <silent> <F5> :UndotreeToggle<CR>
 " tagbar
@@ -467,7 +450,7 @@ map <silent> - <Plug>FileBeagleOpenCurrentBufferDir
 nnoremap <silent> <leader>b :BuffergatorOpen<CR>
 nnoremap <silent> <leader>to :BuffergatorTabsOpen<CR>
 " detectindent
-nnoremap <silent> <leader>di :DetectIndent<CR>
+nnoremap <leader>di :DetectIndent<CR>
 " vim-dispatch
 nnoremap <leader>tag :Dispatch ctags -R<cr>
 " fzf
