@@ -82,6 +82,7 @@ Plug 'thinca/vim-visualstar'
 Plug 'mkc188/auto-pairs'
 Plug 'ReplaceWithRegister'
 Plug 'rhysd/clever-f.vim'
+Plug 'chrisbra/NrrwRgn'
 
 " navigation
 Plug 'mileszs/ack.vim', { 'on': 'Ack' }
@@ -106,6 +107,7 @@ Plug 'Valloric/ListToggle'
 Plug 'Shougo/vinarise.vim', { 'on': 'Vinarise' }
 Plug 'mbbill/fencview', { 'on': ['FencAutoDetect', 'FencView'] }
 Plug 'fmoralesc/vim-pad', { 'branch': 'devel' , 'on': ['<Plug>(pad-'] }
+Plug 'christoomey/vim-tmux-navigator'
 
 " colorscheme
 Plug 'romainl/Apprentice'
@@ -384,10 +386,6 @@ nnoremap <expr> gV '`[' . strpart(getregtype(), 0, 1) . '`]'
 " shortcuts for windows
 nnoremap <leader>v <C-w>v<C-w>l
 nnoremap <leader>s <C-w>s
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
 
 " tab shortcuts
 map <leader>tn :tabnew<CR>
