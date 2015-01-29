@@ -39,7 +39,6 @@ Plug 'sheerun/vim-polyglot'
 
 " web
 Plug 'rstacruz/sparkup', { 'rtp': 'vim' }
-Plug 'jaxbot/browserlink.vim', { 'on': ['BLReloadPage', 'BLReloadCSS'] }
 
 " javascript
 Plug 'marijnh/tern_for_vim', { 'for': 'javascript', 'do': 'npm install' }
@@ -106,7 +105,6 @@ Plug 'KabbAmine/vCoolor.vim'
 Plug 'Valloric/ListToggle'
 Plug 'Shougo/vinarise.vim', { 'on': 'Vinarise' }
 Plug 'mbbill/fencview', { 'on': ['FencAutoDetect', 'FencView'] }
-Plug 'fmoralesc/vim-pad', { 'branch': 'devel' , 'on': ['<Plug>(pad-'] }
 Plug 'christoomey/vim-tmux-navigator'
 
 " colorscheme
@@ -328,14 +326,8 @@ let g:sparkupExecuteMapping = '<C-z>'
 let g:sparkupNextMapping = '<C-l>'
 " tmuxline.vim
 let g:tmuxline_powerline_separators = 0
-" browserlink.vim
-let g:bl_no_mappings = 1
 " vim-signature
 let g:SignatureEnabledAtStartup = 0
-" vim-pad
-let g:pad#dir = '~/Dropbox/notes'
-let g:pad#set_mappings = 0
-let g:pad#search_backend = 'ag'
 
 " -------- mappings --------
 " formatting shortcuts
@@ -467,10 +459,6 @@ nmap <silent> <leader>xr <Plug>(xcode-actions-run)
 nmap <silent> <leader>xc <Plug>(xcode-actions-clean)
 nmap <silent> <leader>xt <Plug>(xcode-actions-test)
 nmap <silent> <leader>xo <Plug>(xcode-actions-openfile)
-" vim-pad
-nmap <silent> <leader>nl <Plug>(pad-list)
-nmap <silent> <leader>nn <Plug>(pad-new)
-nmap <silent> <leader>ns <Plug>(pad-search)
 
 " -------- commands --------
 command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
