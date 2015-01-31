@@ -37,32 +37,15 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-obsession', { 'on': 'Obsession' }
 Plug 'sheerun/vim-polyglot'
 
-" web
-Plug 'rstacruz/sparkup', { 'rtp': 'vim' }
-
 " javascript
 Plug 'marijnh/tern_for_vim', { 'for': 'javascript', 'do': 'npm install' }
 Plug 'othree/javascript-libraries-syntax.vim', { 'for': ['javascript', 'coffee', 'ls', 'typescript'] }
-
-" ruby
-Plug 'tpope/vim-rails', { 'for': ['ruby', 'rake'] }
-Plug 'tpope/vim-bundler', { 'for': ['ruby', 'rake'] }
-
-" python
-Plug 'klen/python-mode', { 'for': 'python' }
-
-" scala
-Plug 'megaannum/vimside', { 'for': 'scala' }
-
-" go
-Plug 'nsf/gocode', { 'for': 'go', 'rtp': 'vim' }
 
 " objective-c
 Plug 'b4winckler/vim-objc', { 'for': 'objc' }
 Plug 'tokorom/xcode-actions.vim', { 'for': ['objc', 'swift'] }
 
 " scm
-Plug 'mhinz/vim-signify'
 Plug 'tpope/vim-fugitive'
 Plug 'gregsexton/gitv', { 'on': 'Gitv' }
 
@@ -91,7 +74,6 @@ Plug 'jeetsukumaran/vim-filebeagle'
 Plug 'jeetsukumaran/vim-buffergator', { 'on': ['BuffergatorOpen', 'BuffergatorTabsOpen'] }
 Plug 'junegunn/fzf', { 'do': 'yes \| ./install' }
 Plug 'derekwyatt/vim-fswitch'
-Plug 'kshenoy/vim-signature'
 
 " indents
 Plug 'sickill/vim-pasta'
@@ -100,12 +82,13 @@ Plug 'Chiel92/vim-autoformat', { 'on': 'Autoformat' }
 
 " misc
 Plug 'guns/xterm-color-table.vim', { 'on': 'XtermColorTable' }
-Plug 'scrooloose/syntastic', { 'for': ['ruby', 'c'], 'on': ['SyntasticCheck', 'SyntasticInfo', 'SyntasticReset', 'SyntasticToggleMode'] }
+Plug 'scrooloose/syntastic', { 'on': ['SyntasticCheck', 'SyntasticInfo', 'SyntasticReset', 'SyntasticToggleMode'] }
 Plug 'KabbAmine/vCoolor.vim'
 Plug 'Valloric/ListToggle'
 Plug 'Shougo/vinarise.vim', { 'on': 'Vinarise' }
 Plug 'mbbill/fencview', { 'on': ['FencAutoDetect', 'FencView'] }
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'talek/obvious-resize'
 
 " colorscheme
 Plug 'romainl/Apprentice'
@@ -278,14 +261,6 @@ else
 endif
 
 " -------- plugin configuration --------
-" python-mode
-let g:pymode_rope = 0
-let g:pymode_folding = 0
-let g:pymode_syntax = 0
-let g:pymode_run_bind = '<leader>pr'
-let g:pymode_breakpoint_bind = '<leader>pb'
-" vim-signify
-let g:signify_update_on_bufenter = 0
 " ack.vim
 if executable('ag')
   let g:ackprg = 'ag -U --silent --nogroup --nocolor'
@@ -321,25 +296,14 @@ let g:EclimCompletionMethod = 'omnifunc'
 " ListToggle
 let g:lt_location_list_toggle_map = '<leader>l'
 let g:lt_quickfix_list_toggle_map = '<leader>q'
-" sparkup
-let g:sparkupExecuteMapping = '<C-z>'
-let g:sparkupNextMapping = '<C-l>'
 " tmuxline.vim
 let g:tmuxline_powerline_separators = 0
-" vim-signature
-let g:SignatureEnabledAtStartup = 0
 
 " -------- mappings --------
 " formatting shortcuts
 nmap <leader>fef :call Preserve("normal gg=G")<CR>
 nmap <leader>f$ :call StripTrailingWhitespace()<CR>
 xmap <leader>s :sort<cr>
-
-" remap arrow keys
-nnoremap <left> :bprev<CR>
-nnoremap <right> :bnext<CR>
-nnoremap <up> :tabnext<CR>
-nnoremap <down> :tabprev<CR>
 
 " smash escape
 inoremap jk <esc>
@@ -459,6 +423,11 @@ nmap <silent> <leader>xr <Plug>(xcode-actions-run)
 nmap <silent> <leader>xc <Plug>(xcode-actions-clean)
 nmap <silent> <leader>xt <Plug>(xcode-actions-test)
 nmap <silent> <leader>xo <Plug>(xcode-actions-openfile)
+" obvious-resize
+noremap <silent> <up> :ObviousResizeUp 5<CR>
+noremap <silent> <down> :ObviousResizeDown 5<CR>
+noremap <silent> <left> :ObviousResizeLeft 5<CR>
+noremap <silent> <right> :ObviousResizeRight 5<CR>
 
 " -------- commands --------
 command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
