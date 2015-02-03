@@ -33,7 +33,6 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-dispatch', { 'on': ['Dispatch', 'Make', 'Start'] }
 Plug 'tpope/vim-eunuch', { 'on': ['Unlink', 'Remove', 'Move', 'Rename', 'Chmod', 'Mkdir', 'SudoEdit', 'SudoWrite'] }
-Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-obsession', { 'on': 'Obsession' }
 Plug 'sheerun/vim-polyglot'
 
@@ -43,7 +42,6 @@ Plug 'othree/javascript-libraries-syntax.vim', { 'for': ['javascript', 'coffee',
 
 " objective-c
 Plug 'b4winckler/vim-objc', { 'for': 'objc' }
-Plug 'tokorom/xcode-actions.vim', { 'for': ['objc', 'swift'] }
 
 " scm
 Plug 'tpope/vim-fugitive'
@@ -55,23 +53,23 @@ if (v:version + has('patch584') >= 704) && has('python')
 endif
 Plug 'SirVer/ultisnips', { 'on': [] }
 Plug 'honza/vim-snippets'
+Plug 'bonsaiben/bootstrap-snippets'
 
 " editing
-Plug 'tpope/vim-endwise', { 'for': ['lua', 'ruby', 'sh', 'zsh', 'vb', 'vbnet', 'aspvbs', 'vim', 'c', 'cpp', 'xdefaults'] }
 Plug 'tpope/vim-commentary', { 'on': '<Plug>Commentary' }
 Plug 'tpope/vim-rsi'
 Plug 'thinca/vim-visualstar'
 Plug 'mkc188/auto-pairs'
 Plug 'ReplaceWithRegister'
 Plug 'rhysd/clever-f.vim'
-Plug 'chrisbra/NrrwRgn'
+Plug 'chrisbra/NrrwRgn', { 'on': 'NR' }
 
 " navigation
 Plug 'mileszs/ack.vim', { 'on': 'Ack' }
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'jeetsukumaran/vim-filebeagle'
-Plug 'jeetsukumaran/vim-buffergator', { 'on': ['BuffergatorOpen', 'BuffergatorTabsOpen'] }
+Plug 'jeetsukumaran/vim-buffergator'
 Plug 'junegunn/fzf', { 'do': 'yes \| ./install' }
 Plug 'derekwyatt/vim-fswitch'
 
@@ -161,6 +159,10 @@ endif
 set nojoinspaces
 set nostartofline
 set noshelltemp
+set pastetoggle=<F7>
+if s:is_macvim
+  set macmeta
+endif
 
 if s:is_windows && !s:is_cygwin
   " ensure correct shell in gvim
@@ -187,7 +189,7 @@ set sidescrolloff=5
 set sidescroll=1
 set display+=lastline
 set wildmenu
-set wildmode=longest:full,full
+set wildmode=longest,full
 
 set splitbelow
 set splitright
@@ -219,8 +221,6 @@ call EnsureExists(&directory)
 if v:version >= 700
   set viminfo=!,'20,<50,s10,h
 endif
-
-let g:mapleader = ','
 
 " -------- ui configuration --------
 set showmatch
@@ -261,6 +261,7 @@ else
 endif
 
 " -------- plugin configuration --------
+let g:mapleader = ','
 " ack.vim
 if executable('ag')
   let g:ackprg = 'ag -U --silent --nogroup --nocolor'
@@ -360,11 +361,6 @@ for i in range(97,122)
   exec "map! \e".c." <M-".c.">"
 endfor
 
-" use option (alt) as meta key
-if s:is_macvim
-  set macmeta
-endif
-
 " map space to colon
 noremap <space> :
 
@@ -372,11 +368,9 @@ noremap <space> :
 nnoremap x "_x
 xnoremap x "_x
 
-" vim-unimpaired
-nmap <M-k> [e
-nmap <M-j> ]e
-xmap <M-k> [egv
-xmap <M-j> ]egv
+" clear the highlighting of :set hlsearch.
+nnoremap <silent> <BS> :nohlsearch<CR><BS>
+
 " vim-fugitive
 nnoremap <silent> <leader>gs :Gstatus<CR>
 nnoremap <silent> <leader>gd :Gdiff<CR>
@@ -402,6 +396,8 @@ map <silent> - <Plug>FileBeagleOpenCurrentBufferDir
 " vim-buffergator
 nnoremap <silent> <leader>b :BuffergatorOpen<CR>
 nnoremap <silent> <leader>to :BuffergatorTabsOpen<CR>
+nnoremap <silent> [b :BuffergatorMruCyclePrev<CR>
+nnoremap <silent> ]b :BuffergatorMruCycleNext<CR>
 " detectindent
 nnoremap <leader>di :DetectIndent<CR>
 " vim-dispatch
@@ -417,12 +413,6 @@ nnoremap <silent> <leader>fb :call fzf#run({
 nnoremap <silent> <leader>fm :FZFMru<CR>
 " vim-fswitch
 nmap <silent> <leader>of :FSHere<CR>
-" xcode-actions.vim
-nmap <silent> <leader>xb <Plug>(xcode-actions-build)
-nmap <silent> <leader>xr <Plug>(xcode-actions-run)
-nmap <silent> <leader>xc <Plug>(xcode-actions-clean)
-nmap <silent> <leader>xt <Plug>(xcode-actions-test)
-nmap <silent> <leader>xo <Plug>(xcode-actions-openfile)
 " obvious-resize
 noremap <silent> <up> :ObviousResizeUp 5<CR>
 noremap <silent> <down> :ObviousResizeDown 5<CR>
