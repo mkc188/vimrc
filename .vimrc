@@ -62,7 +62,6 @@ Plug 'thinca/vim-visualstar'
 Plug 'mkc188/auto-pairs'
 Plug 'ReplaceWithRegister'
 Plug 'rhysd/clever-f.vim'
-Plug 'chrisbra/NrrwRgn', { 'on': 'NR' }
 
 " navigation
 Plug 'mileszs/ack.vim', { 'on': 'Ack' }
@@ -284,7 +283,6 @@ let g:rsi_no_meta = 1
 " gitv
 let g:Gitv_DoNotMapCtrlKey = 1
 " YouCompleteMe
-let g:ycm_path_to_python_interpreter = '/usr/bin/python'
 let g:ycm_key_list_select_completion = ['<Down>']
 let g:ycm_key_list_previous_completion = ['<Up>']
 " ultisnips
@@ -370,6 +368,14 @@ xnoremap x "_x
 
 " clear the highlighting of :set hlsearch.
 nnoremap <silent> <BS> :nohlsearch<CR><BS>
+
+" replace help key with check time
+noremap <F1> :checktime<cr>
+
+" easier to type, and I never use the default behavior.
+noremap H ^
+noremap L $
+xnoremap L g_
 
 " vim-fugitive
 nnoremap <silent> <leader>gs :Gstatus<CR>
