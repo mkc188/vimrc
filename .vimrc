@@ -62,9 +62,8 @@ let g:undotree_SetFocusWhenToggle = 1
 nnoremap <silent> <F5> :UndotreeToggle<CR>
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 nnoremap <silent> <F9> :TagbarToggle<CR>
-Plug 'jeetsukumaran/vim-filebeagle'
-let g:filebeagle_suppress_keymaps = 1
-map <silent> - <Plug>FileBeagleOpenCurrentBufferDir
+Plug 'justinmk/vim-dirvish'
+nnoremap <silent> - :Dirvish %:p:h<CR>
 Plug 'junegunn/fzf', { 'do': 'yes \| ./install' }
 function! s:buflist()
   redir => ls
