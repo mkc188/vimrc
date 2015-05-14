@@ -31,7 +31,6 @@ Plug 'tpope/vim-dispatch', { 'on': ['Dispatch', 'Make', 'Start'] }
 Plug 'tpope/vim-eunuch', { 'on': ['Unlink', 'Remove', 'Move', 'Rename', 'Chmod', 'Mkdir', 'SudoEdit', 'SudoWrite'] }
 Plug 'tpope/vim-obsession', { 'on': 'Obsession' }
 Plug 'sheerun/vim-polyglot'
-Plug 'othree/javascript-libraries-syntax.vim', { 'for': ['javascript', 'coffee', 'ls', 'typescript'] }
 Plug 'b4winckler/vim-objc', { 'for': 'objc' }
 let c_no_curly_error = 1
 Plug 'tpope/vim-fugitive'
@@ -58,11 +57,10 @@ if executable('ag')
 endif
 let g:ack_use_dispatch = 1
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
-let g:undotree_SetFocusWhenToggle = 1
 nnoremap <silent> <F5> :UndotreeToggle<CR>
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 nnoremap <silent> <F9> :TagbarToggle<CR>
-Plug 'justinmk/vim-dirvish'
+Plug 'mkc188/vim-dirvish'
 nnoremap <silent> - :Dirvish %:p:h<CR>
 Plug 'junegunn/fzf', { 'do': 'yes \| ./install' }
 function! s:buflist()
@@ -81,10 +79,16 @@ nnoremap <silent> <Leader>b :call fzf#run({
       \   'options': '+m',
       \   'down':    len(<sid>buflist()) + 2
       \ })<CR>
+command! FZFMru call fzf#run({
+      \'source': v:oldfiles,
+      \'sink' : 'e ',
+      \'options' : '-m',
+      \})
 Plug 'sickill/vim-pasta'
 Plug 'ciaranm/detectindent', { 'on': 'DetectIndent' }
 let g:detectindent_preferred_expandtab = 1
 let g:detectindent_preferred_indent = 4
+let g:detectindent_preferred_when_mixed = 1
 nnoremap <Leader>d :DetectIndent<CR>
 Plug 'Chiel92/vim-autoformat', { 'on': 'Autoformat' }
 Plug 'KabbAmine/vCoolor.vim'
@@ -100,12 +104,16 @@ noremap <silent> <Down> :ObviousResizeDown 5<CR>
 noremap <silent> <Left> :ObviousResizeLeft 5<CR>
 noremap <silent> <Right> :ObviousResizeRight 5<CR>
 Plug 'romainl/Apprentice'
+Plug 'mhinz/vim-sayonara'
+nnoremap gs :Sayonara<CR>
+nnoremap gS :Sayonara!<CR>
 
 call plug#end()
 endif
 
 " -------- base configuration --------
 set ttimeoutlen=10
+set mouse=nvi
 set history=1000
 set encoding=utf-8
 set hidden
@@ -163,7 +171,7 @@ set gdefault
 set noswapfile
 if exists('+undofile')
   set undofile
-  set undodir=/tmp//,.
+  set undodir=~/tmp,~/,.
 endif
 if v:version >= 700
   set viminfo=!,'20,<50,s10,h
@@ -204,6 +212,8 @@ noremap <F1> :checktime<CR>
 noremap <Space> :
 inoremap <C-C> <Esc>
 nnoremap <Tab> <C-^>
+nnoremap <silent> gb :bnext<CR>
+nnoremap <silent> gB :bprev<CR>
 
 nnoremap x "_x
 xnoremap x "_x
@@ -215,6 +225,8 @@ noremap L $
 xnoremap L g_
 inoremap <C-V> <Esc>"+p`[v`]=`]A
 xnoremap s "_dP
+
+noremap <F12> :call plug#load('ultisnips', 'YouCompleteMe')<CR>:call youcompleteme#Enable()<CR>
 
 nnoremap <expr> j v:count == 0 ? 'gj' : 'j'
 nnoremap <expr> k v:count == 0 ? 'gk' : 'k'
@@ -239,14 +251,6 @@ if has('autocmd')
     autocmd FileType tmux setlocal commentstring=#\ %s
     autocmd FileType cpp setlocal commentstring=//\ %s
   augroup END
-
-  if !empty(glob('~/.vim/plugged/YouCompleteMe/third_party/ycmd/ycm_core.so'))
-    augroup load_us_ycm
-      autocmd!
-      autocmd InsertEnter * call plug#load('ultisnips', 'YouCompleteMe')
-            \| call youcompleteme#Enable() | autocmd! load_us_ycm
-    augroup END
-  endif
 endif
 
 " -------- color schemes --------
