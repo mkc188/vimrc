@@ -20,6 +20,7 @@ let g:loaded_2html_plugin = 1
 let g:loaded_matchparen = 1
 let loaded_remote_plugins = 1
 let loaded_rrhelper = 1
+let g:mapleader = ','
 
 " -------- plugin manager --------
 silent! if plug#begin('~/.vim/plugged')
@@ -84,7 +85,6 @@ command! FZFMru call fzf#run({
       \'sink' : 'e ',
       \'options' : '-m',
       \})
-Plug 'sickill/vim-pasta'
 Plug 'ciaranm/detectindent', { 'on': 'DetectIndent' }
 let g:detectindent_preferred_expandtab = 1
 let g:detectindent_preferred_indent = 4
@@ -180,7 +180,7 @@ endif
 " -------- ui configuration --------
 set showmatch
 set matchtime=2
-set number
+set relativenumber
 set showtabline=0
 set nofoldenable
 set synmaxcol=200
@@ -188,7 +188,7 @@ syntax sync minlines=256
 set lazyredraw
 if has('statusline') && !&cp
   set laststatus=2
-  set statusline=%t\ %m%r%{exists('g:loaded_fugitive')?fugitive#statusline():''}%3p%%,%v\ %<%=
+  set statusline=%t\ %m%r%{exists('g:loaded_fugitive')?fugitive#statusline():''}\ %l,%v\ %<%=
   set statusline+=%{&tabstop}:%{&shiftwidth}:%{&softtabstop}:%{&expandtab?'et':'noet'}
   set statusline+=\ %{&fileformat}
   set statusline+=\ %{strlen(&filetype)?&filetype:'None'}
@@ -210,6 +210,7 @@ inoremap <C-U> <C-G>u<C-U>
 nnoremap <silent> <BS> :nohlsearch<CR><BS>
 noremap <F1> :checktime<CR>
 noremap <Space> :
+noremap \ ,
 inoremap <C-C> <Esc>
 nnoremap <Tab> <C-^>
 nnoremap <silent> gb :bnext<CR>
@@ -224,7 +225,9 @@ noremap H ^
 noremap L $
 xnoremap L g_
 inoremap <C-V> <Esc>"+p`[v`]=`]A
-xnoremap s "_dP
+xnoremap p "_dP
+nnoremap p p`[v`]=
+nnoremap P P`[v`]=
 
 noremap <F12> :call plug#load('ultisnips', 'YouCompleteMe')<CR>:call youcompleteme#Enable()<CR>
 
