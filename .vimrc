@@ -61,8 +61,9 @@ Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 nnoremap <silent> <F5> :UndotreeToggle<CR>
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 nnoremap <silent> <F9> :TagbarToggle<CR>
-Plug 'mkc188/vim-dirvish'
-nnoremap <silent> - :Dirvish %:p:h<CR>
+Plug 'jeetsukumaran/vim-filebeagle'
+let g:filebeagle_suppress_keymaps = 1
+map <silent> - <Plug>FileBeagleOpenCurrentBufferDir
 Plug 'junegunn/fzf', { 'do': 'yes \| ./install' }
 function! s:buflist()
   redir => ls
@@ -98,15 +99,24 @@ let g:lt_quickfix_list_toggle_map = '<Leader>q'
 Plug 'Shougo/vinarise.vim', { 'on': 'Vinarise' }
 Plug 'mbbill/fencview', { 'on': ['FencAutoDetect', 'FencView'] }
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'talek/obvious-resize'
+Plug 'talek/obvious-resize', { 'on': ['ObviousResizeUp', 'ObviousResizeDown', 'ObviousResizeLeft', 'ObviousResizeRight'] }
 noremap <silent> <Up> :ObviousResizeUp 5<CR>
 noremap <silent> <Down> :ObviousResizeDown 5<CR>
 noremap <silent> <Left> :ObviousResizeLeft 5<CR>
 noremap <silent> <Right> :ObviousResizeRight 5<CR>
 Plug 'romainl/Apprentice'
-Plug 'mhinz/vim-sayonara'
+Plug 'mhinz/vim-sayonara', { 'on': 'Sayonara' }
 nnoremap gs :Sayonara<CR>
 nnoremap gS :Sayonara!<CR>
+Plug 't9md/vim-smalls', { 'on': '<Plug>(smalls)' }
+nmap s <Plug>(smalls)
+xmap s <Plug>(smalls)
+let g:smalls_jump_trigger = '\'
+let g:smalls_blink_on_notfound = 0
+let g:smalls_exit_at_notfound = 1
+let g:smalls_auto_jump = 1
+let g:smalls_auto_jump_min_input_length = 2
+let g:smalls_auto_jump_timeout = 0.0
 
 call plug#end()
 endif
@@ -180,7 +190,6 @@ endif
 " -------- ui configuration --------
 set showmatch
 set matchtime=2
-set relativenumber
 set showtabline=0
 set nofoldenable
 set synmaxcol=200
@@ -230,9 +239,6 @@ nnoremap p p`[v`]=
 nnoremap P P`[v`]=
 
 noremap <F12> :call plug#load('ultisnips', 'YouCompleteMe')<CR>:call youcompleteme#Enable()<CR>
-
-nnoremap <expr> j v:count == 0 ? 'gj' : 'j'
-nnoremap <expr> k v:count == 0 ? 'gk' : 'k'
 
 " -------- autocmd --------
 if has('autocmd')
