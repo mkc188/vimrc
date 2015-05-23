@@ -237,6 +237,7 @@ inoremap <C-V> <Esc>"+p`[v`]=`]A
 xnoremap p "_dP
 nnoremap p p`[v`]=
 nnoremap P P`[v`]=
+nnoremap Q @q
 
 noremap <F12> :call plug#load('ultisnips', 'YouCompleteMe')<CR>:call youcompleteme#Enable()<CR>
 
