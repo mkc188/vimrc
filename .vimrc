@@ -29,7 +29,6 @@ Plug 'matchit.zip'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-dispatch', { 'on': ['Dispatch', 'Make', 'Start'] }
-Plug 'tpope/vim-eunuch', { 'on': ['Unlink', 'Remove', 'Move', 'Rename', 'Chmod', 'Mkdir', 'SudoEdit', 'SudoWrite'] }
 Plug 'tpope/vim-obsession', { 'on': 'Obsession' }
 Plug 'sheerun/vim-polyglot'
 Plug 'b4winckler/vim-objc', { 'for': 'objc' }
@@ -61,9 +60,6 @@ Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 nnoremap <silent> <F5> :UndotreeToggle<CR>
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 nnoremap <silent> <F9> :TagbarToggle<CR>
-Plug 'jeetsukumaran/vim-filebeagle'
-let g:filebeagle_suppress_keymaps = 1
-map <silent> - <Plug>FileBeagleOpenCurrentBufferDir
 Plug 'junegunn/fzf', { 'do': 'yes \| ./install' }
 function! s:buflist()
   redir => ls
@@ -96,7 +92,6 @@ Plug 'KabbAmine/vCoolor.vim'
 Plug 'Valloric/ListToggle'
 let g:lt_location_list_toggle_map = '<Leader>l'
 let g:lt_quickfix_list_toggle_map = '<Leader>q'
-Plug 'Shougo/vinarise.vim', { 'on': 'Vinarise' }
 Plug 'mbbill/fencview', { 'on': ['FencAutoDetect', 'FencView'] }
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'talek/obvious-resize', { 'on': ['ObviousResizeUp', 'ObviousResizeDown', 'ObviousResizeLeft', 'ObviousResizeRight'] }
@@ -117,6 +112,8 @@ let g:smalls_exit_at_notfound = 1
 let g:smalls_auto_jump = 1
 let g:smalls_auto_jump_min_input_length = 2
 let g:smalls_auto_jump_timeout = 0.0
+Plug 'vifm/vifm.vim'
+nnoremap <silent> - :EditVifm<CR>
 
 call plug#end()
 endif
