@@ -57,9 +57,14 @@ if executable('ag')
 endif
 let g:ack_use_dispatch = 1
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
+let g:undotree_SetFocusWhenToggle = 1
 nnoremap <silent> <F5> :UndotreeToggle<CR>
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
+let g:tagbar_autofocus = 1
 nnoremap <silent> <F9> :TagbarToggle<CR>
+Plug 'jeetsukumaran/vim-filebeagle'
+let g:filebeagle_suppress_keymaps = 1
+nmap <silent> - <Plug>FileBeagleOpenCurrentBufferDir
 Plug 'junegunn/fzf', { 'do': 'yes \| ./install' }
 function! s:buflist()
   redir => ls
@@ -112,8 +117,6 @@ let g:smalls_exit_at_notfound = 1
 let g:smalls_auto_jump = 1
 let g:smalls_auto_jump_min_input_length = 2
 let g:smalls_auto_jump_timeout = 0.0
-Plug 'vifm/vifm.vim'
-nnoremap <silent> - :EditVifm<CR>
 
 call plug#end()
 endif
@@ -219,8 +222,6 @@ noremap <Space> :
 noremap \ ,
 inoremap <C-C> <Esc>
 nnoremap <Tab> <C-^>
-nnoremap <silent> gb :bnext<CR>
-nnoremap <silent> gB :bprev<CR>
 
 nnoremap x "_x
 xnoremap x "_x
