@@ -34,16 +34,9 @@ Plug 'sheerun/vim-polyglot'
 Plug 'b4winckler/vim-objc', { 'for': 'objc' }
 let c_no_curly_error = 1
 Plug 'tpope/vim-fugitive'
-if (v:version + has('patch584') >= 704) && has('python')
-  Plug 'Valloric/YouCompleteMe', { 'do': './install.sh' ,'on': [] }
-  let g:ycm_filetype_specific_completion_to_disable = { 'gitcommit': 1, 'javascript': 1 }
-  let g:ycm_key_list_select_completion = ['<Down>']
-  let g:ycm_key_list_previous_completion = ['<Up>']
-endif
-Plug 'SirVer/ultisnips', { 'on': [] }
-let g:UltiSnipsExpandTrigger = '<Tab>'
-let g:UltiSnipsJumpForwardTrigger = '<Tab>'
-let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
+Plug 'MarcWeber/vim-addon-mw-utils'
+Plug 'tomtom/tlib_vim'
+Plug 'garbas/vim-snipmate'
 Plug 'honza/vim-snippets'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-rsi'
@@ -237,8 +230,6 @@ xnoremap p "_dP
 nnoremap p p`[v`]=
 nnoremap P P`[v`]=
 nnoremap Q @q
-
-noremap <F12> :call plug#load('ultisnips', 'YouCompleteMe')<CR>:call youcompleteme#Enable()<CR>
 
 " -------- autocmd --------
 if has('autocmd')
