@@ -31,12 +31,16 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-dispatch', { 'on': ['Dispatch', 'Make', 'Start'] }
 Plug 'tpope/vim-obsession', { 'on': 'Obsession' }
 Plug 'sheerun/vim-polyglot'
+Plug 'marijnh/tern_for_vim', { 'for': 'javascript', 'do': 'npm install' }
 Plug 'b4winckler/vim-objc', { 'for': 'objc' }
 let c_no_curly_error = 1
 Plug 'tpope/vim-fugitive'
-Plug 'MarcWeber/vim-addon-mw-utils'
-Plug 'tomtom/tlib_vim'
-Plug 'garbas/vim-snipmate'
+Plug 'Valloric/YouCompleteMe', { 'do': './install.sh --clang-completer' }
+let g:ycm_key_list_select_completion = ['<Down>']
+let g:ycm_key_list_previous_completion = ['<Up>']
+Plug 'SirVer/ultisnips'
+let g:UltiSnipsJumpForwardTrigger = '<Tab>'
+let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
 Plug 'honza/vim-snippets'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-rsi'
@@ -80,23 +84,14 @@ command! FZFMru call fzf#run({
       \'sink' : 'e ',
       \'options' : '-m',
       \})
-Plug 'ciaranm/detectindent', { 'on': 'DetectIndent' }
-let g:detectindent_preferred_expandtab = 1
-let g:detectindent_preferred_indent = 4
-let g:detectindent_preferred_when_mixed = 1
-nnoremap <Leader>d :DetectIndent<CR>
 Plug 'Chiel92/vim-autoformat', { 'on': 'Autoformat' }
+Plug 'scrooloose/syntastic', { 'on': ['SyntasticCheck', 'SyntasticInfo', 'SyntasticReset', 'SyntasticToggleMode'] }
 Plug 'KabbAmine/vCoolor.vim'
 Plug 'Valloric/ListToggle'
 let g:lt_location_list_toggle_map = '<Leader>l'
 let g:lt_quickfix_list_toggle_map = '<Leader>q'
 Plug 'mbbill/fencview', { 'on': ['FencAutoDetect', 'FencView'] }
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'talek/obvious-resize', { 'on': ['ObviousResizeUp', 'ObviousResizeDown', 'ObviousResizeLeft', 'ObviousResizeRight'] }
-noremap <silent> <Up> :ObviousResizeUp 5<CR>
-noremap <silent> <Down> :ObviousResizeDown 5<CR>
-noremap <silent> <Left> :ObviousResizeLeft 5<CR>
-noremap <silent> <Right> :ObviousResizeRight 5<CR>
 Plug 'romainl/Apprentice'
 Plug 'mhinz/vim-sayonara', { 'on': 'Sayonara' }
 nnoremap gs :Sayonara<CR>
@@ -111,6 +106,7 @@ let g:smalls_auto_jump = 1
 let g:smalls_auto_jump_min_input_length = 2
 let g:smalls_auto_jump_timeout = 0.0
 Plug 'justinmk/vim-gtfo'
+Plug 'editorconfig/editorconfig-vim'
 
 call plug#end()
 endif
@@ -148,7 +144,7 @@ set backspace=indent,eol,start
 set autoindent
 set expandtab
 set smarttab
-set softtabstop=2
+set tabstop=2
 set shiftwidth=2
 set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
 set shiftround
@@ -225,11 +221,15 @@ xnoremap Y "+y
 noremap H ^
 noremap L $
 xnoremap L g_
-inoremap <C-V> <Esc>"+p`[v`]=`]A
 xnoremap p "_dP
 nnoremap p p`[v`]=
 nnoremap P P`[v`]=
 nnoremap Q @q
+
+nnoremap <Left> :bprev<CR>
+nnoremap <Right> :bnext<CR>
+nnoremap <Up> :tabnext<CR>
+nnoremap <Down> :tabprev<CR>
 
 " -------- autocmd --------
 if has('autocmd')
