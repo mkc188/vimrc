@@ -31,16 +31,10 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-dispatch', { 'on': ['Dispatch', 'Make', 'Start'] }
 Plug 'tpope/vim-obsession', { 'on': 'Obsession' }
 Plug 'sheerun/vim-polyglot'
-Plug 'marijnh/tern_for_vim', { 'for': 'javascript', 'do': 'npm install' }
-Plug 'b4winckler/vim-objc', { 'for': 'objc' }
-let c_no_curly_error = 1
 Plug 'tpope/vim-fugitive'
-Plug 'Valloric/YouCompleteMe', { 'do': './install.sh --clang-completer' }
-let g:ycm_key_list_select_completion = ['<Down>']
-let g:ycm_key_list_previous_completion = ['<Up>']
-Plug 'SirVer/ultisnips'
-let g:UltiSnipsJumpForwardTrigger = '<Tab>'
-let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
+Plug 'MarcWeber/vim-addon-mw-utils'
+Plug 'tomtom/tlib_vim'
+Plug 'garbas/vim-snipmate'
 Plug 'honza/vim-snippets'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-rsi'
@@ -106,7 +100,7 @@ let g:smalls_auto_jump = 1
 let g:smalls_auto_jump_min_input_length = 2
 let g:smalls_auto_jump_timeout = 0.0
 Plug 'justinmk/vim-gtfo'
-Plug 'editorconfig/editorconfig-vim'
+Plug 'tpope/vim-sleuth'
 
 call plug#end()
 endif
@@ -133,7 +127,6 @@ if v:version + has('patch541') >= 704
 endif
 set nojoinspaces
 set noshelltemp
-set pastetoggle=<F7>
 if s:is_macvim
   set macmeta
 endif
@@ -142,10 +135,7 @@ if s:is_windows && !s:is_cygwin
 endif
 set backspace=indent,eol,start
 set autoindent
-set expandtab
 set smarttab
-set tabstop=2
-set shiftwidth=2
 set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
 set shiftround
 set linebreak
@@ -207,7 +197,6 @@ endif
 inoremap <C-U> <C-G>u<C-U>
 
 nnoremap <silent> <BS> :nohlsearch<CR><BS>
-noremap <F1> :checktime<CR>
 noremap <Space> :
 noremap \ ,
 inoremap <C-C> <Esc>
@@ -221,6 +210,7 @@ xnoremap Y "+y
 noremap H ^
 noremap L $
 xnoremap L g_
+inoremap <C-V> <Esc>"+p`[v`]=`]A
 xnoremap p "_dP
 nnoremap p p`[v`]=
 nnoremap P P`[v`]=
