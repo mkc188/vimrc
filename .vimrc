@@ -100,6 +100,8 @@ let g:smalls_auto_jump = 1
 let g:smalls_auto_jump_min_input_length = 2
 let g:smalls_auto_jump_timeout = 0.0
 Plug 'justinmk/vim-gtfo'
+Plug 'wincent/terminus'
+let g:TerminusCursorShape = 0
 Plug 'tpope/vim-sleuth'
 
 call plug#end()
@@ -201,6 +203,7 @@ noremap <Space> :
 noremap \ ,
 inoremap <C-C> <Esc>
 nnoremap <Tab> <C-^>
+nnoremap <expr> gp '`[' . strpart(getregtype(), 0, 1) . '`]'
 
 nnoremap x "_x
 xnoremap x "_x
@@ -210,7 +213,6 @@ xnoremap Y "+y
 noremap H ^
 noremap L $
 xnoremap L g_
-inoremap <C-V> <Esc>"+p`[v`]=`]A
 xnoremap p "_dP
 nnoremap p p`[v`]=
 nnoremap P P`[v`]=
