@@ -73,13 +73,7 @@ nnoremap <silent> <Leader>b :call fzf#run({
       \   'options': '+m',
       \   'down':    len(<sid>buflist()) + 2
       \ })<CR>
-command! FZFMru call fzf#run({
-      \'source': v:oldfiles,
-      \'sink' : 'e ',
-      \'options' : '-m',
-      \})
 Plug 'Chiel92/vim-autoformat', { 'on': 'Autoformat' }
-Plug 'scrooloose/syntastic', { 'on': ['SyntasticCheck', 'SyntasticInfo', 'SyntasticReset', 'SyntasticToggleMode'] }
 Plug 'KabbAmine/vCoolor.vim'
 Plug 'Valloric/ListToggle'
 let g:lt_location_list_toggle_map = '<Leader>l'
@@ -93,6 +87,7 @@ nnoremap gS :Sayonara!<CR>
 Plug 't9md/vim-smalls', { 'on': '<Plug>(smalls)' }
 nmap s <Plug>(smalls)
 xmap s <Plug>(smalls)
+let g:smalls_shade = 0
 let g:smalls_jump_trigger = '\'
 let g:smalls_blink_on_notfound = 0
 let g:smalls_exit_at_notfound = 1
@@ -100,9 +95,12 @@ let g:smalls_auto_jump = 1
 let g:smalls_auto_jump_min_input_length = 2
 let g:smalls_auto_jump_timeout = 0.0
 Plug 'justinmk/vim-gtfo'
-Plug 'wincent/terminus'
-let g:TerminusCursorShape = 0
 Plug 'tpope/vim-sleuth'
+Plug 'kana/vim-fakeclip'
+let g:fakeclip_no_default_key_mappings = 1
+xmap <Leader>y <Plug>(fakeclip-screen-y)
+nmap <Leader>p <Plug>(fakeclip-screen-p)
+nmap <Leader>P <Plug>(fakeclip-screen-P)
 
 call plug#end()
 endif
@@ -170,8 +168,6 @@ if v:version >= 700
 endif
 
 " -------- ui configuration --------
-set showmatch
-set matchtime=2
 set showtabline=0
 set nofoldenable
 set synmaxcol=200
@@ -204,6 +200,8 @@ noremap \ ,
 inoremap <C-C> <Esc>
 nnoremap <Tab> <C-^>
 nnoremap <expr> gp '`[' . strpart(getregtype(), 0, 1) . '`]'
+nnoremap <expr> j v:count == 0 ? 'gj' : 'j'
+nnoremap <expr> k v:count == 0 ? 'gk' : 'k'
 
 nnoremap x "_x
 xnoremap x "_x
@@ -213,7 +211,6 @@ xnoremap Y "+y
 noremap H ^
 noremap L $
 xnoremap L g_
-xnoremap p "_dP
 nnoremap p p`[v`]=
 nnoremap P P`[v`]=
 nnoremap Q @q
