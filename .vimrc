@@ -20,7 +20,6 @@ let g:loaded_2html_plugin = 1
 let g:loaded_matchparen = 1
 let loaded_remote_plugins = 1
 let loaded_rrhelper = 1
-let g:mapleader = ','
 
 " -------- plugin manager --------
 silent! if plug#begin('~/.vim/plugged')
@@ -53,26 +52,12 @@ nnoremap <silent> <F5> :UndotreeToggle<CR>
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 let g:tagbar_autofocus = 1
 nnoremap <silent> <F9> :TagbarToggle<CR>
-Plug 'jeetsukumaran/vim-filebeagle'
-let g:filebeagle_suppress_keymaps = 1
-nmap <silent> - <Plug>FileBeagleOpenCurrentBufferDir
+Plug 'justinmk/vim-dirvish'
+nnoremap <silent> - :Dirvish %<CR>
 Plug 'junegunn/fzf', { 'do': 'yes \| ./install' }
-function! s:buflist()
-  redir => ls
-  silent ls
-  redir END
-  return split(ls, '\n')
-endfunction
-function! s:bufopen(e)
-  execute 'buffer' matchstr(a:e, '^[ 0-9]*')
-endfunction
-nnoremap <silent> <Leader>f :FZF -m<CR>
-nnoremap <silent> <Leader>b :call fzf#run({
-      \   'source':  reverse(<sid>buflist()),
-      \   'sink':    function('<sid>bufopen'),
-      \   'options': '+m',
-      \   'down':    len(<sid>buflist()) + 2
-      \ })<CR>
+Plug 'junegunn/fzf.vim'
+nnoremap <silent> <Leader>f :Files<CR>
+nnoremap <silent> <Leader>b :Buffers<CR>
 Plug 'Chiel92/vim-autoformat', { 'on': 'Autoformat' }
 Plug 'KabbAmine/vCoolor.vim'
 Plug 'Valloric/ListToggle'
@@ -84,23 +69,15 @@ Plug 'romainl/Apprentice'
 Plug 'mhinz/vim-sayonara', { 'on': 'Sayonara' }
 nnoremap gs :Sayonara<CR>
 nnoremap gS :Sayonara!<CR>
-Plug 't9md/vim-smalls', { 'on': '<Plug>(smalls)' }
-nmap s <Plug>(smalls)
-xmap s <Plug>(smalls)
-let g:smalls_shade = 0
-let g:smalls_jump_trigger = '\'
-let g:smalls_blink_on_notfound = 0
-let g:smalls_exit_at_notfound = 1
-let g:smalls_auto_jump = 1
-let g:smalls_auto_jump_min_input_length = 2
-let g:smalls_auto_jump_timeout = 0.0
 Plug 'justinmk/vim-gtfo'
 Plug 'tpope/vim-sleuth'
 Plug 'kana/vim-fakeclip'
 let g:fakeclip_no_default_key_mappings = 1
-xmap <Leader>y <Plug>(fakeclip-screen-y)
-nmap <Leader>p <Plug>(fakeclip-screen-p)
-nmap <Leader>P <Plug>(fakeclip-screen-P)
+xmap gy <Plug>(fakeclip-screen-y)
+nmap gp <Plug>(fakeclip-screen-p)
+nmap gP <Plug>(fakeclip-screen-P)
+Plug 'sickill/vim-pasta'
+Plug 'dahu/vim-fanfingtastic'
 
 call plug#end()
 endif
@@ -121,7 +98,7 @@ set complete-=wbuUi
 set completeopt=menu,menuone,longest
 set tabpagemax=50
 set sessionoptions-=options
-set virtualedit=block
+set virtualedit=block,onemore
 if v:version + has('patch541') >= 704
   set formatoptions+=j
 endif
@@ -193,32 +170,22 @@ endif
 
 " -------- mappings --------
 inoremap <C-U> <C-G>u<C-U>
-
 nnoremap <silent> <BS> :nohlsearch<CR><BS>
 noremap <Space> :
-noremap \ ,
 inoremap <C-C> <Esc>
 nnoremap <Tab> <C-^>
-nnoremap <expr> gp '`[' . strpart(getregtype(), 0, 1) . '`]'
+nnoremap <expr> g= '`[' . strpart(getregtype(), 0, 1) . '`]='
 nnoremap <expr> j v:count == 0 ? 'gj' : 'j'
 nnoremap <expr> k v:count == 0 ? 'gk' : 'k'
 
-nnoremap x "_x
-xnoremap x "_x
+xmap s "_d"0P
 
 nnoremap Y y$
 xnoremap Y "+y
 noremap H ^
 noremap L $
 xnoremap L g_
-nnoremap p p`[v`]=
-nnoremap P P`[v`]=
 nnoremap Q @q
-
-nnoremap <Left> :bprev<CR>
-nnoremap <Right> :bnext<CR>
-nnoremap <Up> :tabnext<CR>
-nnoremap <Down> :tabprev<CR>
 
 " -------- autocmd --------
 if has('autocmd')
