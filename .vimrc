@@ -53,7 +53,7 @@ Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 let g:tagbar_autofocus = 1
 nnoremap <silent> <F9> :TagbarToggle<CR>
 Plug 'justinmk/vim-dirvish'
-nnoremap <silent> - :Dirvish %<CR>
+nnoremap <silent> - :Dirvish %:p:h<CR>
 Plug 'junegunn/fzf', { 'do': 'yes \| ./install' }
 Plug 'junegunn/fzf.vim'
 nnoremap <silent> <Leader>f :Files<CR>
