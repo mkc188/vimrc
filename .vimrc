@@ -78,6 +78,7 @@ nmap gp <Plug>(fakeclip-screen-p)
 nmap gP <Plug>(fakeclip-screen-P)
 Plug 'sickill/vim-pasta'
 Plug 'dahu/vim-fanfingtastic'
+Plug 'ConradIrwin/vim-bracketed-paste'
 
 call plug#end()
 endif
@@ -171,6 +172,7 @@ endif
 " -------- mappings --------
 inoremap <C-U> <C-G>u<C-U>
 nnoremap <silent> <BS> :nohlsearch<CR><BS>
+noremap <F1> :checktime<CR>
 noremap <Space> :
 inoremap <C-C> <Esc>
 nnoremap <Tab> <C-^>
