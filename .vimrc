@@ -52,8 +52,9 @@ nnoremap <silent> <F5> :UndotreeToggle<CR>
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 let g:tagbar_autofocus = 1
 nnoremap <silent> <F9> :TagbarToggle<CR>
-Plug 'justinmk/vim-dirvish'
-nnoremap <silent> - :Dirvish %:p:h<CR>
+Plug 'jeetsukumaran/vim-filebeagle'
+let g:filebeagle_suppress_keymaps = 1
+nmap <silent> - <Plug>FileBeagleOpenCurrentBufferDir
 Plug 'junegunn/fzf', { 'do': 'yes \| ./install' }
 Plug 'junegunn/fzf.vim'
 nnoremap <silent> <Leader>f :Files<CR>
@@ -176,11 +177,13 @@ noremap <F1> :checktime<CR>
 noremap <Space> :
 inoremap <C-C> <Esc>
 nnoremap <Tab> <C-^>
-nnoremap <expr> g= '`[' . strpart(getregtype(), 0, 1) . '`]='
+nnoremap <expr> gb '`[' . strpart(getregtype(), 0, 1) . '`]'
 nnoremap <expr> j v:count == 0 ? 'gj' : 'j'
 nnoremap <expr> k v:count == 0 ? 'gk' : 'k'
 
 xmap s "_d"0P
+nnoremap x "_x
+xnoremap x "_x
 
 nnoremap Y y$
 xnoremap Y "+y
