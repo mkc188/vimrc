@@ -27,8 +27,6 @@ silent! if plug#begin('~/.vim/plugged')
 Plug 'matchit.zip'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-dispatch', { 'on': ['Dispatch', 'Make', 'Start'] }
-Plug 'tpope/vim-obsession', { 'on': 'Obsession' }
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-fugitive'
 Plug 'MarcWeber/vim-addon-mw-utils'
@@ -41,11 +39,6 @@ let g:rsi_no_meta = 1
 Plug 'thinca/vim-visualstar'
 Plug 'Raimondi/delimitMate'
 let delimitMate_expand_cr = 1
-Plug 'mileszs/ack.vim', { 'on': 'Ack' }
-if executable('ag')
-  let g:ackprg = 'ag --nogroup --nocolor'
-endif
-let g:ack_use_dispatch = 1
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 let g:undotree_SetFocusWhenToggle = 1
 nnoremap <silent> <F5> :UndotreeToggle<CR>
@@ -55,7 +48,7 @@ nnoremap <silent> <F9> :TagbarToggle<CR>
 Plug 'jeetsukumaran/vim-filebeagle'
 let g:filebeagle_suppress_keymaps = 1
 nmap <silent> - <Plug>FileBeagleOpenCurrentBufferDir
-Plug 'junegunn/fzf', { 'do': 'yes \| ./install' }
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 nnoremap <silent> <Leader>f :Files<CR>
 nnoremap <silent> <Leader>b :Buffers<CR>
@@ -78,7 +71,6 @@ xmap gy <Plug>(fakeclip-screen-y)
 nmap gp <Plug>(fakeclip-screen-p)
 nmap gP <Plug>(fakeclip-screen-P)
 Plug 'sickill/vim-pasta'
-Plug 'dahu/vim-fanfingtastic'
 Plug 'ConradIrwin/vim-bracketed-paste'
 
 call plug#end()
@@ -209,7 +201,6 @@ if has('autocmd')
   augroup filetype_settings
     autocmd!
     autocmd FileType vim setlocal keywordprg=:help
-    autocmd FileType tmux setlocal commentstring=#\ %s
     autocmd FileType cpp setlocal commentstring=//\ %s
   augroup END
 endif
