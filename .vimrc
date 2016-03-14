@@ -142,7 +142,7 @@ endif
 set showtabline=0
 set nofoldenable
 set synmaxcol=200
-syntax sync minlines=256
+syntax sync minlines=200
 set lazyredraw
 if has('statusline') && !&cp
   set laststatus=2
