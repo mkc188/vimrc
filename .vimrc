@@ -60,9 +60,6 @@ let g:lt_quickfix_list_toggle_map = '<Leader>q'
 Plug 'mbbill/fencview', { 'on': ['FencAutoDetect', 'FencView'] }
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'romainl/Apprentice'
-Plug 'mhinz/vim-sayonara', { 'on': 'Sayonara' }
-nnoremap gs :Sayonara<CR>
-nnoremap gS :Sayonara!<CR>
 Plug 'justinmk/vim-gtfo'
 Plug 'tpope/vim-sleuth'
 Plug 'kana/vim-fakeclip'
@@ -72,6 +69,7 @@ nmap gp <Plug>(fakeclip-screen-p)
 nmap gP <Plug>(fakeclip-screen-P)
 Plug 'sickill/vim-pasta'
 Plug 'ConradIrwin/vim-bracketed-paste'
+Plug 'tpope/vim-eunuch'
 
 call plug#end()
 endif
