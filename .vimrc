@@ -28,7 +28,6 @@ Plug 'matchit.zip'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'sheerun/vim-polyglot'
-Plug 'tpope/vim-fugitive'
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
 Plug 'garbas/vim-snipmate'
@@ -70,6 +69,7 @@ nmap gP <Plug>(fakeclip-screen-P)
 Plug 'sickill/vim-pasta'
 Plug 'ConradIrwin/vim-bracketed-paste'
 Plug 'tpope/vim-eunuch'
+Plug 'mhinz/vim-signify'
 
 call plug#end()
 endif
@@ -144,7 +144,7 @@ syntax sync minlines=200
 set lazyredraw
 if has('statusline') && !&cp
   set laststatus=2
-  set statusline=%t\ %m%r%{exists('g:loaded_fugitive')?fugitive#statusline():''}\ %l,%v\ %<%=
+  set statusline=%t\ %m%r\ %l,%v\ %<%=
   set statusline+=%{&tabstop}:%{&shiftwidth}:%{&softtabstop}:%{&expandtab?'et':'noet'}
   set statusline+=\ %{&fileformat}
   set statusline+=\ %{strlen(&filetype)?&filetype:'None'}
