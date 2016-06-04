@@ -3,35 +3,25 @@ let s:is_windows = has('win32') || has('win64')
 let s:is_cygwin = has('win32unix')
 let s:is_macvim = has('gui_macvim')
 
-let g:did_install_default_menus = 1
-let g:did_install_syntax_menu = 1
-let g:loaded_vimballPlugin = 1
-let g:loaded_vimball = 1
 let g:loaded_getscriptPlugin = 1
+let loaded_gzip = 1
 let g:loaded_netrw = 1
 let g:loaded_netrwPlugin = 1
-let loaded_spellfile_plugin = 1
+let g:loaded_matchparen = 1
 let g:loaded_tarPlugin = 1
 let g:loaded_tar = 1
+let g:loaded_vimballPlugin = 1
+let g:loaded_vimball = 1
 let g:loaded_zipPlugin = 1
 let g:loaded_zip = 1
-let loaded_gzip = 1
-let g:loaded_2html_plugin = 1
-let g:loaded_matchparen = 1
-let loaded_remote_plugins = 1
-let loaded_rrhelper = 1
+let loaded_spellfile_plugin = 1
 
 " -------- plugin manager --------
 silent! if plug#begin('~/.vim/plugged')
 
-Plug 'matchit.zip'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'sheerun/vim-polyglot'
-Plug 'MarcWeber/vim-addon-mw-utils'
-Plug 'tomtom/tlib_vim'
-Plug 'garbas/vim-snipmate'
-Plug 'honza/vim-snippets'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-rsi'
 let g:rsi_no_meta = 1
@@ -70,6 +60,11 @@ Plug 'sickill/vim-pasta'
 Plug 'ConradIrwin/vim-bracketed-paste'
 Plug 'tpope/vim-eunuch'
 Plug 'mhinz/vim-signify'
+function! DoRemote(arg)
+  UpdateRemotePlugins
+endfunction
+Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
+let g:deoplete#enable_at_startup = 1
 
 call plug#end()
 endif
