@@ -64,9 +64,12 @@ function! DoRemote(arg)
   UpdateRemotePlugins
 endfunction
 Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
-let g:deoplete#enable_at_startup = 1
+if has('nvim')
+  let g:deoplete#enable_at_startup = 1
+endif
 
 call plug#end()
+call deoplete#custom#set('_', 'converters', ['converter_remove_paren'])
 endif
 
 " -------- base configuration --------
