@@ -69,7 +69,7 @@ if has('nvim')
 endif
 
 call plug#end()
-call deoplete#custom#set('_', 'converters', ['converter_remove_paren'])
+silent! call deoplete#custom#set('_', 'converters', ['converter_remove_paren'])
 endif
 
 " -------- base configuration --------
