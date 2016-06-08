@@ -42,14 +42,12 @@ Plug 'junegunn/fzf.vim'
 nnoremap <silent> <Leader>f :Files<CR>
 nnoremap <silent> <Leader>b :Buffers<CR>
 Plug 'Chiel92/vim-autoformat', { 'on': 'Autoformat' }
-Plug 'KabbAmine/vCoolor.vim'
 Plug 'Valloric/ListToggle'
 let g:lt_location_list_toggle_map = '<Leader>l'
 let g:lt_quickfix_list_toggle_map = '<Leader>q'
 Plug 'mbbill/fencview', { 'on': ['FencAutoDetect', 'FencView'] }
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'romainl/Apprentice'
-Plug 'justinmk/vim-gtfo'
 Plug 'tpope/vim-sleuth'
 Plug 'kana/vim-fakeclip'
 let g:fakeclip_no_default_key_mappings = 1
@@ -60,16 +58,11 @@ Plug 'sickill/vim-pasta'
 Plug 'ConradIrwin/vim-bracketed-paste'
 Plug 'tpope/vim-eunuch'
 Plug 'mhinz/vim-signify'
-function! DoRemote(arg)
-  UpdateRemotePlugins
-endfunction
-Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
-if has('nvim')
-  let g:deoplete#enable_at_startup = 1
-endif
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
+let g:ycm_key_list_select_completion = ['<Down>']
+let g:ycm_key_list_previous_completion = ['<Up>']
 
 call plug#end()
-silent! call deoplete#custom#set('_', 'converters', ['converter_remove_paren'])
 endif
 
 " -------- base configuration --------
