@@ -58,11 +58,17 @@ Plug 'sickill/vim-pasta'
 Plug 'ConradIrwin/vim-bracketed-paste'
 Plug 'tpope/vim-eunuch'
 Plug 'mhinz/vim-signify'
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
-let g:ycm_key_list_select_completion = ['<Down>']
-let g:ycm_key_list_previous_completion = ['<Up>']
+function! DoRemote(arg)
+  UpdateRemotePlugins
+endfunction
+Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
+if has('nvim')
+  let g:deoplete#enable_at_startup = 1
+  let g:deoplete#enable_camel_case = 1
+endif
 
 call plug#end()
+silent! call deoplete#custom#set('_', 'converters', ['converter_remove_paren'])
 endif
 
 " -------- base configuration --------
