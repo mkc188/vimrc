@@ -62,7 +62,15 @@ function! DoRemote(arg)
   UpdateRemotePlugins
 endfunction
 Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
-if has('nvim')
+Plug 'Shougo/neosnippet'
+imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+      \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+      \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+Plug 'Shougo/neosnippet-snippets'
+Plug 'zchee/deoplete-jedi'
+Plug 'carlitux/deoplete-ternjs'
+if has('nvim') && has('python3')
   let g:deoplete#enable_at_startup = 1
   let g:deoplete#enable_camel_case = 1
 endif
