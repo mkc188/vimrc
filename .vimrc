@@ -79,6 +79,8 @@ call plug#end()
 silent! call deoplete#custom#set('_', 'converters', ['converter_remove_paren'])
 endif
 
+runtime macros/matchit.vim
+
 " -------- base configuration --------
 set ttimeoutlen=10
 set mouse=nvi
@@ -88,7 +90,7 @@ set hidden
 set autoread
 set fileformats=unix,dos,mac
 set nrformats-=octal
-set showcmd
+set noshowcmd
 setglobal tags=./tags;
 set nomodeline
 set complete-=wbuUi
